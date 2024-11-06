@@ -1,34 +1,10 @@
-1. Building/Running your simulator code
-
-   Following are the commands to build and run the code:
-
-   > make       // build code
-   > make run   // run code
-
-   The result of running the code will be a 'trace.vcd' waveform
-   file. You can view it using 'gtkwave' or 'dinotrace' by tunneling
-   X11 through ssh, or you can download the file to your local machine
-   and view it there.
-
-   To change the program binary which you are decoding, edit the
-   following line in Makefile:
-   
-   RUNELF=...
-
-
-2. Viewing the trace.vcd waveform
-
-   If you have logged in to the server using the -Y or -X option, you
-   can view waveforms using the following command:
-
-   > gtkwave trace.vcd
-
-   (you can also use dinotrace, or download the .vcd to view it)
-
-
-3. Submitting your code
-   
-   Type the following command in your project directory. It will sign
-   and submit your code to us:
-
-  > make submit
+# CSE502-Project
+[Assignment Page Link](https://compas.cs.stonybrook.edu/cse502-v4-project-hints#:~:text=Course%20Project%20%E2%80%93%20Build%20a%20CPU)
+# TODO
+// Put 'a' if you start, 'A' if you are done<br>
+// Put 'z' if you start, 'Z' if you are done<br>
+[] add to TODO list<br>
+[] make a direct-mapped cache<br>
+[] connect everything in top.sv<br>
+[] test test test<br>
+[] submit!<br>
