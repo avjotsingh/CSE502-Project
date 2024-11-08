@@ -4,7 +4,7 @@
 // Put 'a' if you start, 'A' if you are done<br>
 // Put 'z' if you start, 'Z' if you are done<br>
 [] add to TODO list<br>
-[] make a direct-mapped cache<br>
+[z] make a direct-mapped cache<br>
 [] connect everything in top.sv<br>
 [] test test test<br>
 [] submit!<br>
