@@ -8,6 +8,7 @@
 [] decoder logic
 [] alu logic
 [] add logic to handle data hazards (stalling or data forwarding)
+[z] cache memory bus
 [z] make a direct-mapped cache<br>
 [] connect everything in top.sv<br>
 [] test test test<br>
