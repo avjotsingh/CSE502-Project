@@ -2,22 +2,24 @@ module top
 #(
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
-    CHUNKS_LOG = 3
+    CHUNKS_LOG = 3,
+    CONNECTIONS = 2
 )
 (
-input  clk,
+  input  clk,
          reset,
          hz32768timer,
 
   //cache interface
-  input wire command_valid,
-  input wire command_store,
-  input wire command_ready,
-  input wire [ADDR_WIDTH-1:0] command_addr,
-  input wire [DATA_WIDTH*(CHUNKS_LOG**2)-1:0] data_in,
+  input wire [CONNECTIONS-1:0] command_valid,
+  input wire [CONNECTIONS-1:0] command_store,
+  input wire [CONNECTIONS-1:0] command_ready,
+  input wire [CONNECTIONS-1:0] [ADDR_WIDTH-1:0] command_addr,
+  input wire [CONNECTIONS-1:0] [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_in,
   output wire bus_valid,
   output wire bus_ready,
-  output wire [DATA_WIDTH*(CHUNKS_LOG**2)-1:0] data_out,
+  output wire [$clog2(CONNECTIONS)-1:0] cacheID,
+  output wire [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
 
 
   // interface to connect to the bus
@@ -66,11 +68,16 @@ input  clk,
   wire [CHUNKS_LOG-1:0] offsetCounter;
   wire [CHUNKS_LOG**2-1:0][DATA_WIDTH-1:0] data_buffer;
   wire [ADDR_WIDTH-1:0] addr_buffer;
+  wire [$clog2(CONNECTIONS)-1:0] currID;
   
   assign data_out = data_buffer;
   assign m_axi_araddr = addr_buffer;
   assign m_axi_arburst = 2'b10;
   assign m_axi_arlen = 7;
+  assign cacheID = currID;
+
+  minimum busChoice (command_valid, busChoiceOut);
+  wire [$clog2(CONNECTIONS)-1:0] busChoiceOut;
 
   always_ff @ (posedge clk)
     if (reset) begin
