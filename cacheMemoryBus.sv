@@ -16,8 +16,8 @@ module top
   input wire [CONNECTIONS-1:0] command_ready,
   input wire [CONNECTIONS-1:0] [ADDR_WIDTH-1:0] command_addr,
   input wire [CONNECTIONS-1:0] [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_in,
-  output wire bus_valid,
-  output wire bus_ready,
+  output wire [CONNECTIONS-1:0] bus_valid,
+  output wire [CONNECTIONS-1:0] bus_ready,
   output wire [$clog2(CONNECTIONS)-1:0] cacheID,
   output wire [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
 
@@ -66,7 +66,7 @@ module top
 
   enum {IDLE, L_ADDR, L_READ, L_DONE, S_ADDR, S_WRITE} state, next_state; 
   wire [CHUNKS_LOG-1:0] offsetCounter;
-  wire [CHUNKS_LOG**2-1:0][DATA_WIDTH-1:0] data_buffer;
+  wire [2**CHUNKS_LOG-1:0][DATA_WIDTH-1:0] data_buffer;
   wire [ADDR_WIDTH-1:0] addr_buffer;
   wire [$clog2(CONNECTIONS)-1:0] currID;
   
@@ -77,7 +77,7 @@ module top
   assign cacheID = currID;
 
   minimum busChoice (command_valid, busChoiceOut);
-  wire [$clog2(CONNECTIONS)-1:0] busChoiceOut;
+  wire [$clog2(CONNECTIONS)-1:0] busChoiceOut; //to be used in IDLE, when choosing the next request to handle
 
   always_ff @ (posedge clk)
     if (reset) begin
@@ -87,7 +87,8 @@ module top
       state <= next_state;
       case(state)
           IDLE: begin
-            addr_buffer <= command_addr;
+            cacheID <= busChoiceOut; 
+            addr_buffer <= command_addr[busChoiceOut];
           end
           L_ADDR: begin
           end
@@ -111,10 +112,10 @@ module top
   //next_state logic
   always_comb begin
     case(state)
-        IDLE : next_state = command_valid ? (command_store ? S_ADDR : L_ADDR) : IDLE;
+        IDLE : next_state = command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) : IDLE;
         L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
         L_READ : next_state = offsetCounter == (-1) ? L_DONE : L_READ;
-        L_DONE : next_state = command_ready ? (command_valid ? (command_store ? S_ADDR : L_ADDR) : IDLE) : L_DONE;
+        L_DONE : next_state = command_ready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
         S_ADDR : ;//handshake???
         S_WRITE : next_state = offsetCounter == (-1) ? IDLE : S_WRITE;
     endcase 
