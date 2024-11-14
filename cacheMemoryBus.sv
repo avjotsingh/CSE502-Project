@@ -62,14 +62,13 @@ input  clk,
   input   wire [3:0]             m_axi_acsnoop
 );
 
-  enum {IDLE, STORE, LOAD, DONE_LOAD} state, nextstate; 
-  enum {L_IDLE, L_ADDR, L_READ} loadstate, nextloadstate;
-  enum {S_IDLE, S_ADDR, S_READ} storestate, nextstorestate;
+  enum {IDLE, L_ADDR, L_READ, L_DONE, S_ADDR, S_WRITE} state, next_state; 
   wire [CHUNKS_LOG-1:0] offsetCounter;
-  wire [CHUNKS_LOG**2-1:0][DATA_WIDTH-1:0] buffer;
+  wire [CHUNKS_LOG**2-1:0][DATA_WIDTH-1:0] data_buffer;
+  wire [ADDR_WIDTH-1:0] addr_buffer;
   
-  assign data_out = buffer;
-  assign m_axi_araddr = command_addr;
+  assign data_out = data_buffer;
+  assign m_axi_araddr = addr_buffer;
   assign m_axi_arburst = 2'b10;
   assign m_axi_arlen = 7;
 
@@ -78,58 +77,82 @@ input  clk,
       state <= IDLE;
       offsetCounter <= 0;
     end else begin
-        case(state)
-            IDLE: begin end
-            STORE: begin end
-            LOAD: begin
-                case (loadstate) 
-                endcase
-                if (m_axi_rvalid) begin
-                    buffer [offsetCounter] <= m_axi_rdata; offsetCounter <= offsetCounter + 1; 
-                end
-             end
-            DONE_LOAD: begin end
-        endcase
-        state <= nextstate;
+      state <= next_state;
+      case(state)
+          IDLE: begin
+            addr_buffer <= command_addr;
+          end
+          L_ADDR: begin
+          end
+          L_READ: begin
+            if (m_axi_rvalid) begin
+              data_buffer [offsetCounter] <= m_axi_rdata; offsetCounter <= offsetCounter + 1;
+            end
+          end
+          L_DONE: begin end
+          S_ADDR: begin end
+          S_WRITE: begin 
+            if (m_axi_wready) begin
+              offsetCounter <= offsetCounter + 1;
+            end
+          end
+          L_DONE: begin end
+      endcase
+      state <= next_state;
     end
 
-  //nextstate logic
+  //next_state logic
   always_comb begin
     case(state)
-        IDLE : nextstate = command_valid ? (command_store ? STORE : LOAD) : IDLE;
-        STORE : nextstate = offsetCounter == (-1) ? IDLE : STORE;
-        LOAD : nextstate = offsetCounter == (-1) ? DONE_LOAD : LOAD;
-        DONE_LOAD : nextstate = command_ready ? (command_valid ? (command_store ? STORE : LOAD) : IDLE) : DONE_LOAD;
+        IDLE : next_state = command_valid ? (command_store ? S_ADDR : L_ADDR) : IDLE;
+        L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
+        L_READ : next_state = offsetCounter == (-1) ? L_DONE : L_READ;
+        L_DONE : next_state = command_ready ? (command_valid ? (command_store ? S_ADDR : L_ADDR) : IDLE) : L_DONE;
+        S_ADDR : ;//handshake???
+        S_WRITE : next_state = offsetCounter == (-1) ? IDLE : S_WRITE;
     endcase 
   end
 
   //output logic
   always_comb begin
     case(state)
-        IDLE: begin
-            bus_valid = 0; 
-            bus_ready = 1;
-            m_axi_arvalid = 0;
-            m_axi_rready = 0;
-        end
-        STORE: begin
-            bus_valid = 0; 
-            bus_ready = 0;
-            m_axi_arvalid = 0;
-            m_axi_rready = 1;
-        end
-        LOAD: begin
-            bus_valid = 0; 
-            bus_ready = 0;
-            m_axi_arvalid = 0;
-            m_axi_rready = 0;
-        end
-        DONE_LOAD: begin 
-            bus_valid = 1; 
-            bus_ready = 1;
-            m_axi_arvalid = 0;
-            m_axi_rready = 0;
-        end
+      IDLE: begin
+        bus_valid = 0;
+        bus_ready = 1;
+        m_axi_arvalid = 0;
+        m_axi_rready = 0;
+      end
+      L_ADDR: begin
+        bus_valid = 0;
+        bus_ready = 0;
+        m_axi_arvalid = 1;
+        m_axi_rready = 0;
+      end
+      L_READ: begin
+        bus_valid = 0;
+        bus_ready = 0;
+        m_axi_arvalid = 0;
+        m_axi_rready = 1;
+      end
+      L_DONE: begin
+        bus_valid = 1;
+        bus_ready = 1;
+        m_axi_arvalid = 0;
+        m_axi_rready = 1;
+      end
+      S_ADDR: begin
+        bus_valid = 0;
+        bus_ready = 0;
+        m_axi_arvalid = 0;
+        m_axi_rready = 0;
+      end
+      S_WRITE: begin
+        bus_valid = 0;
+        bus_ready = 0;
+        m_axi_arvalid = 0;
+        m_axi_rready = 0;
+        m_axi_wdata = data_buffer [offsetCounter]; 
+      end
     endcase
   end
 endmodule
