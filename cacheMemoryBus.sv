@@ -69,15 +69,22 @@ module top
   wire [2**CHUNKS_LOG-1:0][DATA_WIDTH-1:0] data_buffer;
   wire [ADDR_WIDTH-1:0] addr_buffer;
   wire [$clog2(CONNECTIONS)-1:0] currID;
-  
+  wire [CONNECTIONS-1:0] currPow2;
+
   assign data_out = data_buffer;
   assign m_axi_araddr = addr_buffer;
   assign m_axi_arburst = 2'b10;
   assign m_axi_arlen = 7;
   assign cacheID = currID;
 
-  minimum busChoice (command_valid, busChoiceOut);
-  wire [$clog2(CONNECTIONS)-1:0] busChoiceOut; //to be used in IDLE, when choosing the next request to handle
+  //to be used in IDLE, when choosing the next request to handle
+  minimum #($clog2(CONNECTIONS)) busChoice (command_valid, busChoiceOut);
+  wire [$clog2(CONNECTIONS)-1:0] busChoiceOut; 
+
+  //to be used to filter which connection we are sending to 
+  minimum_inverse #($clog2(CONNECTIONS)) busChoiceReply (currID, currPow2);
+  
+
 
   always_ff @ (posedge clk)
     if (reset) begin
@@ -87,7 +94,7 @@ module top
       state <= next_state;
       case(state)
           IDLE: begin
-            cacheID <= busChoiceOut; 
+            currID <= busChoiceOut; 
             addr_buffer <= command_addr[busChoiceOut];
           end
           L_ADDR: begin
@@ -126,7 +133,7 @@ module top
     case(state)
       IDLE: begin
         bus_valid = 0;
-        bus_ready = 1;
+        bus_ready = currPow2;
         m_axi_arvalid = 0;
         m_axi_rready = 0;
       end
@@ -143,10 +150,10 @@ module top
         m_axi_rready = 1;
       end
       L_DONE: begin
-        bus_valid = 1;
-        bus_ready = 1;
+        bus_valid = currPow2;
+        bus_ready = 0;
         m_axi_arvalid = 0;
-        m_axi_rready = 1;
+        m_axi_rready = 0;
       end
       S_ADDR: begin
         bus_valid = 0;
