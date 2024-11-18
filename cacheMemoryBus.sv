@@ -10,7 +10,7 @@ module top
          reset,
          hz32768timer,
 
-  //cache interface
+  //cache interface, each cache should connect to one of the elements of the array 
   input wire [CONNECTIONS-1:0] command_valid,
   input wire [CONNECTIONS-1:0] command_store,
   input wire [CONNECTIONS-1:0] command_ready,
@@ -18,6 +18,8 @@ module top
   input wire [CONNECTIONS-1:0] [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_in,
   output wire [CONNECTIONS-1:0] bus_valid,
   output wire [CONNECTIONS-1:0] bus_ready,
+
+
   output wire [$clog2(CONNECTIONS)-1:0] cacheID,
   output wire [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
 
@@ -69,10 +71,13 @@ module top
   wire [2**CHUNKS_LOG-1:0][DATA_WIDTH-1:0] data_buffer;
   wire [ADDR_WIDTH-1:0] addr_buffer;
   wire [$clog2(CONNECTIONS)-1:0] currID;
+  
+  //should only push 1 to the current cache, 0 to the rest 
   wire [CONNECTIONS-1:0] currPow2;
 
   assign data_out = data_buffer;
   assign m_axi_araddr = addr_buffer;
+  assign m_axi_awaddr = addr_buffer;
   assign m_axi_arburst = 2'b10;
   assign m_axi_arlen = 7;
   assign cacheID = currID;
@@ -98,13 +103,19 @@ module top
             addr_buffer <= command_addr[busChoiceOut];
           end
           L_ADDR: begin
+            /*
+              The state change is handled in the logic, 
+              Address is already being pushed to memory. 
+            */
           end
           L_READ: begin
             if (m_axi_rvalid) begin
               data_buffer [offsetCounter] <= m_axi_rdata; offsetCounter <= offsetCounter + 1;
             end
           end
-          L_DONE: begin end
+          L_DONE: begin 
+            //!!!curently assuming that the cache that made the request will be ready for the result
+          end
           S_ADDR: begin end
           S_WRITE: begin 
             if (m_axi_wready) begin
@@ -113,7 +124,6 @@ module top
           end
           L_DONE: begin end
       endcase
-      state <= next_state;
     end
 
   //next_state logic
@@ -123,7 +133,7 @@ module top
         L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
         L_READ : next_state = offsetCounter == (-1) ? L_DONE : L_READ;
         L_DONE : next_state = command_ready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
-        S_ADDR : ;//handshake???
+        S_ADDR : next_state = m_axi_awready ? S_WRITE : S_ADDR;//handshake???
         S_WRITE : next_state = offsetCounter == (-1) ? IDLE : S_WRITE;
     endcase 
   end
@@ -134,38 +144,67 @@ module top
       IDLE: begin
         bus_valid = 0;
         bus_ready = currPow2;
+        
         m_axi_arvalid = 0;
         m_axi_rready = 0;
+
+        m_axi_awvalid = 0;
+        m_axi_wvalid = 0;
+        m_axi_wdata = 0;
       end
       L_ADDR: begin
         bus_valid = 0;
         bus_ready = 0;
+        
         m_axi_arvalid = 1;
         m_axi_rready = 0;
+        
+        m_axi_awvalid = 0;
+        m_axi_wvalid = 0;
+        m_axi_wdata = 0;
       end
       L_READ: begin
         bus_valid = 0;
         bus_ready = 0;
+        
         m_axi_arvalid = 0;
         m_axi_rready = 1;
+        
+        m_axi_awvalid = 0;
+        m_axi_wvalid = 0;
+        m_axi_wdata = 0;
       end
       L_DONE: begin
         bus_valid = currPow2;
         bus_ready = 0;
+        
         m_axi_arvalid = 0;
         m_axi_rready = 0;
+        
+        m_axi_awvalid = 0;
+        m_axi_wvalid = 0;
+        m_axi_wdata = 0;
       end
       S_ADDR: begin
         bus_valid = 0;
         bus_ready = 0;
+        
         m_axi_arvalid = 0;
         m_axi_rready = 0;
+        
+        m_axi_awvalid = 1;
+        m_axi_wvalid = 0;
+        m_axi_wdata = 0;
       end
       S_WRITE: begin
         bus_valid = 0;
         bus_ready = 0;
+        
         m_axi_arvalid = 0;
         m_axi_rready = 0;
+        
+        m_axi_awvalid = 0;
+        m_axi_wvalid = 0;
         m_axi_wdata = data_buffer [offsetCounter]; 
       end
     endcase
