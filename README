@@ -4,11 +4,13 @@
 // Put 'a' if you start, 'A' if you are done<br>
 // Put 'z' if you start, 'Z' if you are done<br>
 [] add to TODO list<be>
-[a] build a dumb 5+ stage pipeline
+[a] build a 5+ stage pipeline
+[a] add branch prediction logic to pipeline
+[a] handle data+control hazards in pipeline via forwarding/stalling
 [] decoder logic
 [] alu logic
 [] add logic to handle data hazards (stalling or data forwarding)
-[z] cache memory bus
+[Z] cache memory bus
 [z] make a direct-mapped cache<br>
 [] connect everything in top.sv<br>
 [] test test test<br>
