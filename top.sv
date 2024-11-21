@@ -60,13 +60,32 @@ module top
 );
 
   logic [63:0] pc;
+  reg [7:0] test_in;
+  wire [2:0] test_out;
+  logic test_start;
+  minimum #(3) min (test_in,test_out);
+
+  wire [2:0] test2_in;
+  reg [7:0] test2_out;
+  minimum_inverse #(3) min_inv (test2_in,test2_out);
 
   always_ff @ (posedge clk)
     if (reset) begin
       pc <= entry;
+      test_in <= 0;
+      test_start <= 0;
+      test2_in <= 0;
     end else begin
-      $display("Hello World!  @ %x", pc);
-      $finish;
+      //$display("min: in is %b, out is %d", test_in, test_out);
+      $display("min_inv: in is %b, out is %b", test2_in, test2_out);
+      if (!test_start) begin
+        if (test_in == 255) test_start <= 1;
+        test_in <= test_in + 1;
+        test2_in <= test2_in + 1;
+      end else begin
+        $display("Hello World!  @ %x", pc);
+        $finish;
+      end
     end
 
   initial begin

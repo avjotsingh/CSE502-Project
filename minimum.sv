@@ -1,5 +1,6 @@
 module minimum
 //this module outputs the position of the lowest value 1 in the input array
+//tested correctly!
 #(
     LOG_INPUTS = 1
 )
@@ -7,12 +8,13 @@ module minimum
     input wire [2**LOG_INPUTS-1:0] in,
     output wire [LOG_INPUTS-1:0] out
 );
-    wire unsigned [$size(out)-1:0] i;
+    wire [$size(out)-1:0] i;
+    
     always_comb begin
-        out = 0;
         i = 0;
+        out = 0;
         do begin
-            out = in[i] == 0 ? i : out;
+            out = in[i] ? i : out;
             i = i+1; 
         end while (i != 0);
     end
