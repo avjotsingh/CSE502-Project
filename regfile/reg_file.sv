@@ -1,4 +1,4 @@
-module register_file(
+module register_file #(
     DATA_WIDTH=64,
     NUM_REGS=32,
     NUM_REGS_LOG=$clog2(NUM_REGS)
