@@ -1,9 +1,9 @@
-module ifid_regs #(
+module if_id_regs #(
     INSTR_WIDTH = 32
     DATA_WIDTH = 64
 ) (
-    clk,
-    reset,;
+    input wire clk,
+    input wire reset,
     input wire [DATA_WIDTH-1:0] pc_in,
     input wire [INSTR_WIDTH-1:0] instruction_in,
     output wire [DATA_WIDTH-1:0] pc_out,
@@ -11,20 +11,20 @@ module ifid_regs #(
 );
 
     logic [DATA_WIDTH-1:0] pc;
-    logic [DATA_WIDTH-1:0] instruction;
+    logic [INSTR_WIDTH-1:0] instruction;
 
     always_ff @posedge(clk) begin
         if (reset) begin
-            pc <= 0;
-            instruction <= 0;
-        end else
-            pc <= pc_in;
-            instruction <= instruction_in;
+            pc              <= 0;
+            instruction     <= 0;
+        end else begin
+            pc              <= pc_in;
+            instruction     <= instruction_in;
         end
     end
 
     always_comb begin
-        pc_out = pc;
-        instruction_out = instruction;
+        pc_out              = pc;
+        instruction_out     = instruction;
     end
 endmodule

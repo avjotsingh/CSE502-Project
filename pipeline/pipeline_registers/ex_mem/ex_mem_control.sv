@@ -1,4 +1,4 @@
-module mem_control (
+module ex_mem_control (
     input wire clk,
     input wire reset,
     input wire branch_in,                       // control signal -> whether or not branch is taken

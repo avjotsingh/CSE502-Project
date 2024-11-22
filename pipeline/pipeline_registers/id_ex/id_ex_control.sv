@@ -1,4 +1,4 @@
-module wb_control #(
+module id_ex_control #(
     ALU_OP_WIDTH = 7,
     ALU_FUNC3_WIDTH = 3
     ALU_FUNC7_WIDTH = 7
