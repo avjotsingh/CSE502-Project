@@ -5,7 +5,8 @@ module directCache
     OFFSET_LENGTH = 5, //I just made up #s here
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
-    STATE_BITS = 1
+    //TODO: Make this non-variable in construction
+    STATE_BITS = 2 // {Valid,Dirty}
 )
 (
     input wire clk,
@@ -18,17 +19,32 @@ module directCache
 
     input wire dready,
 
+    output wire aready,
     output wire dvalid,
     output wire [DATA_WIDTH-1:0] data_out
 );
 
+    //register for the current address we are dealing with
     wire [ADDR_WIDTH-1:0] internal_addr;
+
+    //combinational parsing of the input
+    wire [TAG_LENGTH-1:0] tag;
+    wire [INDEX_LENGTH-1:0] index;
+    wire [OFFSET_LENGTH-1:0] offset;
+
+
+    wire hit;
+
     assign tag = internal_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
     assign index = internal_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
     assign offset = internal_addr[OFFSET_LENGTH-1:0];
-    
-    assign hit = tag == cache[index][TAG_LENGTH-1:0];
-    assign data_out = hit ? cache[index][(offset + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1: offset * DATA_WIDTH + STATE_BITS + TAG_LENGTH] : 1 /*this is a debug bit rn*/;
+
+    assign hit = tag == cache[index][TAG_LENGTH-1:0] && cache[index][TAG_LENGTH] == 1;
+    //the below line doesn't compile becaus of the variable on both sides of the [a:b] 
+    //assign data_out = hit ? cache[index][(offset + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1: offset * DATA_WIDTH + STATE_BITS + TAG_LENGTH] : 1 /*this is a debug bit rn*/;
+
+    //{{32-OFFSET_LENGTH{1'b0}}, offset} is just 0-padding offset to 32 bits for math purposes 
+    assign data_out = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
 
     //did_we_just_finish_our_memory_operation? probably replace with a wire that communicates with the bus
     wire mod;
@@ -38,10 +54,17 @@ module directCache
     
     always_ff @ (posedge clk) begin
         if (reset) begin
+            //TODO: Found this line on stack overflow, should fully understand what this is doing
+            cache <= '{default: '0};
+            internal_addr <= 0;
         end else begin
             case (state)
                 IDLE: begin
-                    
+                    if (avalid) begin
+                        internal_addr <= aaddr;
+                    end else begin 
+                        internal_addr <= 0;
+                    end
                 end
                 OUTPUT: begin
                     
@@ -66,30 +89,44 @@ module directCache
     end
 
     //output logic
+    /*
+        wires that need pushing:
+        aready, dvalid
+    */
     always_comb begin
-        case (state)
-            IDLE: begin
-                
-            end
-            OUTPUT: begin
-                
-            end
-            IDLE_BUSY: begin
-                
-            end
-            OUTPUT_BUSY: begin
-                
-            end
-            LOADING: begin
-                
-            end
-            STALL_LOAD: begin
-                
-            end
-            STALL_STORE: begin
-                
-            end
-        endcase
+        if (reset) begin
+        end else begin
+            case (state)
+                IDLE: begin
+                    aready = 1;
+                    dvalid = 0;
+                end
+                OUTPUT: begin
+                    aready = 0;
+                    dvalid = 1;
+                end
+                IDLE_BUSY: begin
+                    aready = 1;
+                    dvalid = 0;
+                end
+                OUTPUT_BUSY: begin
+                    aready = 0;
+                    dvalid = 1;
+                end
+                LOADING: begin
+                    aready = 0;
+                    dvalid = 0;
+                end
+                STALL_LOAD: begin
+                    aready = 0;                    
+                    dvalid = 0;
+                end
+                STALL_STORE: begin
+                    aready = 0;
+                    dvalid = 0;
+                end
+            endcase
+        end
     end
 
     //next state logic
