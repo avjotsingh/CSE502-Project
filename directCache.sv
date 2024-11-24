@@ -21,7 +21,17 @@ module directCache
 
     output wire aready,
     output wire dvalid,
-    output wire [DATA_WIDTH-1:0] data_out
+    output wire [DATA_WIDTH-1:0] data_out,
+
+    //memory bus wires:
+    output wire command_valid,
+    output wire command_store,
+    output wire command_rready,
+    output wire [ADDR_WIDTH-1:0] command_addr,
+    //TODO: confirm the size of this array
+    output wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_in,
+    input wire bus_valid,
+    input wire bus_ready
 );
 
     //register for the current address we are dealing with
@@ -46,10 +56,15 @@ module directCache
     //{{32-OFFSET_LENGTH{1'b0}}, offset} is just 0-padding offset to 32 bits for math purposes 
     assign data_out = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
 
+
+
+    enum {IDLE, OUTPUT, IDLE_BUSY, OUTPUT_BUSY, LOADING, STALL_LOAD, STALL_STORE} state, next_state;
+    
+    //TODO: Communicate with the memory bus
+
     //did_we_just_finish_our_memory_operation? probably replace with a wire that communicates with the bus
     wire mod;
 
-    enum {IDLE, OUTPUT, IDLE_BUSY, OUTPUT_BUSY, LOADING, STALL_LOAD, STALL_STORE} state, next_state;	
     logic [2**INDEX_LENGTH-1:0] [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cache;
     
     always_ff @ (posedge clk) begin
@@ -128,6 +143,7 @@ module directCache
             endcase
         end
     end
+
 
     //next state logic
     always_comb begin

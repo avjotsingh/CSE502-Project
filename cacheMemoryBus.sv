@@ -13,7 +13,7 @@ module top
   //cache interface, each cache should connect to one of the elements of the array 
   input wire [CONNECTIONS-1:0] command_valid,
   input wire [CONNECTIONS-1:0] command_store,
-  input wire [CONNECTIONS-1:0] command_ready,
+  input wire [CONNECTIONS-1:0] command_rready,
   input wire [CONNECTIONS-1:0] [ADDR_WIDTH-1:0] command_addr,
   input wire [CONNECTIONS-1:0] [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_in,
   output wire [CONNECTIONS-1:0] bus_valid,
@@ -132,7 +132,7 @@ module top
         IDLE : next_state = command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) : IDLE;
         L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
         L_READ : next_state = offsetCounter == (-1) ? L_DONE : L_READ;
-        L_DONE : next_state = command_ready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
+        L_DONE : next_state = command_rready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
         S_ADDR : next_state = m_axi_awready ? S_WRITE : S_ADDR;//handshake???
         S_WRITE : next_state = offsetCounter == (-1) ? IDLE : S_WRITE;
     endcase 
