@@ -12,6 +12,8 @@ module directCache
     input wire clk,
     input wire reset,
     
+    //cpu wires
+
     input wire avalid,
     input wire [ADDR_WIDTH-1:0] aaddr,
     //if not, then store
@@ -21,7 +23,7 @@ module directCache
 
     output wire aready,
     output wire dvalid,
-    output wire [DATA_WIDTH-1:0] data_out,
+    output wire [DATA_WIDTH-1:0] data_to_cpu,
 
     //memory bus wires:
     output wire command_valid,
@@ -29,7 +31,7 @@ module directCache
     output wire command_rready,
     output wire [ADDR_WIDTH-1:0] command_addr,
     //TODO: confirm the size of this array
-    output wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_in,
+    output wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_to_bus,
     input wire bus_valid,
     input wire bus_ready
 );
@@ -43,6 +45,7 @@ module directCache
     wire [OFFSET_LENGTH-1:0] offset;
 
 
+
     wire hit;
 
     assign tag = internal_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
@@ -51,11 +54,10 @@ module directCache
 
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && cache[index][TAG_LENGTH] == 1;
     //the below line doesn't compile becaus of the variable on both sides of the [a:b] 
-    //assign data_out = hit ? cache[index][(offset + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1: offset * DATA_WIDTH + STATE_BITS + TAG_LENGTH] : 1 /*this is a debug bit rn*/;
+    //assign data_to_cpu = hit ? cache[index][(offset + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1: offset * DATA_WIDTH + STATE_BITS + TAG_LENGTH] : 1 /*this is a debug bit rn*/;
 
     //{{32-OFFSET_LENGTH{1'b0}}, offset} is just 0-padding offset to 32 bits for math purposes 
-    assign data_out = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
-
+    assign data_to_cpu = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
 
 
     enum {IDLE, OUTPUT, IDLE_BUSY, OUTPUT_BUSY, LOADING, STALL_LOAD, STALL_STORE} state, next_state;
@@ -72,6 +74,7 @@ module directCache
             //TODO: Found this line on stack overflow, should fully understand what this is doing
             cache <= '{default: '0};
             internal_addr <= 0;
+            data_to_bus <= 0;
         end else begin
             case (state)
                 IDLE: begin
@@ -153,9 +156,8 @@ module directCache
             IDLE_BUSY: next_state = mod ? (avalid ? (hit ? (load ? OUTPUT : IDLE) : (load ? OUTPUT_BUSY : IDLE_BUSY)) : IDLE) : 
                 (avalid ? (hit ? (load ? OUTPUT_BUSY : IDLE_BUSY) : (load ? STALL_LOAD : STALL_STORE)) : IDLE_BUSY); 
             OUTPUT_BUSY: next_state = mod ? (dready ? IDLE : OUTPUT) : (dready ? IDLE_BUSY : OUTPUT_BUSY);
-            //TODO: replace with a wire that (is connected to/communicates with) the memory bus ≡ rdone
-            // next_state = rdone ? OUTPUT_BUSY : LOADING;
-            LOADING: next_state = OUTPUT_BUSY;
+
+            LOADING: next_state = bus_valid ? OUTPUT_BUSY : LOADING;
             //TODO: I think I'm overloading the load variable here, maybe need another register that remembers the previous
             //FIX: Add a new state to differentiate the two
             STALL_LOAD: next_state = mod ? LOADING : STALL_LOAD; 
