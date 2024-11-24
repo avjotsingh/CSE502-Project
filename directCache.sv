@@ -6,7 +6,7 @@ module directCache
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
     //TODO: Make this non-variable in construction
-    STATE_BITS = 2 // {Valid,Dirty}
+    STATE_BITS = 1 // {Valid}
 )
 (
     input wire clk,
@@ -53,8 +53,6 @@ module directCache
     assign offset = internal_addr[OFFSET_LENGTH-1:0];
 
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && cache[index][TAG_LENGTH] == 1;
-    //the below line doesn't compile becaus of the variable on both sides of the [a:b] 
-    //assign data_to_cpu = hit ? cache[index][(offset + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1: offset * DATA_WIDTH + STATE_BITS + TAG_LENGTH] : 1 /*this is a debug bit rn*/;
 
     //{{32-OFFSET_LENGTH{1'b0}}, offset} is just 0-padding offset to 32 bits for math purposes 
     assign data_to_cpu = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
@@ -66,6 +64,7 @@ module directCache
 
     //did_we_just_finish_our_memory_operation? probably replace with a wire that communicates with the bus
     wire mod;
+    assign mod = command_valid && bus_ready;
 
     logic [2**INDEX_LENGTH-1:0] [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cache;
     
@@ -80,6 +79,14 @@ module directCache
                 IDLE: begin
                     if (avalid) begin
                         internal_addr <= aaddr;
+                        //if miss by invalid
+                        if (!hit && cache[index][TAG_LENGTH] == 0) begin
+                            if (!load) begin
+                                //load memory into cache, then overwrite the correct part with data_in        
+                            end
+                        end else if (!hit) begin
+                            data_to_bus <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
+                        end
                     end else begin 
                         internal_addr <= 0;
                     end
@@ -88,7 +95,13 @@ module directCache
                     
                 end
                 IDLE_BUSY: begin
-                    
+                    if (!hit && cache[index][TAG_LENGTH] == 0) begin
+                        if (!load) begin
+                            //load memory into cache, then overwrite the correct part with data_in        
+                        end
+                    end else if (!hit) begin
+                        data_to_bus <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
+                    end
                 end
                 OUTPUT_BUSY: begin
                     
@@ -106,7 +119,7 @@ module directCache
         end
     end
 
-    //output logic
+    //output to cpu logic
     /*
         wires that need pushing:
         aready, dvalid
@@ -142,6 +155,36 @@ module directCache
                 STALL_STORE: begin
                     aready = 0;
                     dvalid = 0;
+                end
+            endcase
+        end
+    end
+
+    //output to bus logic
+    always_comb begin
+        if (reset) begin
+        end else begin
+            case (state)
+                IDLE: begin
+                    
+                end
+                OUTPUT: begin
+
+                end
+                IDLE_BUSY: begin
+                
+                end
+                OUTPUT_BUSY: begin
+                   
+                end
+                LOADING: begin
+                   
+                end
+                STALL_LOAD: begin
+                 
+                end
+                STALL_STORE: begin
+                 
                 end
             endcase
         end
