@@ -7,8 +7,8 @@
 [a] build a 5+ stage pipeline
 [a] add branch prediction logic to pipeline
 [a] handle data+control hazards in pipeline via forwarding/stalling
-[] decoder logic
-[] alu logic
+[a] decoder logic
+[a] alu logic
 [] add logic to handle data hazards (stalling or data forwarding)
 [Z] cache memory bus
 [z] make a direct-mapped cache<br>
