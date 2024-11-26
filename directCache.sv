@@ -38,7 +38,9 @@ module directCache
 );
 
     //register for the current address we are dealing with
-    wire [ADDR_WIDTH-1:0] internal_addr;
+    wire [ADDR_WIDTH-1:0] cache_addr;
+
+    wire [ADDR_WIDTH-1:0] dirty_addr;
 
     //combinational parsing of the input
     wire [TAG_LENGTH-1:0] tag;
@@ -60,15 +62,15 @@ module directCache
         (.data(cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:STATE_BITS + TAG_LENGTH]), 
         .new_data(new_data), .sel(offset), .final_data(new_cache_data));
 
-    assign tag = internal_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
-    assign index = internal_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
-    assign offset = internal_addr[OFFSET_LENGTH-1:0];
+    assign tag = cache_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
+    assign index = cache_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
+    assign offset = cache_addr[OFFSET_LENGTH-1:0];
 
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && cache[index][TAG_LENGTH] == 1;
 
     //{{32-OFFSET_LENGTH{1'b0}}, offset} is just 0-padding offset to 32 bits for math purposes 
-    assign data_to_cpu = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
-
+    //assign data_to_cpu = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
+    assign data_to_cpu = cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH]
 
     enum {IDLE, OUTPUT, IDLE_BUSY, OUTPUT_BUSY, LOADING, STALL_LOAD, STALL_STORE} state, next_state;
     enum {BUS_IDLE, BUS_STORE_VALID, BUS_LOAD_VALID, BUS_LOAD_READY} bus_state, next_bus_state;
@@ -85,7 +87,7 @@ module directCache
         if (reset) begin
             //TODO: Found this line on stack overflow, should fully understand what this is doing
             cache <= '{default: '0};
-            internal_addr <= 0;
+            cache_addr <= 0;
             data_to_bus <= 0;
             state <= IDLE;
             bus_state <= BUS_IDLE;
@@ -95,7 +97,7 @@ module directCache
             case (state)
                 IDLE: begin
                     if (avalid) begin
-                        internal_addr <= aaddr;
+                        cache_addr <= aaddr;
                         //if miss by invalid
                         if (!hit && cache[index][TAG_LENGTH] == 0) begin
                             if (!load) begin
@@ -106,7 +108,7 @@ module directCache
                             data_to_bus <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
                         end
                     end else begin 
-                        internal_addr <= 0;
+                        cache_addr <= 0;
                     end
                 end
                 OUTPUT: begin
@@ -149,6 +151,7 @@ module directCache
                 IDLE: begin
                     aready = 1;
                     dvalid = 0;
+                    data
                 end
                 OUTPUT: begin
                     aready = 0;
@@ -184,25 +187,25 @@ module directCache
         end else begin
             case (state)
                 IDLE: begin
-                    
+                    command_addr = aaddr;
                 end
                 OUTPUT: begin
-
+                    command_addr = 0;
                 end
                 IDLE_BUSY: begin
-                
+                    command_addr = dirty_addr;
                 end
                 OUTPUT_BUSY: begin
-                   
+                    command_addr = dirty_addr;  
                 end
                 LOADING: begin
-                   
+                    command_addr = cache_addr;  
                 end
                 STALL_LOAD: begin
-                 
+                    command_addr = dirty_addr; 
                 end
                 STALL_STORE: begin
-                 
+                    command_addr = dirty_addr; 
                 end
             endcase
         end
