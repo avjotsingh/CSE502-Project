@@ -1,5 +1,6 @@
 // TODO: add control signals for loading/storing byte/word etc.
 // TODO: add control signals for choosing between rs1 and pc (for auipc, and jalr)
+// TODO: verify jal, jalr, lui, and auipc instructions
 
 module alu #(
     DATA_WIDTH = 64,
