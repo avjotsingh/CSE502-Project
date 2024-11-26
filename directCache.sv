@@ -20,6 +20,7 @@ module directCache
     input wire load,
 
     input wire dready,
+    input wire [DATA_WIDTH-1:0] data_from_cpu,
 
     output wire aready,
     output wire dvalid,
@@ -44,9 +45,20 @@ module directCache
     wire [INDEX_LENGTH-1:0] index;
     wire [OFFSET_LENGTH-1:0] offset;
 
-
-
     wire hit;
+
+    //TODO: make this better
+    wire [DATA_WIDTH * (2**OFFSET_LENGTH) -1 : 0] new_cache_data;
+
+    wire [DATA_WIDTH-1:0] new_data;
+
+    //this needs logic for data from memory
+    assign new_data = data_from_cpu;
+
+    //makes the new cache state
+    modifyOne #(OFFSET_LENGTH, DATA_WIDTH) store_modifier 
+        (.data(cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:STATE_BITS + TAG_LENGTH]), 
+        .new_data(new_data), .sel(offset), .final_data(new_cache_data));
 
     assign tag = internal_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
     assign index = internal_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
@@ -59,6 +71,7 @@ module directCache
 
 
     enum {IDLE, OUTPUT, IDLE_BUSY, OUTPUT_BUSY, LOADING, STALL_LOAD, STALL_STORE} state, next_state;
+    enum {BUS_IDLE, BUS_STORE_VALID, BUS_LOAD_VALID, BUS_LOAD_READY} bus_state, next_bus_state;
     
     //TODO: Communicate with the memory bus
 
@@ -74,7 +87,11 @@ module directCache
             cache <= '{default: '0};
             internal_addr <= 0;
             data_to_bus <= 0;
+            state <= IDLE;
+            bus_state <= BUS_IDLE;
         end else begin
+            state <= next_state;
+            bus_state <= next_bus_state;
             case (state)
                 IDLE: begin
                     if (avalid) begin
@@ -82,7 +99,8 @@ module directCache
                         //if miss by invalid
                         if (!hit && cache[index][TAG_LENGTH] == 0) begin
                             if (!load) begin
-                                //load memory into cache, then overwrite the correct part with data_in        
+                                //load memory into cache, then overwrite the correct part with data_in      
+                                cache[index] <= {new_cache_data,1'b1,tag};  
                             end
                         end else if (!hit) begin
                             data_to_bus <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
@@ -199,15 +217,9 @@ module directCache
             IDLE_BUSY: next_state = mod ? (avalid ? (hit ? (load ? OUTPUT : IDLE) : (load ? OUTPUT_BUSY : IDLE_BUSY)) : IDLE) : 
                 (avalid ? (hit ? (load ? OUTPUT_BUSY : IDLE_BUSY) : (load ? STALL_LOAD : STALL_STORE)) : IDLE_BUSY); 
             OUTPUT_BUSY: next_state = mod ? (dready ? IDLE : OUTPUT) : (dready ? IDLE_BUSY : OUTPUT_BUSY);
-
             LOADING: next_state = bus_valid ? OUTPUT_BUSY : LOADING;
-            //TODO: I think I'm overloading the load variable here, maybe need another register that remembers the previous
-            //FIX: Add a new state to differentiate the two
             STALL_LOAD: next_state = mod ? LOADING : STALL_LOAD; 
             STALL_STORE: next_state = mod ? IDLE_BUSY : STALL_STORE; 
         endcase
     end
-
-
-
 endmodule
