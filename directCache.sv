@@ -151,7 +151,6 @@ module directCache
                 IDLE: begin
                     aready = 1;
                     dvalid = 0;
-                    data
                 end
                 OUTPUT: begin
                     aready = 0;
