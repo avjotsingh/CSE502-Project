@@ -1,6 +1,5 @@
 // TODO: add control signals for loading/storing byte/word etc.
 // TODO: add control signals for choosing between rs1 and pc (for auipc, and jalr)
-// TODO: verify jal, jalr, lui, and auipc instructions
 
 module alu #(
     DATA_WIDTH = 64,
@@ -95,11 +94,11 @@ module alu #(
             
             7'b0110111:
                 // RV32I
-                res = data2 << 12;                                                                  // lui
+                res = data2;                                                                        // lui
             
             7'b0010111:
                 // RV32I
-                res = data1 + (data2 << 12);                                                        // auipc
+                res = data1 + data2;                                                                // auipc
             
             7'b0111011, 7'b0011011:
                 case (func)

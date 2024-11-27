@@ -1,4 +1,4 @@
-# file: test_mux.py
+# file: test_alu.py
 import cocotb
 from cocotb.triggers import Timer
 
@@ -155,7 +155,7 @@ async def test_mux_basic(alu):
     alu.data1.value = 0xfffffffffeadbee0
     alu.data2.value = 0xffffffff0000000f
     await Timer(1, units="ns")
-    assert alu.alu_res.value == 0xfffffffffeadbeef, f"Failed for bgeu, got {alu.alu_res.value}"
+    assert alu.alu_res.value == 0xfffffffffeadbeef, f"Failed for addw, got {alu.alu_res.value}"
 
     # Test case 18: subw
     alu.alu_op.value = 0b0111011
@@ -164,7 +164,7 @@ async def test_mux_basic(alu):
     alu.data1.value = 0x0000000000000008
     alu.data2.value = 0x00000000000000f0
     await Timer(1, units="ns")
-    assert alu.alu_res.value == 0xffffffffffffff18, f"Failed for bgeu, got {alu.alu_res.value}"
+    assert alu.alu_res.value == 0xffffffffffffff18, f"Failed for subw, got {alu.alu_res.value}"
 
     # Test case 19: sllw
     alu.alu_op.value = 0b0111011
@@ -173,7 +173,7 @@ async def test_mux_basic(alu):
     alu.data1.value = 0xdeadbeefdeadfeef
     alu.data2.value = 0x0000000000000010
     await Timer(1, units="ns")
-    assert alu.alu_res.value == 0xfffffffffeef0000, f"Failed for bgeu, got {alu.alu_res.value}"
+    assert alu.alu_res.value == 0xfffffffffeef0000, f"Failed for sllw, got {alu.alu_res.value}"
 
     # Test case 20: srlw
     alu.alu_op.value = 0b0111011
@@ -182,7 +182,7 @@ async def test_mux_basic(alu):
     alu.data1.value = 0xdeadbeefdeadbeef
     alu.data2.value = 0x0000000000000010
     await Timer(1, units="ns")
-    assert alu.alu_res.value == 0xdead, f"Failed for bgeu, got {alu.alu_res.value}"
+    assert alu.alu_res.value == 0xdead, f"Failed for srlw, got {alu.alu_res.value}"
 
     # Test case 21: sraw
     alu.alu_op.value = 0b0111011
@@ -191,4 +191,40 @@ async def test_mux_basic(alu):
     alu.data1.value = 0xfeadbeeffeadbeef
     alu.data2.value = 0x0000000000000010
     await Timer(1, units="ns")
-    assert alu.alu_res.value == 0xfffffffffffffead, f"Failed for bgeu, got {alu.alu_res.value}"
+    assert alu.alu_res.value == 0xfffffffffffffead, f"Failed for sraw, got {alu.alu_res.value}"
+
+    # Test case 22: jal
+    alu.alu_op.value = 0b1101111
+    alu.func3.value = 0x0
+    alu.func7.value = 0x0
+    alu.data1.value = 0x0000000000000010
+    alu.data2.value = 0x0000000000000010
+    await Timer(1, units="ns")
+    assert alu.alu_res.value == 0x14, f"Failed for jal, got {alu.alu_res.value}"
+
+    # Test case 23: jalr
+    alu.alu_op.value = 0b1100111
+    alu.func3.value = 0x0
+    alu.func7.value = 0x0
+    alu.data1.value = 0x0000000000000010
+    alu.data2.value = 0x0000000000000010
+    await Timer(1, units="ns")
+    assert alu.alu_res.value == 0x14, f"Failed for jalr, got {alu.alu_res.value}"
+
+    # Test case 24: lui
+    alu.alu_op.value = 0b0110111
+    alu.func3.value = 0x0
+    alu.func7.value = 0x0
+    alu.data1.value = 0xfeadbeeffeadbeef
+    alu.data2.value = 0x000000000000f000
+    await Timer(1, units="ns")
+    assert alu.alu_res.value == 0xf000, f"Failed for lui, got {alu.alu_res.value}"
+
+    # Test case 25: auipc
+    alu.alu_op.value = 0b0010111
+    alu.func3.value = 0x0
+    alu.func7.value = 0x0
+    alu.data1.value = 0xfeadbeeffead0eef
+    alu.data2.value = 0x000000000000f000
+    await Timer(1, units="ns")
+    assert alu.alu_res.value == 0xfeadbeeffeadfeef, f"Failed for auipc, got {alu.alu_res.value}"
