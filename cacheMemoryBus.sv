@@ -2,7 +2,7 @@ module top
 #(
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
-    CHUNKS_LOG = 3,
+    CHUNKS_LOG = 5,
     CONNECTIONS = 2
 )
 (
