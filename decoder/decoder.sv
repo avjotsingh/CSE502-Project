@@ -17,6 +17,7 @@ module decoder #(
     output wire [REG_ID_WIDTH-1:0] rs1,                                                     // Source register 1
     output wire [REG_ID_WIDTH-1:0] rs2,                                                     // Source register 2
     output wire [REG_ID_WIDTH-1:0] rd,                                                      // Destination register
+    output wire reg_to_pc,                                                                  // ALU control signal -> chooses b/w register 1 value and PC (0 for register value, 1 for PC)
     output wire alu_src,                                                                    // ALU control signal -> chooses b/w register 2 value and immediate (0 for register value, 1 for immediate)
     output wire mem_read,                                                                   // MEM control signal -> read memory?
     output wire mem_write,                                                                  // MEM control signal -> write memory?
@@ -32,6 +33,7 @@ module decoder #(
     logic [REG_ID_WIDTH-1:0] rs1_;
     logic [REG_ID_WIDTH-1:0] rs2_;
     logic [REG_ID_WIDTH-1:0] rd_;
+    logic reg_to_pc_;
     logic alu_src_;
     logic mem_read_;
     logic mem_write_;
@@ -45,6 +47,7 @@ module decoder #(
     assign rs1 = rs1_;
     assign rs2 = rs2_;
     assign rd = rd_;
+    assign reg_to_pc = reg_to_pc_;
     assign alu_src = alu_src_;
     assign mem_read = mem_read_;
     assign mem_write = mem_write_;
@@ -60,6 +63,7 @@ module decoder #(
         rs1_ = 0;
         rs2_ = 0;
         rd_ = 0;
+        reg_to_pc_ = 0;
         alu_src_ = 0;
         mem_read_ = 0;
         mem_write_ = 0;
@@ -103,6 +107,7 @@ module decoder #(
                 rs1_ = instr_[19:15];
                 imm_ = { {52{instr_[31]}}, instr_[31:20]};
                 
+                reg_to_pc_ = alu_op != 7'b1100111 ? 0 : 1;
                 alu_src_ = 1;
                 mem_read_ = alu_op != 7'b1100111 ? 1 : 0;
                 reg_write_ = 1;
@@ -131,6 +136,7 @@ module decoder #(
                 rd_ = instr_[11:7];
                 imm_ = { {44{instr_[31]}}, instr_[19:12], instr_[20], instr_[30:21], 1'b0 };
 
+                reg_to_pc_ = 1;
                 alu_src_ = 1;
                 reg_write_ = 1;
                 mem_to_reg_ = 1;
@@ -140,6 +146,7 @@ module decoder #(
                 rd_ = instr_[11:7];
                 imm_ = { {32{instr_[31]}}, instr_[31:12], {12{1'b0}}};
 
+                reg_to_pc_ = 1;
                 alu_src_ = 1;
                 reg_write_ = 1;
                 mem_to_reg_ = 1;
