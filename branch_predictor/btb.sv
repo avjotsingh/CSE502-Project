@@ -1,4 +1,4 @@
-module branch_target_buffer #(
+module btb #(
     ADDR_WIDTH = 64,        // Width of addresses
     INDEX_WIDTH = 10,       // Number of entries = 2^INDEX_WIDTH
     TAG_WIDTH = ADDR_WIDTH - INDEX_WIDTH
@@ -14,43 +14,46 @@ module branch_target_buffer #(
     output wire hit                                         // Whether or not BTB hit for IF stage
 );
 
-    // Define BTB entry structure
-    typedef struct {
-        logic [TAG_WIDTH-1:0] tag;
-        logic [ADDR_WIDTH-1:0] target;
-        logic valid;
-    } btb_entry;
-
     // BTB memory
-    btb_entry btb_mem [0:(1 << INDEX_WIDTH) - 1];
+    logic [TAG_WIDTH+ADDR_WIDTH:0] btb_mem[0:(1 << INDEX_WIDTH) - 1];
 
-    // Extract index and tag from PC
     logic [INDEX_WIDTH-1:0] index_if;
     logic [INDEX_WIDTH-1:0] index_ex;
     logic [TAG_WIDTH-1:0] pc_tag_if;
     logic [TAG_WIDTH-1:0] pc_tag_ex;
+    logic [ADDR_WIDTH-1:0] predicted_target_;
+    logic hit_;
 
-    assign index_if = pc_if[INDEX_WIDTH-1:0];
-    assign pc_tag_if = pc_if[ADDR_WIDTH-1:INDEX_WIDTH];
-    assign index_ex = pc_ex[INDEX_WIDTH-1:0];
-    assign pc_tag_ex = pc_ex[ADDR_WIDTH-1:INDEX_WIDTH];
+    assign predicted_target = predicted_target_;
+    assign hit = hit_;
+
+    // Extract index and tag from PC
+    always_comb begin
+        index_if = pc_if[INDEX_WIDTH-1:0];
+        pc_tag_if = pc_if[ADDR_WIDTH-1:INDEX_WIDTH];
+        index_ex = pc_ex[INDEX_WIDTH-1:0];
+        pc_tag_ex = pc_ex[ADDR_WIDTH-1:INDEX_WIDTH];
+    end
 
     // Read BTB entry
-    btb_entry current_entry;
+    logic [TAG_WIDTH-1:0] current_tag;
+    logic [ADDR_WIDTH-1:0] current_target;
+    logic current_valid;
 
     // Predict target
     always_comb begin
-        current_entry = btb_mem[index_if];
-
-        if (pc_if == pc_ex && branch_taken) begin                   // Forwarding condition, if btb entry from EX stage is being updated at the same as a read from IF stage
-            predicted_target             = target_addr_ex;
-            hit                          = 1'b1;
-        end else if (current_entry.valid && (current_entry.tag == pc_tag_if)) begin
-            predicted_target = current_entry.target;
-            hit = 1'b1;
+        current_valid = btb_mem[index_if][0];
+        current_target = btb_mem[index_if][ADDR_WIDTH:1];
+        current_tag = btb_mem[index_if][TAG_WIDTH+ADDR_WIDTH:ADDR_WIDTH+1];
+        if (pc_if == pc_ex && branch_taken_ex) begin                   // Forwarding condition, if btb entry from EX stage is being updated at the same as a read from IF stage
+            predicted_target_             = target_addr_ex;
+            hit_                          = 1'b1;
+        end else if (current_valid && (current_tag == pc_tag_if)) begin
+            predicted_target_ = current_target;
+            hit_ = 1'b1;
         end else begin
-            predicted_target = '0;
-            hit = 1'b0;
+            predicted_target_ = '0;
+            hit_ = 1'b0;
         end
     end
 
@@ -58,12 +61,10 @@ module branch_target_buffer #(
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             foreach (btb_mem[i]) begin
-                btb_mem[i].valid        <= '0;
+                btb_mem[i]                  =  {{TAG_WIDTH{1'b0}}, {ADDR_WIDTH{1'b0}}, 1'b0};        // work-around for error due to non-blocking assignment
             end
-        end else if (branch_taken) begin
-            btb_mem[index_ex].tag          <= pc_tag_ex;
-            btb_mem[index_ex].target       <= target_addr_ex;
-            btb_mem[index_ex].valid        <= 1'b1;
+        end else if (branch_taken_ex) begin
+            btb_mem[index_ex]               <= {pc_tag_ex, target_addr_ex, 1'b1};
         end
     end
 endmodule
