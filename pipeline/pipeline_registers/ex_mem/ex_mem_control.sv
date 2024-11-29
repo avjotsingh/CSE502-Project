@@ -15,6 +15,10 @@ module ex_mem_control (
     logic mem_read;
     logic mem_write;
 
+    assign branch_out          = branch;
+    assign mem_read_out        = mem_read;
+    assign mem_write_out       = mem_write;
+
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
         if (reset) begin
@@ -26,12 +30,5 @@ module ex_mem_control (
             mem_read    <= mem_read_in;
             mem_write   <= mem_write_in;
         end
-    end
-
-    // Continuous assignments to output the register values
-    always_comb begin
-        branch_out          = branch
-        mem_read_out        = mem_read;
-        mem_write_out       = mem_write;
     end
 endmodule

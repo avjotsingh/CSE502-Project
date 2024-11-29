@@ -23,12 +23,16 @@ module mem_wb_regs #(
         .reg_write_in(wb_control_in[1]),
         .mem_to_reg_in(wb_control_in[0]),
         .reg_write_out(wb_control_out[1]), 
-        .mem_to_reg_out(wb_control_out[0]),
+        .mem_to_reg_out(wb_control_out[0])
     );
 
     logic [DATA_WIDTH-1:0] alu;
     logic [DATA_WIDTH-1:0] mem_data;
     logic [REG_ID_WIDTH-1:0] dest;
+
+    assign alu_out         = alu;
+    assign mem_data_out    = mem_data;
+    assign dest_out        = dest;
 
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
@@ -42,12 +46,4 @@ module mem_wb_regs #(
             dest        <= dest_in;
         end
     end
-
-    // Continuous assignments to output the register values
-    always_comb begin
-        alu_out         = alu_reg;
-        mem_data_out    = mem_data_reg;
-        dest_out        = dest;
-    end
-
 endmodule

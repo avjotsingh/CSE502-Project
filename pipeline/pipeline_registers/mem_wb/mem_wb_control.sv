@@ -4,13 +4,16 @@ module mem_wb_control (
     input wire reg_write_in,                    // control signal -> whether or not to write back to register file
     input wire mem_to_reg_in,                   // control signal -> whether writeback value comes from memory or ALU result
   
-    output write reg_write_out,
-    output wire mem_to_reg_out,
+    output wire reg_write_out,
+    output wire mem_to_reg_out
 );
 
     // Internal registers to store values
     logic reg_write;
     logic mem_to_reg;
+
+    assign reg_write_out   = reg_write;
+    assign mem_to_reg_out  = mem_to_reg;
 
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
@@ -23,9 +26,5 @@ module mem_wb_control (
         end
     end
 
-    // Continuous assignments to output the register values
-    always_comb begin
-        reg_write_out   = reg_write;
-        mem_to_reg_out  = mem_to_reg;
-    end
+        
 endmodule

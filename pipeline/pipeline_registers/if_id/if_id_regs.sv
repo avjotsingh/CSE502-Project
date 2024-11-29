@@ -1,5 +1,5 @@
 module if_id_regs #(
-    INSTR_WIDTH = 32
+    INSTR_WIDTH = 32,
     DATA_WIDTH = 64
 ) (
     input wire clk,
@@ -13,7 +13,10 @@ module if_id_regs #(
     logic [DATA_WIDTH-1:0] pc;
     logic [INSTR_WIDTH-1:0] instruction;
 
-    always_ff @posedge(clk) begin
+    assign pc_out              = pc;
+    assign instruction_out     = instruction;
+
+    always_ff @(posedge clk) begin
         if (reset) begin
             pc              <= 0;
             instruction     <= 0;
@@ -21,10 +24,5 @@ module if_id_regs #(
             pc              <= pc_in;
             instruction     <= instruction_in;
         end
-    end
-
-    always_comb begin
-        pc_out              = pc;
-        instruction_out     = instruction;
     end
 endmodule

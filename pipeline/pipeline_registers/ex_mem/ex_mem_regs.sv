@@ -1,5 +1,6 @@
 module ex_mem_regs #(
-    DATA_WIDTH = 64
+    DATA_WIDTH = 64,
+    REG_ID_WIDTH = 5
 ) (
     input wire clk,
     input wire reset,
@@ -16,7 +17,7 @@ module ex_mem_regs #(
     output wire [DATA_WIDTH-1:0] alu_res_out,
     output wire [DATA_WIDTH-1:0] write_data_out,
     output wire [2:0] mem_control_out,
-    output wire [1:0] wb_control_out
+    output wire [1:0] wb_control_out,
     output wire [REG_ID_WIDTH-1:0] dest_out
 );
 
@@ -30,8 +31,8 @@ module ex_mem_regs #(
         .mem_write_in(mem_control_in[0]),
         .branch_out(mem_control_out[2]),
         .mem_read_out(mem_control_out[1]),
-        .mem_write_out(mem_control_out[0]),
-    )
+        .mem_write_out(mem_control_out[0])
+    );
 
     mem_wb_control mem_wb_ctrl(
         .clk(clk),
@@ -49,6 +50,12 @@ module ex_mem_regs #(
     logic [DATA_WIDTH-1:0] write_data;
     logic [REG_ID_WIDTH-1:0] dest;
 
+    assign target_out              = target;
+    assign branch_decision_out     = branch_decision;
+    assign alu_res_out             = alu_res;
+    assign write_data_out          = write_data;
+    assign dest_out                = dest;
+
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
         if (reset) begin
@@ -65,14 +72,4 @@ module ex_mem_regs #(
             dest                <=  dest_in;
         end
     end
-
-    // Continuous assignments to output the register values
-    always_comb begin
-        target_out              = target;
-        branch_decision_out     = branch_decision;
-        alu_res_out             = alu_res;
-        write_data_out          = write_data;
-        dest_out                = dest;
-    end
-
 endmodule
