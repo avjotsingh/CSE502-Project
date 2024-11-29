@@ -3,7 +3,7 @@ import cocotb
 from cocotb.triggers import Timer
 
 @cocotb.test()
-async def test_mux_basic(dut):
+async def test_decoder(dut):
     # Test case 1: R-type
     dut.instr.value = 0b00000000010001100000000100110011
     await Timer(1, units="ns")

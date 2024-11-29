@@ -3,7 +3,7 @@ import cocotb
 from cocotb.triggers import Timer
 
 @cocotb.test()
-async def test_mux_basic(alu):
+async def test_alu(alu):
     # Test case 1: add
     alu.alu_op.value = 0b0110011
     alu.func3.value = 0x0
