@@ -1,0 +1,5 @@
+CDC Report for VmodifyOne
+Each dump below traces logic from inputs/source flops to destination flop(s).
+First source logic is listed, then a variable that logic generates,
+repeating recursively forwards to the destination flop(s).
+%% Indicates the operator considered potentially hazardous.
