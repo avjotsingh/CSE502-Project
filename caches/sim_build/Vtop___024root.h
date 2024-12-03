@@ -37,6 +37,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     CData/*3:0*/ directCache__DOT__offset;
     CData/*0:0*/ directCache__DOT__curr_valid;
     CData/*0:0*/ directCache__DOT____Vlvbound_h22f92dc4__0;
+    CData/*0:0*/ directCache__DOT____Vlvbound_h22f92dc4__1;
     CData/*3:0*/ directCache__DOT__store_modifier__DOT__sel;
     CData/*0:0*/ __VstlFirstIteration;
     CData/*0:0*/ __VicoFirstIteration;
@@ -53,6 +54,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     IData/*31:0*/ directCache__DOT__next_state;
     VlWide<34400>/*1100799:0*/ directCache__DOT__cache;
     VlWide<32>/*1023:0*/ directCache__DOT____Vlvbound_h08920d1f__0;
+    VlWide<32>/*1023:0*/ directCache__DOT____Vlvbound_h08920d1f__1;
     IData/*20:0*/ directCache__DOT____VdfgTmp_ha8191f0f__0;
     IData/*31:0*/ __VactIterCount;
     VL_IN64(aaddr,63,0);
@@ -69,6 +71,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     QData/*63:0*/ directCache__DOT____Vlvbound_h1b8b6c23__0;
     QData/*49:0*/ directCache__DOT____Vlvbound_h78d7f6ab__0;
     QData/*63:0*/ directCache__DOT____Vlvbound_h1b8b6c23__1;
+    QData/*49:0*/ directCache__DOT____Vlvbound_h78d7f6ab__1;
+    QData/*63:0*/ directCache__DOT____Vlvbound_h1b8b6c23__2;
     VlWide<32>/*1023:0*/ directCache__DOT__store_modifier__DOT__data;
     QData/*63:0*/ directCache__DOT__store_modifier__DOT__new_data;
     VlWide<32>/*1023:0*/ directCache__DOT__store_modifier__DOT__final_data;

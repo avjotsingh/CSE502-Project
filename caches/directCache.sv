@@ -70,7 +70,7 @@ module directCache
     //assign data_to_cpu = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
     assign data_to_cpu = cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH];
 
-    enum {IDLE, DIRTY_WRITEBACK, LOADING} state, next_state;
+    enum {IDLE, DIRTY_WRITEBACK, LOADING, LOADING_CLEAN} state, next_state;
 
     logic [2**INDEX_LENGTH-1:0] [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cache;
 
@@ -109,6 +109,19 @@ module directCache
                         cache[index][TAG_LENGTH] <= 1;
                     end
                 end
+                LOADING_CLEAN: begin
+                    if (bus_valid) begin
+                        //originally was just this line:
+                        //cache[index] <= {data_from_bus, 1'b1, tag};
+                        cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
+                        cache[index][TAG_LENGTH - 1 : 0] <= tag;
+                        if (!load) begin 
+                            cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                        end
+                        cache[index][TAG_LENGTH] <= 1;
+                    end
+                end
+
 
             endcase
         end
@@ -137,6 +150,12 @@ module directCache
                     command_store = 0;
                     command_rready = 1;
                 end
+                LOADING_CLEAN: begin
+                    command_addr = {tag, index, {OFFSET_LENGTH{1'b0}}};
+                    command_valid = 1;
+                    command_store = 0;
+                    command_rready = 1;
+                end
             endcase
         end
     end
@@ -145,9 +164,10 @@ module directCache
     //next state logic
     always_comb begin
         case (state)
-            IDLE: next_state = avalid ? (hit ? IDLE : LOADING) : IDLE;
+            IDLE: next_state = avalid ? (hit ? IDLE : (curr_valid ? LOADING : LOADING_CLEAN)) : IDLE;
             DIRTY_WRITEBACK: next_state = bus_ready ? IDLE : DIRTY_WRITEBACK;
-            LOADING: next_state = bus_valid ? (curr_valid ? DIRTY_WRITEBACK : IDLE) : LOADING;
+            LOADING: next_state = bus_valid ? DIRTY_WRITEBACK : LOADING;
+            LOADING_CLEAN: next_state = bus_valid ? IDLE : LOADING_CLEAN;
         endcase
     end
 endmodule

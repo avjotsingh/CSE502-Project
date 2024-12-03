@@ -127,6 +127,12 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
             vlSelf->directCache__DOT__command_rready = 1U;
             vlSelf->directCache__DOT__command_addr 
                 = (0xfffffffffffffff0ULL & vlSelf->aaddr);
+        } else if ((3U == vlSelf->directCache__DOT__state)) {
+            vlSelf->directCache__DOT__command_valid = 1U;
+            vlSelf->directCache__DOT__command_store = 0U;
+            vlSelf->directCache__DOT__command_rready = 1U;
+            vlSelf->directCache__DOT__command_addr 
+                = (0xfffffffffffffff0ULL & vlSelf->aaddr);
         }
     }
     vlSelf->directCache__DOT__tag = (vlSelf->aaddr 
@@ -1460,7 +1466,10 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
                                                  ? 
                                                 ((IData)(vlSelf->hit)
                                                   ? 0U
-                                                  : 2U)
+                                                  : 
+                                                 ((IData)(vlSelf->directCache__DOT__curr_valid)
+                                                   ? 2U
+                                                   : 3U))
                                                  : 0U);
     } else if ((1U == vlSelf->directCache__DOT__state)) {
         vlSelf->directCache__DOT__next_state = ((IData)(vlSelf->bus_ready)
@@ -1468,11 +1477,12 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
                                                  : 1U);
     } else if ((2U == vlSelf->directCache__DOT__state)) {
         vlSelf->directCache__DOT__next_state = ((IData)(vlSelf->bus_valid)
-                                                 ? 
-                                                ((IData)(vlSelf->directCache__DOT__curr_valid)
-                                                  ? 1U
-                                                  : 0U)
+                                                 ? 1U
                                                  : 2U);
+    } else if ((3U == vlSelf->directCache__DOT__state)) {
+        vlSelf->directCache__DOT__next_state = ((IData)(vlSelf->bus_valid)
+                                                 ? 0U
+                                                 : 3U);
     }
 }
 
@@ -2791,6 +2801,142 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
                                                   * (IData)(vlSelf->directCache__DOT__index))))));
                     }
                 }
+            } else if ((3U == vlSelf->directCache__DOT__state)) {
+                if (vlSelf->bus_valid) {
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0U] 
+                        = vlSelf->data_from_bus[0U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[1U] 
+                        = vlSelf->data_from_bus[1U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[2U] 
+                        = vlSelf->data_from_bus[2U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[3U] 
+                        = vlSelf->data_from_bus[3U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[4U] 
+                        = vlSelf->data_from_bus[4U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[5U] 
+                        = vlSelf->data_from_bus[5U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[6U] 
+                        = vlSelf->data_from_bus[6U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[7U] 
+                        = vlSelf->data_from_bus[7U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[8U] 
+                        = vlSelf->data_from_bus[8U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[9U] 
+                        = vlSelf->data_from_bus[9U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0xaU] 
+                        = vlSelf->data_from_bus[0xaU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0xbU] 
+                        = vlSelf->data_from_bus[0xbU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0xcU] 
+                        = vlSelf->data_from_bus[0xcU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0xdU] 
+                        = vlSelf->data_from_bus[0xdU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0xeU] 
+                        = vlSelf->data_from_bus[0xeU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0xfU] 
+                        = vlSelf->data_from_bus[0xfU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x10U] 
+                        = vlSelf->data_from_bus[0x10U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x11U] 
+                        = vlSelf->data_from_bus[0x11U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x12U] 
+                        = vlSelf->data_from_bus[0x12U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x13U] 
+                        = vlSelf->data_from_bus[0x13U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x14U] 
+                        = vlSelf->data_from_bus[0x14U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x15U] 
+                        = vlSelf->data_from_bus[0x15U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x16U] 
+                        = vlSelf->data_from_bus[0x16U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x17U] 
+                        = vlSelf->data_from_bus[0x17U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x18U] 
+                        = vlSelf->data_from_bus[0x18U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x19U] 
+                        = vlSelf->data_from_bus[0x19U];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x1aU] 
+                        = vlSelf->data_from_bus[0x1aU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x1bU] 
+                        = vlSelf->data_from_bus[0x1bU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x1cU] 
+                        = vlSelf->data_from_bus[0x1cU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x1dU] 
+                        = vlSelf->data_from_bus[0x1dU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x1eU] 
+                        = vlSelf->data_from_bus[0x1eU];
+                    vlSelf->directCache__DOT____Vlvbound_h08920d1f__1[0x1fU] 
+                        = vlSelf->data_from_bus[0x1fU];
+                    if ((0x10cbffU >= (0x1fffffU & 
+                                       ((IData)(0x33U) 
+                                        + ((IData)(0x433U) 
+                                           * (IData)(vlSelf->directCache__DOT__index)))))) {
+                        VL_ASSIGNSEL_WW(1100800,1024,
+                                        (0x1fffffU 
+                                         & ((IData)(0x33U) 
+                                            + ((IData)(0x433U) 
+                                               * (IData)(vlSelf->directCache__DOT__index)))), __Vdly__directCache__DOT__cache, vlSelf->directCache__DOT____Vlvbound_h08920d1f__1);
+                    }
+                    vlSelf->directCache__DOT____Vlvbound_h78d7f6ab__1 
+                        = vlSelf->directCache__DOT__tag;
+                    if ((0x10cbffU >= (0x1fffffU & 
+                                       ((IData)(0x433U) 
+                                        * (IData)(vlSelf->directCache__DOT__index))))) {
+                        VL_ASSIGNSEL_WQ(1100800,50,
+                                        (0x1fffffU 
+                                         & ((IData)(0x433U) 
+                                            * (IData)(vlSelf->directCache__DOT__index))), __Vdly__directCache__DOT__cache, vlSelf->directCache__DOT____Vlvbound_h78d7f6ab__1);
+                    }
+                    if ((1U & (~ (IData)(vlSelf->load)))) {
+                        vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__2 
+                            = vlSelf->data_from_cpu;
+                        if ((0x10cbffU >= (0x1fffffU 
+                                           & (((IData)(0x433U) 
+                                               * (IData)(vlSelf->directCache__DOT__index)) 
+                                              + (0x7ffU 
+                                                 & ((IData)(0x7f3U) 
+                                                    + 
+                                                    VL_SHIFTL_III(11,32,32, 
+                                                                  ((IData)(1U) 
+                                                                   + (IData)(vlSelf->directCache__DOT__offset)), 6U))))))) {
+                            VL_ASSIGNSEL_WQ(1100800,64,
+                                            (0x1fffffU 
+                                             & (((IData)(0x433U) 
+                                                 * (IData)(vlSelf->directCache__DOT__index)) 
+                                                + (0x7ffU 
+                                                   & ((IData)(0x7f3U) 
+                                                      + 
+                                                      VL_SHIFTL_III(11,32,32, 
+                                                                    ((IData)(1U) 
+                                                                     + (IData)(vlSelf->directCache__DOT__offset)), 6U))))), __Vdly__directCache__DOT__cache, vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__2);
+                        }
+                    }
+                    vlSelf->directCache__DOT____Vlvbound_h22f92dc4__1 = 1U;
+                    if ((0x10cbffU >= (0x1fffffU & 
+                                       ((IData)(0x32U) 
+                                        + ((IData)(0x433U) 
+                                           * (IData)(vlSelf->directCache__DOT__index)))))) {
+                        __Vdly__directCache__DOT__cache[(0xffffU 
+                                                         & (((IData)(0x32U) 
+                                                             + 
+                                                             ((IData)(0x433U) 
+                                                              * (IData)(vlSelf->directCache__DOT__index))) 
+                                                            >> 5U))] 
+                            = (((~ ((IData)(1U) << 
+                                    (0x1fU & ((IData)(0x32U) 
+                                              + ((IData)(0x433U) 
+                                                 * (IData)(vlSelf->directCache__DOT__index)))))) 
+                                & __Vdly__directCache__DOT__cache[
+                                (0xffffU & (((IData)(0x32U) 
+                                             + ((IData)(0x433U) 
+                                                * (IData)(vlSelf->directCache__DOT__index))) 
+                                            >> 5U))]) 
+                               | ((IData)(vlSelf->directCache__DOT____Vlvbound_h22f92dc4__1) 
+                                  << (0x1fU & ((IData)(0x32U) 
+                                               + ((IData)(0x433U) 
+                                                  * (IData)(vlSelf->directCache__DOT__index))))));
+                    }
+                }
             }
         }
         vlSelf->directCache__DOT__state = vlSelf->directCache__DOT__next_state;
@@ -2809,6 +2955,12 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
             vlSelf->directCache__DOT__command_addr 
                 = (0xfffffffffffffff0ULL & vlSelf->directCache__DOT__dirty_addr);
         } else if ((2U == vlSelf->directCache__DOT__state)) {
+            vlSelf->directCache__DOT__command_valid = 1U;
+            vlSelf->directCache__DOT__command_store = 0U;
+            vlSelf->directCache__DOT__command_rready = 1U;
+            vlSelf->directCache__DOT__command_addr 
+                = (0xfffffffffffffff0ULL & vlSelf->aaddr);
+        } else if ((3U == vlSelf->directCache__DOT__state)) {
             vlSelf->directCache__DOT__command_valid = 1U;
             vlSelf->directCache__DOT__command_store = 0U;
             vlSelf->directCache__DOT__command_rready = 1U;
@@ -4141,7 +4293,10 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__1(Vtop___024root* vlSelf) 
                                                  ? 
                                                 ((IData)(vlSelf->hit)
                                                   ? 0U
-                                                  : 2U)
+                                                  : 
+                                                 ((IData)(vlSelf->directCache__DOT__curr_valid)
+                                                   ? 2U
+                                                   : 3U))
                                                  : 0U);
     } else if ((1U == vlSelf->directCache__DOT__state)) {
         vlSelf->directCache__DOT__next_state = ((IData)(vlSelf->bus_ready)
@@ -4149,11 +4304,12 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__1(Vtop___024root* vlSelf) 
                                                  : 1U);
     } else if ((2U == vlSelf->directCache__DOT__state)) {
         vlSelf->directCache__DOT__next_state = ((IData)(vlSelf->bus_valid)
-                                                 ? 
-                                                ((IData)(vlSelf->directCache__DOT__curr_valid)
-                                                  ? 1U
-                                                  : 0U)
+                                                 ? 1U
                                                  : 2U);
+    } else if ((3U == vlSelf->directCache__DOT__state)) {
+        vlSelf->directCache__DOT__next_state = ((IData)(vlSelf->bus_valid)
+                                                 ? 0U
+                                                 : 3U);
     }
 }
 

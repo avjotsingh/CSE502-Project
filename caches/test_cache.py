@@ -37,7 +37,7 @@ async def test_cache(cache):
 
     # Test case 2: can we load?
     cache.bus_ready.value = 1
-    assert cache.state.value == 0x2,f"Failed 2.state, got {cache.state.value}"
+    assert cache.state.value == 0x3,f"Failed 2.state, got {cache.state.value}"
     print_tio(cache)
     assert cache.command_addr.value == 0x0000000000000000,f"Failed 2.command_addr, got {cache.command_addr.value}"
     await tick_tock(cache,2)

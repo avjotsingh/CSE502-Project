@@ -199,6 +199,10 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->directCache__DOT____Vlvbound_h78d7f6ab__0 = VL_RAND_RESET_Q(50);
     vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__1 = VL_RAND_RESET_Q(64);
     vlSelf->directCache__DOT____Vlvbound_h22f92dc4__0 = VL_RAND_RESET_I(1);
+    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT____Vlvbound_h08920d1f__1);
+    vlSelf->directCache__DOT____Vlvbound_h78d7f6ab__1 = VL_RAND_RESET_Q(50);
+    vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__2 = VL_RAND_RESET_Q(64);
+    vlSelf->directCache__DOT____Vlvbound_h22f92dc4__1 = VL_RAND_RESET_I(1);
     vlSelf->directCache__DOT____VdfgTmp_ha8191f0f__0 = 0;
     VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__store_modifier__DOT__data);
     vlSelf->directCache__DOT__store_modifier__DOT__new_data = VL_RAND_RESET_Q(64);
