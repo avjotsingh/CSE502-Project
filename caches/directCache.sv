@@ -13,13 +13,17 @@ module directCache
     input wire reset,
     
     //cpu wires
-
+    
+    //is the address valid
     input wire avalid,
+    //the address
     input wire [ADDR_WIDTH-1:0] aaddr,
+    //load command? if not, then store command
     input wire load,
-    input wire [DATA_WIDTH-1:0] data_from_cpu,
 
+    input wire [DATA_WIDTH-1:0] data_from_cpu,
     output reg [DATA_WIDTH-1:0] data_to_cpu,
+    //this is also "dvalid", if this is 1 then the cpu is being given valid data
     output reg hit,
 
     //memory bus wires:
@@ -54,11 +58,6 @@ module directCache
         (.data(cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:STATE_BITS + TAG_LENGTH]), 
         .new_data(data_from_cpu), .sel(offset), .final_data(new_cache_data));
 
-    /*  Buggy? (wrong input)
-        assign tag = data_from_cpu[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
-        assign index = data_from_cpu[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
-        assign offset = data_from_cpu[OFFSET_LENGTH-1:0];
-    */
     assign tag = aaddr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
     assign index = aaddr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
     assign offset = aaddr[OFFSET_LENGTH-1:0];
@@ -66,18 +65,15 @@ module directCache
     assign curr_valid = cache[index][TAG_LENGTH] == 1;
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && curr_valid;
     
-    //{{32-OFFSET_LENGTH{1'b0}}, offset} is just 0-padding offset to 32 bits for math purposes 
-    //assign data_to_cpu = hit ? cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] : 1 /*this is a debug bit rn*/;
     assign data_to_cpu = cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH];
 
     enum {IDLE, DIRTY_WRITEBACK, LOADING, LOADING_CLEAN} state, next_state;
 
     logic [2**INDEX_LENGTH-1:0] [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cache;
 
-    //state, cache, dirty_data, dirty_addr
     always_ff @ (posedge clk) begin
         if (reset) begin
-            cache <= 0;//'{default: '0};
+            cache <= 0;
             dirty_addr <= 0;
             dirty_data <= 0;
             state <= IDLE;
@@ -99,8 +95,6 @@ module directCache
                 DIRTY_WRITEBACK: begin end
                 LOADING: begin
                     if (bus_valid) begin
-                        //originally was just this line:
-                        //cache[index] <= {data_from_bus, 1'b1, tag};
                         cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
                         cache[index][TAG_LENGTH - 1 : 0] <= tag;
                         if (!load) begin 
@@ -111,8 +105,6 @@ module directCache
                 end
                 LOADING_CLEAN: begin
                     if (bus_valid) begin
-                        //originally was just this line:
-                        //cache[index] <= {data_from_bus, 1'b1, tag};
                         cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
                         cache[index][TAG_LENGTH - 1 : 0] <= tag;
                         if (!load) begin 
