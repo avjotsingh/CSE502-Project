@@ -22,7 +22,7 @@ def idle_mem(cache):
 
 @cocotb.test()
 async def test_cache(cache):
-    # Test case 1: first request should miss
+    # Test case 1: miss clean (read)
     cache.reset.value = 1
     await tick_tock(cache,1)
     cache.reset.value = 0
@@ -35,7 +35,7 @@ async def test_cache(cache):
     assert cache.hit.value == 0x0,f"Failed 1.hit, got {cache.hit.value}"
     await tick_tock(cache,1)
 
-    # Test case 2: can we load?
+    # Test case 2: read/miss clean
     cache.bus_ready.value = 1
     assert cache.state.value == 0x3,f"Failed 2.state, got {cache.state.value}"
     print_tio(cache)
@@ -75,9 +75,10 @@ async def test_cache(cache):
     print_tio(cache)
     assert cache.hit.value == 0x1,f"Failed 4.hit, got {cache.hit.value}"
     assert cache.data_to_cpu.value == 0xffffffffffffffff,f"Failed 4.data value, got {cache.data_to_cpu.value}"
-
+    await tick_tock(cache,4)
+    
     # Test case 5, write/hit
-    await tick_tock(cache,5)
+
     cache.aaddr.value = 0x100000000010000c
     cache.load.value = 0
     cache.data_from_cpu.value = 0x0123456789abcdef
@@ -169,3 +170,29 @@ async def test_cache(cache):
 
     await tick_tock(cache,7)
     idle_mem(cache)
+
+    #Test case 8: read/miss dirty
+    cache.reset.value = 1
+    await tick_tock(cache,8)
+    cache.reset.value = 0
+    await tick_tock(cache,8)
+    cache.avalid.value = 1
+    cache.aaddr.value = 0x0000000000000011
+    cache.load.value = 1
+    print_tio(cache)
+    await tick_tock(cache,8)
+    assert cache.hit.value == 0x0,f"Failed 1.hit, got {cache.hit.value}"
+    await tick_tock(cache,8)
+
+    cache.bus_ready.value = 1
+    assert cache.state.value == 0x3,f"Failed 2.state, got {cache.state.value}"
+    print_tio(cache)
+    assert cache.command_addr.value == 0x0000000000000010,f"Failed 2.command_addr, got {cache.command_addr.value}"
+    await tick_tock(cache,8)
+    cache.data_from_bus.value = 0x0111111111111111111111111111111121111111111111113111111111111111411111111111111151111111111111116111111111111111711111111111111181111111111111119111111111111111a111111111111111b111111111111111c111111111111111d111111111111111e111111111111111f111111111111111
+    cache.bus_valid.value = 1
+    assert cache.hit.value == 0x0,f"Failed 2.miss, shouldn't update yet"
+    await tick_tock(cache,8)
+    idle_mem(cache)
+    assert cache.hit.value == 0x1,f"Failed 2.hit, got {cache.hit.value}"
+    assert cache.data_to_cpu.value == 0xe111111111111111,f"Failed 2.data value, got {cache.data_to_cpu.value}"
