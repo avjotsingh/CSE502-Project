@@ -52,6 +52,9 @@ async def test_cache(cache):
     # Test case 3: do we hit with new offsets?
     cache.aaddr.value = 0x000000000000000f
     cache.avalid.value = 1
+    await Timer(1, units="ns")
+    assert cache.hit.value == 0x1
+    assert cache.data_to_cpu.value == 0x0111111111111111,f"Failed 3.data value, got {cache.data_to_cpu.value}"
     await tick_tock(cache,3)
     assert cache.hit.value == 0x1
     assert cache.data_to_cpu.value == 0x0111111111111111,f"Failed 3.data value, got {cache.data_to_cpu.value}"
