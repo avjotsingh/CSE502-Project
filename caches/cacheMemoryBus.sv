@@ -18,9 +18,6 @@ module top
   input wire [CONNECTIONS-1:0] [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_in,
   output wire [CONNECTIONS-1:0] bus_valid,
   output wire [CONNECTIONS-1:0] bus_ready,
-
-
-  output wire [$clog2(CONNECTIONS)-1:0] cacheID,
   output wire [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
 
 
@@ -80,7 +77,6 @@ module top
   assign m_axi_awaddr = addr_buffer;
   assign m_axi_arburst = 2'b10;
   assign m_axi_arlen = 7;
-  assign cacheID = currID;
 
   //to be used in IDLE, when choosing the next request to handle
   minimum #($clog2(CONNECTIONS)) busChoice (command_valid, busChoiceOut);
