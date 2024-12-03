@@ -1,8 +1,8 @@
 module directCache
 #(
-    TAG_LENGTH = 49, //I just made up #s here
+    TAG_LENGTH = 50, //I just made up #s here
     INDEX_LENGTH = 10, //I just made up #s here
-    OFFSET_LENGTH = 5, //I just made up #s here
+    OFFSET_LENGTH = 4, //I just made up #s here
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
     //TODO: Make this non-variable in construction
@@ -19,25 +19,25 @@ module directCache
     input wire load,
     input wire [DATA_WIDTH-1:0] data_from_cpu,
 
-    output wire [DATA_WIDTH-1:0] data_to_cpu,
-    output wire hit,
+    output reg [DATA_WIDTH-1:0] data_to_cpu,
+    output reg hit,
 
     //memory bus wires:
-    output wire command_valid,
-    output wire command_store,
-    output wire command_rready,
-    output wire [ADDR_WIDTH-1:0] command_addr,
+    output reg command_valid,
+    output reg command_store,
+    output reg command_rready,
+    output reg [ADDR_WIDTH-1:0] command_addr,
     //TODO: confirm the size of this array
-    output wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_to_bus,
+    output reg [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_to_bus,
     input wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_from_bus,
     input wire bus_valid,
     input wire bus_ready
 );
 
 
-    wire [ADDR_WIDTH-1:0] dirty_addr;
+    reg [ADDR_WIDTH-1:0] dirty_addr;
 
-    wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] dirty_data;
+    reg [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] dirty_data;
     //combinational parsing of the input
     wire [TAG_LENGTH-1:0] tag;
     wire [INDEX_LENGTH-1:0] index;
@@ -54,10 +54,15 @@ module directCache
         (.data(cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:STATE_BITS + TAG_LENGTH]), 
         .new_data(data_from_cpu), .sel(offset), .final_data(new_cache_data));
 
-    assign tag = data_from_cpu[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
-    assign index = data_from_cpu[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
-    assign offset = data_from_cpu[OFFSET_LENGTH-1:0];
-
+    /*  Buggy? (wrong input)
+        assign tag = data_from_cpu[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
+        assign index = data_from_cpu[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
+        assign offset = data_from_cpu[OFFSET_LENGTH-1:0];
+    */
+    assign tag = aaddr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
+    assign index = aaddr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
+    assign offset = aaddr[OFFSET_LENGTH-1:0];
+    
     assign curr_valid = cache[index][TAG_LENGTH] == 1;
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && curr_valid;
     
@@ -72,7 +77,7 @@ module directCache
     //state, cache, dirty_data, dirty_addr
     always_ff @ (posedge clk) begin
         if (reset) begin
-            cache <= '{default: '0};
+            cache <= 0;//'{default: '0};
             dirty_addr <= 0;
             dirty_data <= 0;
             state <= IDLE;
@@ -94,7 +99,14 @@ module directCache
                 DIRTY_WRITEBACK: begin end
                 LOADING: begin
                     if (bus_valid) begin
-                        cache[index] <= {data_from_bus, 1'b1, tag};
+                        //originally was just this line:
+                        //cache[index] <= {data_from_bus, 1'b1, tag};
+                        cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
+                        cache[index][TAG_LENGTH - 1 : 0] <= tag;
+                        if (!load) begin 
+                            cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                        end
+                        cache[index][TAG_LENGTH] <= 1;
                     end
                 end
 
