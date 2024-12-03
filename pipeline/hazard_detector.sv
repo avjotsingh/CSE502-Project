@@ -16,3 +16,4 @@ module hazard_detector #(
 
         if (mem_read && (dest == id_ex_reg1 || dest == id_ex_reg2)) stall_int = '1;
     end
+endmodule
