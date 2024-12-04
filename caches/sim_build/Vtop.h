@@ -25,8 +25,51 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop VL_NOT_FINAL : public VerilatedModel {
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(&sel,0,0);
-    VL_OUT8(&broadcast,1,0);
+    VL_IN8(&clk,0,0);
+    VL_IN8(&reset,0,0);
+    VL_IN8(&hz32768timer,0,0);
+    VL_IN8(&command_valid,1,0);
+    VL_IN8(&command_store,1,0);
+    VL_IN8(&command_rready,1,0);
+    VL_OUT8(&bus_valid,1,0);
+    VL_OUT8(&bus_ready,1,0);
+    VL_OUT8(&m_axi_awlen,7,0);
+    VL_OUT8(&m_axi_awsize,2,0);
+    VL_OUT8(&m_axi_awburst,1,0);
+    VL_OUT8(&m_axi_awlock,0,0);
+    VL_OUT8(&m_axi_awcache,3,0);
+    VL_OUT8(&m_axi_awprot,2,0);
+    VL_OUT8(&m_axi_awvalid,0,0);
+    VL_IN8(&m_axi_awready,0,0);
+    VL_OUT8(&m_axi_wlast,0,0);
+    VL_OUT8(&m_axi_wvalid,0,0);
+    VL_IN8(&m_axi_wready,0,0);
+    VL_IN8(&m_axi_bresp,1,0);
+    VL_IN8(&m_axi_bvalid,0,0);
+    VL_OUT8(&m_axi_bready,0,0);
+    VL_OUT8(&m_axi_arlen,7,0);
+    VL_OUT8(&m_axi_arsize,2,0);
+    VL_OUT8(&m_axi_arburst,1,0);
+    VL_OUT8(&m_axi_arlock,0,0);
+    VL_OUT8(&m_axi_arcache,3,0);
+    VL_OUT8(&m_axi_arprot,2,0);
+    VL_OUT8(&m_axi_arvalid,0,0);
+    VL_IN8(&m_axi_arready,0,0);
+    VL_IN8(&m_axi_rresp,1,0);
+    VL_IN8(&m_axi_rlast,0,0);
+    VL_IN8(&m_axi_rvalid,0,0);
+    VL_OUT8(&m_axi_rready,0,0);
+    VL_IN8(&m_axi_acvalid,0,0);
+    VL_OUT8(&m_axi_acready,0,0);
+    VL_IN8(&m_axi_acsnoop,3,0);
+    VL_INW(&data_in,2047,0,64);
+    VL_OUTW(&data_out,1023,0,32);
+    VL_INW(&command_addr,127,0,4);
+    VL_OUT64(&m_axi_awaddr,63,0);
+    VL_OUT64(&m_axi_wdata,63,0);
+    VL_OUT64(&m_axi_araddr,63,0);
+    VL_IN64(&m_axi_rdata,63,0);
+    VL_IN64(&m_axi_acaddr,63,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

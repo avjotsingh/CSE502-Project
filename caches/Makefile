@@ -16,4 +16,7 @@ MODULE = test_bus  # Name of the Python test module
 #TOPLEVEL = minimum_inverse  # Name of the top-level module in your SV code
 #MODULE = test_minimum_inverse  # Name of the Python test module
 
+#when changing which module to test, uncomment this line:
+#$(shell rm -rf sim_build)
+
 include $(shell cocotb-config --makefiles)/Makefile.sim

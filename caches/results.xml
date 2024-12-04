@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1733290420" />
+    <testcase name="test_1" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="13" time="0.0011479854583740234" sim_time_ns="6.001" ratio_time="5227.418131671859" />
+  </testsuite>
+</testsuites>
