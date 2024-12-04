@@ -91,6 +91,9 @@ module cacheMemoryBus
     if (reset) begin
       state <= IDLE;
       offsetCounter <= 0;
+      data_buffer <= 0;
+      addr_buffer <= 0;
+      currID <= 0;
     end else begin
       state <= next_state;
       case(state)

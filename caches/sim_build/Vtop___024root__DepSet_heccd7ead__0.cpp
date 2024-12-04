@@ -322,6 +322,8 @@ void Vtop___024root___eval_act(Vtop___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___eval_act\n"); );
 }
 
+extern const VlWide<32>/*1023:0*/ Vtop__ConstPool__CONST_hd6b7ba52_0;
+
 VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -333,6 +335,72 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     __Vdly__cacheMemoryBus__DOT__offsetCounter = vlSelf->cacheMemoryBus__DOT__offsetCounter;
     if (vlSelf->reset) {
         __Vdly__cacheMemoryBus__DOT__offsetCounter = 0U;
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[1U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[1U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[2U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[2U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[3U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[3U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[4U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[4U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[5U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[5U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[6U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[6U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[7U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[7U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[8U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[8U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[9U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[9U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xaU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xaU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xbU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xbU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xcU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xcU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xdU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xdU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xeU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xeU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xfU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xfU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x10U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x10U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x11U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x11U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x12U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x12U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x13U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x13U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x14U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x14U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x15U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x15U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x16U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x16U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x17U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x17U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x18U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x18U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x19U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x19U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1aU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1aU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1bU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1bU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1cU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1cU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1dU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1dU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1eU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1eU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1fU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1fU];
+        vlSelf->cacheMemoryBus__DOT__addr_buffer = 0ULL;
+        vlSelf->cacheMemoryBus__DOT__currID = 0U;
     } else if ((0U == vlSelf->cacheMemoryBus__DOT__state)) {
         vlSelf->cacheMemoryBus__DOT__currID = vlSelf->cacheMemoryBus__DOT__busChoiceOut;
         vlSelf->cacheMemoryBus__DOT__addr_buffer = 
