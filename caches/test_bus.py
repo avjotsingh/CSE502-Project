@@ -115,8 +115,80 @@ async def test_lread_lread_ldone(bus):
     await tick_tock(bus)
     assert bus.state.value == 0x2,f"state should be L_READ, is{bus.state.value}"
     assert bus.m_axi_rready.value == 1
+
+    bus.m_axi_rdata.value = 0x3141
+    bus.m_axi_rvalid.value = 0x1
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 1,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 2,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 3,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 4,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 5,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 6,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 7,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 8,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 9,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 10,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 11,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 12,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 13,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 14,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    assert bus.offsetCounter.value == 15,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    bus.m_axi_rlast.value = 1
+    assert bus.offsetCounter.value == 0,f"offset is {bus.offsetCounter.value}"
+    await tick_tock(bus)
+    bus.m_axi_rlast.value = 0
+    bus.m_axi_rvalid.value = 0
+    bus.m_axi_rdata = 0
+    assert bus.state.value == 0x3,f"state should be L_DONE, is{bus.state.value}"
+
 # Test 7: L_DONE -> L_DONE (might be unneccesary)
+@cocotb.test()
+async def test_ldone_ldone(bus):
+    assert bus.data_out.value == 0x0000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141,f"should be 16 sets of 3141, is {bus.data_out.value}"
+    assert bus.bus_valid.value == 0b01
+    await tick_tock(bus)
+    assert bus.data_out.value == 0x0000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141,f"should be 16 sets of 3141, is {bus.data_out.value}"
+    assert bus.bus_valid.value == 0b01
+    assert bus.state.value == 0x3
+    await tick_tock(bus)
+
 # Test 8: L_DONE -> IDLE
+@cocotb.test()
+async def test_ldone_idle(bus):
+    bus.command_rready.value = 0b10
+    await tick_tock(bus)
+    assert bus.data_out.value == 0x0000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141000000000000314100000000000031410000000000003141,f"should be 16 sets of 3141, is {bus.data_out.value}"
+    assert bus.bus_valid.value == 0b01
+    assert bus.state.value == 0x3
+    bus.command_rready.value = 0b11
+    #The other option also works:
+    #bus.command_rready.value = 0b01
+    await tick_tock(bus)
+    assert bus.state.value == 0x0
+    #assert bus.data_out.value == 0x0
+    assert bus.bus_valid.value == 0b00
+    await tick_tock(bus)
+    assert bus.state.value == 0x0
+    assert bus.data_out.value == 0x0
+    assert bus.bus_valid.value == 0b00
+
+
 # Test 9: IDLE -> S_ADDR, 1 request
 # Test 10: S_ADDR -> S_ADDR
 # Test 11: S_WRITE -> S_WRITE -> S_WRITE -> ... -> IDLE

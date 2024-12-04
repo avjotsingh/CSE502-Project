@@ -100,6 +100,7 @@ module cacheMemoryBus
           IDLE: begin
             currID <= busChoiceOut; 
             addr_buffer <= command_addr[busChoiceOut];
+            data_buffer <= 0;
           end
           L_ADDR: begin
             /*
@@ -130,10 +131,10 @@ module cacheMemoryBus
     case(state)
         IDLE : next_state = command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) : IDLE;
         L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
-        L_READ : next_state = offsetCounter == (-1) ? L_DONE : L_READ;
+        L_READ : next_state = m_axi_rlast ? L_DONE : L_READ;
         L_DONE : next_state = command_rready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
         S_ADDR : next_state = m_axi_awready ? S_WRITE : S_ADDR;//handshake???
-        S_WRITE : next_state = offsetCounter == (-1) ? IDLE : S_WRITE;
+        S_WRITE : next_state = m_axi_wlast ? IDLE : S_WRITE;
     endcase 
   end
 

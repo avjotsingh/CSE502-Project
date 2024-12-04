@@ -270,7 +270,9 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
                                                     ? 2U
                                                     : 1U);
     } else if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
-        vlSelf->cacheMemoryBus__DOT__next_state = 2U;
+        vlSelf->cacheMemoryBus__DOT__next_state = ((IData)(vlSelf->m_axi_rlast)
+                                                    ? 3U
+                                                    : 2U);
     } else if ((3U == vlSelf->cacheMemoryBus__DOT__state)) {
         vlSelf->cacheMemoryBus__DOT__next_state = (
                                                    (1U 
@@ -283,7 +285,9 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
                                                     ? 5U
                                                     : 4U);
     } else if ((5U == vlSelf->cacheMemoryBus__DOT__state)) {
-        vlSelf->cacheMemoryBus__DOT__next_state = 5U;
+        vlSelf->cacheMemoryBus__DOT__next_state = ((IData)(vlSelf->cacheMemoryBus__DOT__m_axi_wlast)
+                                                    ? 0U
+                                                    : 5U);
     }
     vlSelf->bus_ready = vlSelf->cacheMemoryBus__DOT__bus_ready;
     vlSelf->bus_valid = vlSelf->cacheMemoryBus__DOT__bus_valid;
@@ -427,6 +431,70 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
                                    (3U & (VL_SHIFTL_III(7,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 6U) 
                                           >> 5U))])) 
                    >> (0x1fU & VL_SHIFTL_III(7,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 6U)))));
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[1U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[1U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[2U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[2U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[3U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[3U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[4U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[4U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[5U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[5U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[6U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[6U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[7U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[7U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[8U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[8U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[9U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[9U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xaU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xaU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xbU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xbU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xcU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xcU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xdU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xdU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xeU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xeU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0xfU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xfU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x10U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x10U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x11U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x11U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x12U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x12U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x13U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x13U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x14U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x14U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x15U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x15U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x16U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x16U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x17U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x17U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x18U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x18U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x19U] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x19U];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1aU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1aU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1bU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1bU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1cU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1cU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1dU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1dU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1eU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1eU];
+        vlSelf->cacheMemoryBus__DOT__data_buffer[0x1fU] 
+            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1fU];
     } else if ((1U != vlSelf->cacheMemoryBus__DOT__state)) {
         if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
             if (vlSelf->m_axi_rvalid) {
@@ -658,7 +726,9 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__1(Vtop___024root* vlSelf) 
                                                     ? 2U
                                                     : 1U);
     } else if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
-        vlSelf->cacheMemoryBus__DOT__next_state = 2U;
+        vlSelf->cacheMemoryBus__DOT__next_state = ((IData)(vlSelf->m_axi_rlast)
+                                                    ? 3U
+                                                    : 2U);
     } else if ((3U == vlSelf->cacheMemoryBus__DOT__state)) {
         vlSelf->cacheMemoryBus__DOT__next_state = (
                                                    (1U 
@@ -671,7 +741,9 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__1(Vtop___024root* vlSelf) 
                                                     ? 5U
                                                     : 4U);
     } else if ((5U == vlSelf->cacheMemoryBus__DOT__state)) {
-        vlSelf->cacheMemoryBus__DOT__next_state = 5U;
+        vlSelf->cacheMemoryBus__DOT__next_state = ((IData)(vlSelf->cacheMemoryBus__DOT__m_axi_wlast)
+                                                    ? 0U
+                                                    : 5U);
     }
 }
 
