@@ -9,22 +9,8 @@
 Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new Vtop__Syms(contextp(), _vcname__, this)}
-    , clk{vlSymsp->TOP.clk}
-    , reset{vlSymsp->TOP.reset}
-    , avalid{vlSymsp->TOP.avalid}
-    , load{vlSymsp->TOP.load}
-    , hit{vlSymsp->TOP.hit}
-    , command_valid{vlSymsp->TOP.command_valid}
-    , command_store{vlSymsp->TOP.command_store}
-    , command_rready{vlSymsp->TOP.command_rready}
-    , bus_valid{vlSymsp->TOP.bus_valid}
-    , bus_ready{vlSymsp->TOP.bus_ready}
-    , data_to_bus{vlSymsp->TOP.data_to_bus}
-    , data_from_bus{vlSymsp->TOP.data_from_bus}
-    , aaddr{vlSymsp->TOP.aaddr}
-    , data_from_cpu{vlSymsp->TOP.data_from_cpu}
-    , data_to_cpu{vlSymsp->TOP.data_to_cpu}
-    , command_addr{vlSymsp->TOP.command_addr}
+    , sel{vlSymsp->TOP.sel}
+    , broadcast{vlSymsp->TOP.broadcast}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

@@ -4,11 +4,11 @@ module minimum_inverse
     LOG_INPUTS = 1
 )
 (
-    input wire [LOG_INPUTS-1:0] in,
-    output wire [2**LOG_INPUTS-1:0] out
+    input wire [LOG_INPUTS-1:0] sel,
+    output reg [2**LOG_INPUTS-1:0] broadcast
 );
-    wire unsigned [$size(out)-1:0] i;
+    logic [$size(broadcast)-1:0] i;
     always_comb begin
-        out = 2**in;
+        broadcast = 2**sel;
     end
 endmodule
