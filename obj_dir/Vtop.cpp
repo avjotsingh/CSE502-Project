@@ -1,275 +1,138 @@
-// Verilated -*- C++ -*-
-// DESCRIPTION: Verilator output: Design implementation internals
-// See Vtop.h for the primary calling header
+// Verilated -*- SystemC -*-
+// DESCRIPTION: Verilator output: Model implementation (design independent parts)
 
-#include "Vtop.h"              // For This
-#include "Vtop__Syms.h"
+#include "Vtop__pch.h"
 
-#include "verilated_dpi.h"
+//============================================================
+// Constructors
 
-//--------------------
-// STATIC VARIABLES
+Vtop::Vtop(sc_core::sc_module_name /* unused */)
+    : VerilatedModel{*Verilated::threadContextp()}
+    , vlSymsp{new Vtop__Syms(contextp(), name(), this)}
+    , clk{vlSymsp->TOP.clk}
+    , reset{vlSymsp->TOP.reset}
+    , hz32768timer{vlSymsp->TOP.hz32768timer}
+    , m_axi_awlen{vlSymsp->TOP.m_axi_awlen}
+    , m_axi_awsize{vlSymsp->TOP.m_axi_awsize}
+    , m_axi_awburst{vlSymsp->TOP.m_axi_awburst}
+    , m_axi_awlock{vlSymsp->TOP.m_axi_awlock}
+    , m_axi_awcache{vlSymsp->TOP.m_axi_awcache}
+    , m_axi_awprot{vlSymsp->TOP.m_axi_awprot}
+    , m_axi_awvalid{vlSymsp->TOP.m_axi_awvalid}
+    , m_axi_awready{vlSymsp->TOP.m_axi_awready}
+    , m_axi_wstrb{vlSymsp->TOP.m_axi_wstrb}
+    , m_axi_wlast{vlSymsp->TOP.m_axi_wlast}
+    , m_axi_wvalid{vlSymsp->TOP.m_axi_wvalid}
+    , m_axi_wready{vlSymsp->TOP.m_axi_wready}
+    , m_axi_bresp{vlSymsp->TOP.m_axi_bresp}
+    , m_axi_bvalid{vlSymsp->TOP.m_axi_bvalid}
+    , m_axi_bready{vlSymsp->TOP.m_axi_bready}
+    , m_axi_arlen{vlSymsp->TOP.m_axi_arlen}
+    , m_axi_arsize{vlSymsp->TOP.m_axi_arsize}
+    , m_axi_arburst{vlSymsp->TOP.m_axi_arburst}
+    , m_axi_arlock{vlSymsp->TOP.m_axi_arlock}
+    , m_axi_arcache{vlSymsp->TOP.m_axi_arcache}
+    , m_axi_arprot{vlSymsp->TOP.m_axi_arprot}
+    , m_axi_arvalid{vlSymsp->TOP.m_axi_arvalid}
+    , m_axi_arready{vlSymsp->TOP.m_axi_arready}
+    , m_axi_rresp{vlSymsp->TOP.m_axi_rresp}
+    , m_axi_rlast{vlSymsp->TOP.m_axi_rlast}
+    , m_axi_rvalid{vlSymsp->TOP.m_axi_rvalid}
+    , m_axi_rready{vlSymsp->TOP.m_axi_rready}
+    , m_axi_acvalid{vlSymsp->TOP.m_axi_acvalid}
+    , m_axi_acready{vlSymsp->TOP.m_axi_acready}
+    , m_axi_acsnoop{vlSymsp->TOP.m_axi_acsnoop}
+    , m_axi_awid{vlSymsp->TOP.m_axi_awid}
+    , m_axi_bid{vlSymsp->TOP.m_axi_bid}
+    , m_axi_arid{vlSymsp->TOP.m_axi_arid}
+    , m_axi_rid{vlSymsp->TOP.m_axi_rid}
+    , entry{vlSymsp->TOP.entry}
+    , stackptr{vlSymsp->TOP.stackptr}
+    , satp{vlSymsp->TOP.satp}
+    , m_axi_awaddr{vlSymsp->TOP.m_axi_awaddr}
+    , m_axi_wdata{vlSymsp->TOP.m_axi_wdata}
+    , m_axi_araddr{vlSymsp->TOP.m_axi_araddr}
+    , m_axi_rdata{vlSymsp->TOP.m_axi_rdata}
+    , m_axi_acaddr{vlSymsp->TOP.m_axi_acaddr}
+    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
+    , rootp{&(vlSymsp->TOP)}
+{
+    // Register model with the context
+    contextp()->addModel(this);
+    // Sensitivities on all clocks and combinational inputs
+    SC_METHOD(eval);
+    sensitive << clk;
+    sensitive << reset;
+    sensitive << entry;
 
-VL_ST_SIG8(Vtop::__Vtable1_top__DOT__test2_out[8],7,0);
-
-//--------------------
-
-VL_CTOR_IMP(Vtop) {
-    Vtop__Syms* __restrict vlSymsp = __VlSymsp = new Vtop__Syms(this, name());
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    VL_CELL (__PVT____024unit, Vtop___024unit);
-    // Reset internal values
-    
-    // Reset structure values
-    _ctor_var_reset();
 }
 
-void Vtop::__Vconfigure(Vtop__Syms* vlSymsp, bool first) {
-    if (0 && first) {}  // Prevent unused
-    this->__VlSymsp = vlSymsp;
-}
+//============================================================
+// Destructor
 
 Vtop::~Vtop() {
-    delete __VlSymsp; __VlSymsp=NULL;
+    delete vlSymsp;
 }
 
-//--------------------
+//============================================================
+// Evaluation function
 
+#ifdef VL_DEBUG
+void Vtop___024root___eval_debug_assertions(Vtop___024root* vlSelf);
+#endif  // VL_DEBUG
+void Vtop___024root___eval_static(Vtop___024root* vlSelf);
+void Vtop___024root___eval_initial(Vtop___024root* vlSelf);
+void Vtop___024root___eval_settle(Vtop___024root* vlSelf);
+void Vtop___024root___eval(Vtop___024root* vlSelf);
 
-void Vtop::eval() {
-    Vtop__Syms* __restrict vlSymsp = this->__VlSymsp; // Setup global symbol table
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Initialize
-    if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) _eval_initial_loop(vlSymsp);
-    // Evaluate till stable
-    VL_DEBUG_IF(VL_PRINTF("\n----TOP Evaluate Vtop::eval\n"); );
-    int __VclockLoop = 0;
-    QData __Vchange=1;
-    while (VL_LIKELY(__Vchange)) {
-	VL_DEBUG_IF(VL_PRINTF(" Clock loop\n"););
-	vlSymsp->__Vm_activity = true;
-	_eval(vlSymsp);
-	__Vchange = _change_request(vlSymsp);
-	if (++__VclockLoop > 100) vl_fatal(__FILE__,__LINE__,__FILE__,"Verilated model didn't converge");
+void Vtop::eval_step() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+++++TOP Evaluate Vtop::eval_step\n"); );
+#ifdef VL_DEBUG
+    // Debug assertions
+    Vtop___024root___eval_debug_assertions(&(vlSymsp->TOP));
+#endif  // VL_DEBUG
+    vlSymsp->__Vm_deleter.deleteAll();
+    if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) {
+        vlSymsp->__Vm_didInit = true;
+        VL_DEBUG_IF(VL_DBG_MSGF("+ Initial\n"););
+        Vtop___024root___eval_static(&(vlSymsp->TOP));
+        Vtop___024root___eval_initial(&(vlSymsp->TOP));
+        Vtop___024root___eval_settle(&(vlSymsp->TOP));
     }
+    VL_DEBUG_IF(VL_DBG_MSGF("+ Eval\n"););
+    Vtop___024root___eval(&(vlSymsp->TOP));
+    // Evaluate cleanup
+    Verilated::endOfEval(vlSymsp->__Vm_evalMsgQp);
 }
 
-void Vtop::_eval_initial_loop(Vtop__Syms* __restrict vlSymsp) {
-    vlSymsp->__Vm_didInit = true;
-    _eval_initial(vlSymsp);
-    vlSymsp->__Vm_activity = true;
-    int __VclockLoop = 0;
-    QData __Vchange=1;
-    while (VL_LIKELY(__Vchange)) {
-	_eval_settle(vlSymsp);
-	_eval(vlSymsp);
-	__Vchange = _change_request(vlSymsp);
-	if (++__VclockLoop > 100) vl_fatal(__FILE__,__LINE__,__FILE__,"Verilated model didn't DC converge");
-    }
+//============================================================
+// Events and timing
+bool Vtop::eventsPending() { return false; }
+
+uint64_t Vtop::nextTimeSlot() {
+    VL_FATAL_MT(__FILE__, __LINE__, "", "%Error: No delays in the design");
+    return 0;
 }
 
-//--------------------
-// Internal Methods
+//============================================================
+// Utilities
 
-void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_initial__TOP__1\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    // INITIAL at top.sv:91
-    VL_WRITEF("Initializing top, entry point = 0x%x\n",
-	      64,vlTOPp->entry);
+//============================================================
+// Invoke final blocks
+
+void Vtop___024root___eval_final(Vtop___024root* vlSelf);
+
+VL_ATTR_COLD void Vtop::final() {
+    Vtop___024root___eval_final(&(vlSymsp->TOP));
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__2(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_sequent__TOP__2\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Variables
-    VL_SIG8(__Vdly__top__DOT__test_in,7,0);
-    VL_SIG8(__Vdly__top__DOT__test_start,0,0);
-    VL_SIG8(__Vdly__top__DOT__test2_in,2,0);
-    //char	__VpadToAlign27[5];
-    VL_SIG64(__Vdly__top__DOT__pc,63,0);
-    // Body
-    __Vdly__top__DOT__pc = vlTOPp->top__DOT__pc;
-    __Vdly__top__DOT__test_start = vlTOPp->top__DOT__test_start;
-    __Vdly__top__DOT__test_in = vlTOPp->top__DOT__test_in;
-    __Vdly__top__DOT__test2_in = vlTOPp->top__DOT__test2_in;
-    // ALWAYS at top.sv:72
-    if (VL_LIKELY(vlTOPp->reset)) {
-	__Vdly__top__DOT__pc = vlTOPp->entry;
-	__Vdly__top__DOT__test_in = 0U;
-	__Vdly__top__DOT__test_start = 0U;
-	__Vdly__top__DOT__test2_in = 0U;
-    } else {
-	VL_WRITEF("min_inv: in is %b, out is %b\n",
-		  3,vlTOPp->top__DOT__test2_in,8,(IData)(vlTOPp->top__DOT__test2_out));
-	if (VL_UNLIKELY(vlTOPp->top__DOT__test_start)) {
-	    VL_WRITEF("Hello World!  @ %x\n",64,vlTOPp->top__DOT__pc);
-	    vl_finish("top.sv",87,"");
-	} else {
-	    __Vdly__top__DOT__test2_in = (7U & ((IData)(1U) 
-						+ (IData)(vlTOPp->top__DOT__test2_in)));
-	    if ((0xffU == (IData)(vlTOPp->top__DOT__test_in))) {
-		__Vdly__top__DOT__test_start = 1U;
-	    }
-	    __Vdly__top__DOT__test_in = (0xffU & ((IData)(1U) 
-						  + (IData)(vlTOPp->top__DOT__test_in)));
-	}
-    }
-    vlTOPp->top__DOT__test_start = __Vdly__top__DOT__test_start;
-    vlTOPp->top__DOT__pc = __Vdly__top__DOT__pc;
-    vlTOPp->top__DOT__test_in = __Vdly__top__DOT__test_in;
-    vlTOPp->top__DOT__test2_in = __Vdly__top__DOT__test2_in;
-    // ALWAYS at minimum.sv:13
-    vlTOPp->top__DOT__test_out = 0U;
-    vlTOPp->top__DOT__min__DOT__i = 1U;
-    while ((0U != (IData)(vlTOPp->top__DOT__min__DOT__i))) {
-	vlTOPp->top__DOT__test_out = ((1U & ((IData)(vlTOPp->top__DOT__test_in) 
-					     >> (IData)(vlTOPp->top__DOT__min__DOT__i)))
-				       ? (IData)(vlTOPp->top__DOT__min__DOT__i)
-				       : (IData)(vlTOPp->top__DOT__test_out));
-	vlTOPp->top__DOT__min__DOT__i = (7U & ((IData)(1U) 
-					       + (IData)(vlTOPp->top__DOT__min__DOT__i)));
-    }
-    // ALWAYS at minimum_inverse.sv:11
-    vlTOPp->__Vtableidx1 = vlTOPp->top__DOT__test2_in;
-    vlTOPp->top__DOT__test2_out = vlTOPp->__Vtable1_top__DOT__test2_out
-	[vlTOPp->__Vtableidx1];
-}
+//============================================================
+// Implementations of abstract methods from VerilatedModel
 
-void Vtop::_settle__TOP__3(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_settle__TOP__3\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    // ALWAYS at minimum.sv:13
-    vlTOPp->top__DOT__test_out = 0U;
-    vlTOPp->top__DOT__min__DOT__i = 1U;
-    while ((0U != (IData)(vlTOPp->top__DOT__min__DOT__i))) {
-	vlTOPp->top__DOT__test_out = ((1U & ((IData)(vlTOPp->top__DOT__test_in) 
-					     >> (IData)(vlTOPp->top__DOT__min__DOT__i)))
-				       ? (IData)(vlTOPp->top__DOT__min__DOT__i)
-				       : (IData)(vlTOPp->top__DOT__test_out));
-	vlTOPp->top__DOT__min__DOT__i = (7U & ((IData)(1U) 
-					       + (IData)(vlTOPp->top__DOT__min__DOT__i)));
-    }
-    // ALWAYS at minimum_inverse.sv:11
-    vlTOPp->__Vtableidx1 = vlTOPp->top__DOT__test2_in;
-    vlTOPp->top__DOT__test2_out = vlTOPp->__Vtable1_top__DOT__test2_out
-	[vlTOPp->__Vtableidx1];
-}
-
-void Vtop::_eval(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_eval\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    if (((IData)(vlTOPp->clk) & (~ (IData)(vlTOPp->__Vclklast__TOP__clk)))) {
-	vlTOPp->_sequent__TOP__2(vlSymsp);
-	vlTOPp->__Vm_traceActivity = (2U | vlTOPp->__Vm_traceActivity);
-    }
-    // Final
-    vlTOPp->__Vclklast__TOP__clk = vlTOPp->clk;
-}
-
-void Vtop::_eval_initial(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_eval_initial\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    vlTOPp->_initial__TOP__1(vlSymsp);
-}
-
-void Vtop::final() {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::final\n"); );
-    // Variables
-    Vtop__Syms* __restrict vlSymsp = this->__VlSymsp;
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-}
-
-void Vtop::_eval_settle(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_eval_settle\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    vlTOPp->_settle__TOP__3(vlSymsp);
-    vlTOPp->__Vm_traceActivity = (1U | vlTOPp->__Vm_traceActivity);
-}
-
-VL_INLINE_OPT QData Vtop::_change_request(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_change_request\n"); );
-    Vtop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    // Change detection
-    QData __req = false;  // Logically a bool
-    return __req;
-}
-
-void Vtop::_ctor_var_reset() {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_ctor_var_reset\n"); );
-    // Body
-    clk = VL_RAND_RESET_I(1);
-    reset = VL_RAND_RESET_I(1);
-    hz32768timer = VL_RAND_RESET_I(1);
-    entry = VL_RAND_RESET_Q(64);
-    stackptr = VL_RAND_RESET_Q(64);
-    satp = VL_RAND_RESET_Q(64);
-    m_axi_awid = VL_RAND_RESET_I(13);
-    m_axi_awaddr = VL_RAND_RESET_Q(64);
-    m_axi_awlen = VL_RAND_RESET_I(8);
-    m_axi_awsize = VL_RAND_RESET_I(3);
-    m_axi_awburst = VL_RAND_RESET_I(2);
-    m_axi_awlock = VL_RAND_RESET_I(1);
-    m_axi_awcache = VL_RAND_RESET_I(4);
-    m_axi_awprot = VL_RAND_RESET_I(3);
-    m_axi_awvalid = VL_RAND_RESET_I(1);
-    m_axi_awready = VL_RAND_RESET_I(1);
-    m_axi_wdata = VL_RAND_RESET_Q(64);
-    m_axi_wstrb = VL_RAND_RESET_I(8);
-    m_axi_wlast = VL_RAND_RESET_I(1);
-    m_axi_wvalid = VL_RAND_RESET_I(1);
-    m_axi_wready = VL_RAND_RESET_I(1);
-    m_axi_bid = VL_RAND_RESET_I(13);
-    m_axi_bresp = VL_RAND_RESET_I(2);
-    m_axi_bvalid = VL_RAND_RESET_I(1);
-    m_axi_bready = VL_RAND_RESET_I(1);
-    m_axi_arid = VL_RAND_RESET_I(13);
-    m_axi_araddr = VL_RAND_RESET_Q(64);
-    m_axi_arlen = VL_RAND_RESET_I(8);
-    m_axi_arsize = VL_RAND_RESET_I(3);
-    m_axi_arburst = VL_RAND_RESET_I(2);
-    m_axi_arlock = VL_RAND_RESET_I(1);
-    m_axi_arcache = VL_RAND_RESET_I(4);
-    m_axi_arprot = VL_RAND_RESET_I(3);
-    m_axi_arvalid = VL_RAND_RESET_I(1);
-    m_axi_arready = VL_RAND_RESET_I(1);
-    m_axi_rid = VL_RAND_RESET_I(13);
-    m_axi_rdata = VL_RAND_RESET_Q(64);
-    m_axi_rresp = VL_RAND_RESET_I(2);
-    m_axi_rlast = VL_RAND_RESET_I(1);
-    m_axi_rvalid = VL_RAND_RESET_I(1);
-    m_axi_rready = VL_RAND_RESET_I(1);
-    m_axi_acvalid = VL_RAND_RESET_I(1);
-    m_axi_acready = VL_RAND_RESET_I(1);
-    m_axi_acaddr = VL_RAND_RESET_Q(64);
-    m_axi_acsnoop = VL_RAND_RESET_I(4);
-    top__DOT__pc = VL_RAND_RESET_Q(64);
-    top__DOT__test_in = VL_RAND_RESET_I(8);
-    top__DOT__test_out = VL_RAND_RESET_I(3);
-    top__DOT__test_start = VL_RAND_RESET_I(1);
-    top__DOT__test2_in = VL_RAND_RESET_I(3);
-    top__DOT__test2_out = VL_RAND_RESET_I(8);
-    top__DOT__min__DOT__i = VL_RAND_RESET_I(3);
-    top__DOT__min_inv__DOT__i = VL_RAND_RESET_I(8);
-    __Vtableidx1 = VL_RAND_RESET_I(3);
-    __Vtable1_top__DOT__test2_out[0] = 1U;
-    __Vtable1_top__DOT__test2_out[1] = 2U;
-    __Vtable1_top__DOT__test2_out[2] = 4U;
-    __Vtable1_top__DOT__test2_out[3] = 8U;
-    __Vtable1_top__DOT__test2_out[4] = 0x10U;
-    __Vtable1_top__DOT__test2_out[5] = 0x20U;
-    __Vtable1_top__DOT__test2_out[6] = 0x40U;
-    __Vtable1_top__DOT__test2_out[7] = 0x80U;
-    __Vclklast__TOP__clk = VL_RAND_RESET_I(1);
-    __Vm_traceActivity = VL_RAND_RESET_I(32);
-}
-
-void Vtop::_configure_coverage(Vtop__Syms* __restrict vlSymsp, bool first) {
-    VL_DEBUG_IF(VL_PRINTF("    Vtop::_configure_coverage\n"); );
+const char* Vtop::hierName() const { return vlSymsp->name(); }
+const char* Vtop::modelName() const { return "Vtop"; }
+unsigned Vtop::threads() const { return 1; }
+void Vtop::prepareClone() const { contextp()->prepareClone(); }
+void Vtop::atClone() const {
+    contextp()->threadPoolpOnClone();
 }

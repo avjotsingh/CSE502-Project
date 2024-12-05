@@ -1,5 +1,5 @@
-`include "Sysbus.defs"
-
+//`include "Sysbus.defs"
+//this include will become necessary
 module top
 #(
   ID_WIDTH = 13,
@@ -59,34 +59,34 @@ module top
   input   wire [3:0]             m_axi_acsnoop
 );
 
-  logic [63:0] pc;
-  reg [7:0] test_in;
-  wire [2:0] test_out;
-  logic test_start;
-  minimum #(3) min (test_in,test_out);
+  logic [63:0] pc_cpu, pc_if, pc_ex;
+  wire [63:0] next_pc = branch_taken_ex ? predicted_target : pc_cpu + 4;
+  wire branch_taken_ex;
+  wire [63:0] predicted_target;
+  wire instruction_cache_hit, data_cache_hit;
+  wire [31:0] cache_instr, if_id_decoder_instr;
 
-  wire [2:0] test2_in;
-  reg [7:0] test2_out;
-  minimum_inverse #(3) min_inv (test2_in,test2_out);
+  btb branch_predictor (.clk(clk),.reset(reset), .pc_if(pc_if), .pc_ex(pc_ex), .branch_taken_ex(branch_taken_ex), .target_addr_ex(), .predicted_target(predicted_target), .hit());
+
+  directCache #(.OFFSET_LENGTH(5), .TAG_LENGTH(49), .DATA_WIDTH(32)) instruction_cache 
+  (.clk(clk), .reset(reset), .avalid(1), .aaddr(next_pc), .load(1), .data_from_cpu(0), .data_to_cpu(cache_instr),
+   .hit(instruction_cache_hit), 
+   .command_valid(), .command_store(), .command_rready(), .command_addr(), .data_to_bus(), 
+   .data_from_bus(), .bus_valid(), .bus_ready());
+
+  if_id_regs if_id (.clk(clk), .reset(reset), .pc_in(pc_cpu), .instruction_in(cache_instr), .pc_out(pc_if), .instruction_out(if_id_decoder_instr));
 
   always_ff @ (posedge clk)
     if (reset) begin
-      pc <= entry;
-      test_in <= 0;
-      test_start <= 0;
-      test2_in <= 0;
+      pc_cpu <= entry;
     end else begin
-      //$display("min: in is %b, out is %d", test_in, test_out);
-      $display("min_inv: in is %b, out is %b", test2_in, test2_out);
-      if (!test_start) begin
-        if (test_in == 255) test_start <= 1;
-        test_in <= test_in + 1;
-        test2_in <= test2_in + 1;
-      end else begin
-        $display("Hello World!  @ %x", pc);
-        $finish;
+        pc_cpu <= next_pc;
+      if (pc_cpu == 1000) begin  
+        $display("Hello World!  @ %x", pc_cpu);
+        $finish; //crashes the test
       end
     end
+    
 
   initial begin
     $display("Initializing top, entry point = 0x%x", entry);

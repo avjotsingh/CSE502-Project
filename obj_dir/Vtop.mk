@@ -4,31 +4,27 @@
 # Execute this makefile from the object directory:
 #    make -f Vtop.mk
 
-default: Vtop
+default: libVtop
 
 ### Constants...
 # Perl executable (from $PERL)
 PERL = perl
 # Path to Verilator kit (from $VERILATOR_ROOT)
-VERILATOR_ROOT = /shared/share/verilator
-# Path to SystemPerl kit top (from $SYSTEMPERL)
-SYSTEMPERL = 
-# Path to SystemPerl kit includes (from $SYSTEMPERL_INCLUDE)
-SYSTEMPERL_INCLUDE = 
+VERILATOR_ROOT = /usr/share/verilator
 # SystemC include directory with systemc.h (from $SYSTEMC_INCLUDE)
 SYSTEMC_INCLUDE ?= 
 # SystemC library directory with libsystemc.a (from $SYSTEMC_LIBDIR)
 SYSTEMC_LIBDIR ?= 
 
 ### Switches...
-# SystemPerl output mode?  0/1 (from --sp)
-VM_SP = 0
+# C++ code coverage  0/1 (from --prof-c)
+VM_PROFC = 0
 # SystemC output mode?  0/1 (from --sc)
-VM_SC = 0
-# SystemPerl or SystemC output mode?  0/1 (from --sp/--sc)
-VM_SP_OR_SC = 0
+VM_SC = 1
+# Legacy or SystemC output mode?  0/1 (from --sc)
+VM_SP_OR_SC = $(VM_SC)
 # Deprecated
-VM_PCLI = 1
+VM_PCLI = 0
 # Deprecated: SystemC architecture to find link library path (from $SYSTEMC_ARCH)
 VM_SC_TARGET_ARCH = linux
 
@@ -39,28 +35,15 @@ VM_PREFIX = Vtop
 VM_MODPREFIX = Vtop
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-I/shared/cse502 \
-	-g3 \
-	-std=c++11 \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
-	-Wl,-rpath=/shared/cse502/DRAMSim2 \
-	-lelf \
-	-lncurses \
-	-lrt \
-	/shared/cse502/DRAMSim2/libdramsim.so \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
-	fake-os \
-	hardware \
-	main \
-	system \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
-	. \
 
 
 ### Default rules...
@@ -69,21 +52,9 @@ include Vtop_classes.mk
 # Include global rules
 include $(VERILATOR_ROOT)/include/verilated.mk
 
-### Executable rules... (from --exe)
-VPATH += $(VM_USER_DIR)
-
-fake-os.o: fake-os.cpp
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-hardware.o: hardware.cpp
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-main.o: main.cpp
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-system.o: system.cpp
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-
-### Link rules... (from --exe)
-Vtop: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a
-	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@ $(LIBS) $(SC_LIBS) 2>&1 | c++filt
-
+### Library rules (default lib mode)
+libVtop.a: $(VK_OBJS) $(VK_USER_OBJS) $(VM_HIER_LIBS)
+libverilated.a: $(VK_GLOBAL_OBJS)
+libVtop: libVtop.a libverilated.a $(VM_PREFIX)__ALL.a
 
 # Verilated -*- Makefile -*-

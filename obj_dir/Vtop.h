@@ -1,156 +1,117 @@
-// Verilated -*- C++ -*-
-// DESCRIPTION: Verilator output: Primary design header
+// Verilated -*- SystemC -*-
+// DESCRIPTION: Verilator output: Primary model header
 //
 // This header should be included by all source files instantiating the design.
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef _Vtop_H_
-#define _Vtop_H_
+#ifndef VERILATED_VTOP_H_
+#define VERILATED_VTOP_H_  // guard
 
-#include "verilated_heavy.h"
-#include "Vtop__Dpi.h"
+#include "systemc"
+#include "verilated_sc.h"
+#include "verilated.h"
+#include "svdpi.h"
 
 class Vtop__Syms;
+class Vtop___024root;
 class Vtop___024unit;
-class VerilatedVcd;
 
-//----------
 
-VL_MODULE(Vtop) {
+// This class is the main interface to the Verilated model
+class alignas(VL_CACHE_LINE_BYTES) Vtop VL_NOT_FINAL : public ::sc_core::sc_module, public VerilatedModel {
+  private:
+    // Symbol table holding complete model state (owned by this class)
+    Vtop__Syms* const vlSymsp;
+
   public:
-    // CELLS
-    // Public to allow access to /*verilator_public*/ items;
-    // otherwise the application code can consider these internals.
-    Vtop___024unit*    	__PVT____024unit;
-    
+
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(clk,0,0);
-    VL_IN8(reset,0,0);
-    VL_IN8(hz32768timer,0,0);
-    VL_OUT8(m_axi_awlen,7,0);
-    VL_OUT8(m_axi_awsize,2,0);
-    VL_OUT8(m_axi_awburst,1,0);
-    VL_OUT8(m_axi_awlock,0,0);
-    VL_OUT8(m_axi_awcache,3,0);
-    VL_OUT8(m_axi_awprot,2,0);
-    VL_OUT8(m_axi_awvalid,0,0);
-    VL_IN8(m_axi_awready,0,0);
-    VL_OUT8(m_axi_wstrb,7,0);
-    VL_OUT8(m_axi_wlast,0,0);
-    VL_OUT8(m_axi_wvalid,0,0);
-    VL_IN8(m_axi_wready,0,0);
-    VL_IN8(m_axi_bresp,1,0);
-    VL_IN8(m_axi_bvalid,0,0);
-    VL_OUT8(m_axi_bready,0,0);
-    VL_OUT8(m_axi_arlen,7,0);
-    VL_OUT8(m_axi_arsize,2,0);
-    VL_OUT8(m_axi_arburst,1,0);
-    VL_OUT8(m_axi_arlock,0,0);
-    VL_OUT8(m_axi_arcache,3,0);
-    VL_OUT8(m_axi_arprot,2,0);
-    VL_OUT8(m_axi_arvalid,0,0);
-    VL_IN8(m_axi_arready,0,0);
-    VL_IN8(m_axi_rresp,1,0);
-    VL_IN8(m_axi_rlast,0,0);
-    VL_IN8(m_axi_rvalid,0,0);
-    VL_OUT8(m_axi_rready,0,0);
-    VL_IN8(m_axi_acvalid,0,0);
-    VL_OUT8(m_axi_acready,0,0);
-    VL_IN8(m_axi_acsnoop,3,0);
-    //char	__VpadToAlign33[1];
-    VL_OUT16(m_axi_awid,12,0);
-    VL_IN16(m_axi_bid,12,0);
-    VL_OUT16(m_axi_arid,12,0);
-    VL_IN16(m_axi_rid,12,0);
-    //char	__VpadToAlign42[6];
-    VL_IN64(entry,63,0);
-    VL_IN64(stackptr,63,0);
-    VL_IN64(satp,63,0);
-    VL_OUT64(m_axi_awaddr,63,0);
-    VL_OUT64(m_axi_wdata,63,0);
-    VL_OUT64(m_axi_araddr,63,0);
-    VL_IN64(m_axi_rdata,63,0);
-    VL_IN64(m_axi_acaddr,63,0);
-    
-    // LOCAL SIGNALS
-    // Internals; generally not touched by application code
-    VL_SIG8(top__DOT__test_in,7,0);
-    VL_SIG8(top__DOT__test_out,2,0);
-    VL_SIG8(top__DOT__test_start,0,0);
-    VL_SIG8(top__DOT__test2_in,2,0);
-    VL_SIG8(top__DOT__test2_out,7,0);
-    VL_SIG8(top__DOT__min__DOT__i,2,0);
-    VL_SIG8(top__DOT__min_inv__DOT__i,7,0);
-    //char	__VpadToAlign123[5];
-    VL_SIG64(top__DOT__pc,63,0);
-    
-    // LOCAL VARIABLES
-    // Internals; generally not touched by application code
-    static VL_ST_SIG8(__Vtable1_top__DOT__test2_out[8],7,0);
-    VL_SIG8(__Vtableidx1,2,0);
-    VL_SIG8(__Vclklast__TOP__clk,0,0);
-    //char	__VpadToAlign142[2];
-    VL_SIG(__Vm_traceActivity,31,0);
-    
-    // INTERNAL VARIABLES
-    // Internals; generally not touched by application code
-    Vtop__Syms*	__VlSymsp;		// Symbol table
-    
-    // PARAMETERS
-    // Parameters marked /*verilator public*/ for use by application code
-    
-    // CONSTRUCTORS
-  private:
-    Vtop& operator= (const Vtop&);	///< Copying not allowed
-    Vtop(const Vtop&);	///< Copying not allowed
-  public:
-    /// Construct the model; called by application code
-    /// The special name  may be used to make a wrapper with a
-    /// single model invisible WRT DPI scope names.
-    Vtop(const char* name="TOP");
-    /// Destroy the model; called (often implicitly) by application code
-    ~Vtop();
-    /// Trace signals in the model; called by application code
-    void trace (VerilatedVcdC* tfp, int levels, int options=0);
-    
-    // USER METHODS
-    
-    // API METHODS
-    /// Evaluate the model.  Application must call when inputs change.
-    void eval();
-    /// Simulation complete, run final blocks.  Application must call on completion.
-    void final();
-    
-    // INTERNAL METHODS
-  private:
-    static void _eval_initial_loop(Vtop__Syms* __restrict vlSymsp);
-  public:
-    void __Vconfigure(Vtop__Syms* symsp, bool first);
-  private:
-    static QData	_change_request(Vtop__Syms* __restrict vlSymsp);
-    void	_configure_coverage(Vtop__Syms* __restrict vlSymsp, bool first);
-    void	_ctor_var_reset();
-  public:
-    static void	_eval(Vtop__Syms* __restrict vlSymsp);
-    static void	_eval_initial(Vtop__Syms* __restrict vlSymsp);
-    static void	_eval_settle(Vtop__Syms* __restrict vlSymsp);
-    static void	_initial__TOP__1(Vtop__Syms* __restrict vlSymsp);
-    static void	_sequent__TOP__2(Vtop__Syms* __restrict vlSymsp);
-    static void	_settle__TOP__3(Vtop__Syms* __restrict vlSymsp);
-    static void	traceChgThis(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceChgThis__2(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceChgThis__3(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceChgThis__4(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceFullThis(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceFullThis__1(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceInitThis(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void	traceInitThis__1(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
-    static void traceInit (VerilatedVcd* vcdp, void* userthis, uint32_t code);
-    static void traceFull (VerilatedVcd* vcdp, void* userthis, uint32_t code);
-    static void traceChg  (VerilatedVcd* vcdp, void* userthis, uint32_t code);
-} VL_ATTR_ALIGNED(128);
+    sc_core::sc_in<bool> &clk;
+    sc_core::sc_in<bool> &reset;
+    sc_core::sc_in<bool> &hz32768timer;
+    sc_core::sc_out<uint32_t> &m_axi_awlen;
+    sc_core::sc_out<uint32_t> &m_axi_awsize;
+    sc_core::sc_out<uint32_t> &m_axi_awburst;
+    sc_core::sc_out<bool> &m_axi_awlock;
+    sc_core::sc_out<uint32_t> &m_axi_awcache;
+    sc_core::sc_out<uint32_t> &m_axi_awprot;
+    sc_core::sc_out<bool> &m_axi_awvalid;
+    sc_core::sc_in<bool> &m_axi_awready;
+    sc_core::sc_out<uint32_t> &m_axi_wstrb;
+    sc_core::sc_out<bool> &m_axi_wlast;
+    sc_core::sc_out<bool> &m_axi_wvalid;
+    sc_core::sc_in<bool> &m_axi_wready;
+    sc_core::sc_in<uint32_t> &m_axi_bresp;
+    sc_core::sc_in<bool> &m_axi_bvalid;
+    sc_core::sc_out<bool> &m_axi_bready;
+    sc_core::sc_out<uint32_t> &m_axi_arlen;
+    sc_core::sc_out<uint32_t> &m_axi_arsize;
+    sc_core::sc_out<uint32_t> &m_axi_arburst;
+    sc_core::sc_out<bool> &m_axi_arlock;
+    sc_core::sc_out<uint32_t> &m_axi_arcache;
+    sc_core::sc_out<uint32_t> &m_axi_arprot;
+    sc_core::sc_out<bool> &m_axi_arvalid;
+    sc_core::sc_in<bool> &m_axi_arready;
+    sc_core::sc_in<uint32_t> &m_axi_rresp;
+    sc_core::sc_in<bool> &m_axi_rlast;
+    sc_core::sc_in<bool> &m_axi_rvalid;
+    sc_core::sc_out<bool> &m_axi_rready;
+    sc_core::sc_in<bool> &m_axi_acvalid;
+    sc_core::sc_out<bool> &m_axi_acready;
+    sc_core::sc_in<uint32_t> &m_axi_acsnoop;
+    sc_core::sc_out<uint32_t> &m_axi_awid;
+    sc_core::sc_in<uint32_t> &m_axi_bid;
+    sc_core::sc_out<uint32_t> &m_axi_arid;
+    sc_core::sc_in<uint32_t> &m_axi_rid;
+    sc_core::sc_in<uint64_t> &entry;
+    sc_core::sc_in<uint64_t> &stackptr;
+    sc_core::sc_in<uint64_t> &satp;
+    sc_core::sc_out<uint64_t> &m_axi_awaddr;
+    sc_core::sc_out<uint64_t> &m_axi_wdata;
+    sc_core::sc_out<uint64_t> &m_axi_araddr;
+    sc_core::sc_in<uint64_t> &m_axi_rdata;
+    sc_core::sc_in<uint64_t> &m_axi_acaddr;
 
-#endif  /*guard*/
+    // CELLS
+    // Public to allow access to /* verilator public */ items.
+    // Otherwise the application code can consider these internals.
+    Vtop___024unit* const __PVT____024unit;
+
+    // Root instance pointer to allow access to model internals,
+    // including inlined /* verilator public_flat_* */ items.
+    Vtop___024root* const rootp;
+
+    // CONSTRUCTORS
+    SC_CTOR(Vtop);
+    virtual ~Vtop();
+  private:
+    VL_UNCOPYABLE(Vtop);  ///< Copying not allowed
+
+  public:
+    // API METHODS
+  private:
+    void eval() { eval_step(); }
+    void eval_step();
+  public:
+    void final();
+    /// Are there scheduled events to handle?
+    bool eventsPending();
+    /// Returns time at next time slot. Aborts if !eventsPending()
+    uint64_t nextTimeSlot();
+
+    // Abstract methods from VerilatedModel
+    const char* hierName() const override final;
+    const char* modelName() const override final;
+    unsigned threads() const override final;
+    /// Prepare for cloning the model at the process level (e.g. fork in Linux)
+    /// Release necessary resources. Called before cloning.
+    void prepareClone() const;
+    /// Re-init after cloning the model at the process level (e.g. fork in Linux)
+    /// Re-allocate necessary resources. Called after cloning.
+    void atClone() const;
+};
+
+#endif  // guard
