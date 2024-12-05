@@ -12,7 +12,7 @@
 [a] add logic to handle data hazards (stalling or data forwarding)
 [a] assemble all components to get a working pipeline
 [Z] cache memory bus
-[z] make a direct-mapped cache<br>
+[Z] make a direct-mapped cache<br>
 [] connect everything in top.sv<br>
 [] test test test<br>
 [] submit!<br>
