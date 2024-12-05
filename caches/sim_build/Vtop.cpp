@@ -11,20 +11,49 @@ Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , vlSymsp{new Vtop__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , reset{vlSymsp->TOP.reset}
-    , avalid{vlSymsp->TOP.avalid}
-    , load{vlSymsp->TOP.load}
-    , hit{vlSymsp->TOP.hit}
+    , hz32768timer{vlSymsp->TOP.hz32768timer}
     , command_valid{vlSymsp->TOP.command_valid}
     , command_store{vlSymsp->TOP.command_store}
     , command_rready{vlSymsp->TOP.command_rready}
     , bus_valid{vlSymsp->TOP.bus_valid}
     , bus_ready{vlSymsp->TOP.bus_ready}
-    , data_to_bus{vlSymsp->TOP.data_to_bus}
-    , data_from_bus{vlSymsp->TOP.data_from_bus}
-    , aaddr{vlSymsp->TOP.aaddr}
-    , data_from_cpu{vlSymsp->TOP.data_from_cpu}
-    , data_to_cpu{vlSymsp->TOP.data_to_cpu}
+    , m_axi_awlen{vlSymsp->TOP.m_axi_awlen}
+    , m_axi_awsize{vlSymsp->TOP.m_axi_awsize}
+    , m_axi_awburst{vlSymsp->TOP.m_axi_awburst}
+    , m_axi_awlock{vlSymsp->TOP.m_axi_awlock}
+    , m_axi_awcache{vlSymsp->TOP.m_axi_awcache}
+    , m_axi_awprot{vlSymsp->TOP.m_axi_awprot}
+    , m_axi_awvalid{vlSymsp->TOP.m_axi_awvalid}
+    , m_axi_awready{vlSymsp->TOP.m_axi_awready}
+    , m_axi_wlast{vlSymsp->TOP.m_axi_wlast}
+    , m_axi_wvalid{vlSymsp->TOP.m_axi_wvalid}
+    , m_axi_wready{vlSymsp->TOP.m_axi_wready}
+    , m_axi_bresp{vlSymsp->TOP.m_axi_bresp}
+    , m_axi_bvalid{vlSymsp->TOP.m_axi_bvalid}
+    , m_axi_bready{vlSymsp->TOP.m_axi_bready}
+    , m_axi_arlen{vlSymsp->TOP.m_axi_arlen}
+    , m_axi_arsize{vlSymsp->TOP.m_axi_arsize}
+    , m_axi_arburst{vlSymsp->TOP.m_axi_arburst}
+    , m_axi_arlock{vlSymsp->TOP.m_axi_arlock}
+    , m_axi_arcache{vlSymsp->TOP.m_axi_arcache}
+    , m_axi_arprot{vlSymsp->TOP.m_axi_arprot}
+    , m_axi_arvalid{vlSymsp->TOP.m_axi_arvalid}
+    , m_axi_arready{vlSymsp->TOP.m_axi_arready}
+    , m_axi_rresp{vlSymsp->TOP.m_axi_rresp}
+    , m_axi_rlast{vlSymsp->TOP.m_axi_rlast}
+    , m_axi_rvalid{vlSymsp->TOP.m_axi_rvalid}
+    , m_axi_rready{vlSymsp->TOP.m_axi_rready}
+    , m_axi_acvalid{vlSymsp->TOP.m_axi_acvalid}
+    , m_axi_acready{vlSymsp->TOP.m_axi_acready}
+    , m_axi_acsnoop{vlSymsp->TOP.m_axi_acsnoop}
+    , data_in{vlSymsp->TOP.data_in}
+    , data_out{vlSymsp->TOP.data_out}
     , command_addr{vlSymsp->TOP.command_addr}
+    , m_axi_awaddr{vlSymsp->TOP.m_axi_awaddr}
+    , m_axi_wdata{vlSymsp->TOP.m_axi_wdata}
+    , m_axi_araddr{vlSymsp->TOP.m_axi_araddr}
+    , m_axi_rdata{vlSymsp->TOP.m_axi_rdata}
+    , m_axi_acaddr{vlSymsp->TOP.m_axi_acaddr}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

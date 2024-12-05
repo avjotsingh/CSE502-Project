@@ -5,16 +5,16 @@ module minimum
     LOG_INPUTS = 1
 )
 (
-    input wire [2**LOG_INPUTS-1:0] in,
-    output wire [LOG_INPUTS-1:0] out
+    input wire [2**LOG_INPUTS-1:0] candidates,
+    output logic [LOG_INPUTS-1:0] out
 );
-    wire [$size(out)-1:0] i;
+    logic [$size(out)-1:0] i;
     
     always_comb begin
         i = 0;
         out = 0;
         do begin
-            out = in[i] ? i : out;
+            out = candidates[i] ? i : out;
             i = i+1; 
         end while (i != 0);
     end

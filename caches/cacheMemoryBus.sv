@@ -1,4 +1,4 @@
-module top
+module cacheMemoryBus
 #(
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
@@ -16,9 +16,9 @@ module top
   input wire [CONNECTIONS-1:0] command_rready,
   input wire [CONNECTIONS-1:0] [ADDR_WIDTH-1:0] command_addr,
   input wire [CONNECTIONS-1:0] [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_in,
-  output wire [CONNECTIONS-1:0] bus_valid,
-  output wire [CONNECTIONS-1:0] bus_ready,
-  output wire [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
+  output reg [CONNECTIONS-1:0] bus_valid,
+  output reg [CONNECTIONS-1:0] bus_ready,
+  output reg [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
 
 
   // interface to connect to the bus
@@ -64,13 +64,13 @@ module top
 );
 
   enum {IDLE, L_ADDR, L_READ, L_DONE, S_ADDR, S_WRITE} state, next_state; 
-  wire [CHUNKS_LOG-1:0] offsetCounter;
-  wire [2**CHUNKS_LOG-1:0][DATA_WIDTH-1:0] data_buffer;
-  wire [ADDR_WIDTH-1:0] addr_buffer;
-  wire [$clog2(CONNECTIONS)-1:0] currID;
+  reg [CHUNKS_LOG-1:0] offsetCounter;
+  reg [2**CHUNKS_LOG-1:0][DATA_WIDTH-1:0] data_buffer;
+  reg [ADDR_WIDTH-1:0] addr_buffer;
+  reg [$clog2(CONNECTIONS)-1:0] currID;
   
   //should only push 1 to the current cache, 0 to the rest 
-  wire [CONNECTIONS-1:0] currPow2;
+  reg [CONNECTIONS-1:0] currPow2;
 
   assign data_out = data_buffer;
   assign m_axi_araddr = addr_buffer;
@@ -91,12 +91,16 @@ module top
     if (reset) begin
       state <= IDLE;
       offsetCounter <= 0;
+      data_buffer <= 0;
+      addr_buffer <= 0;
+      currID <= 0;
     end else begin
       state <= next_state;
       case(state)
           IDLE: begin
             currID <= busChoiceOut; 
             addr_buffer <= command_addr[busChoiceOut];
+            data_buffer <= data_in[busChoiceOut];
           end
           L_ADDR: begin
             /*
@@ -118,7 +122,6 @@ module top
               offsetCounter <= offsetCounter + 1;
             end
           end
-          L_DONE: begin end
       endcase
     end
 
@@ -127,82 +130,100 @@ module top
     case(state)
         IDLE : next_state = command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) : IDLE;
         L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
-        L_READ : next_state = offsetCounter == (-1) ? L_DONE : L_READ;
+        L_READ : next_state = m_axi_rlast ? L_DONE : L_READ;
         L_DONE : next_state = command_rready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
         S_ADDR : next_state = m_axi_awready ? S_WRITE : S_ADDR;//handshake???
-        S_WRITE : next_state = offsetCounter == (-1) ? IDLE : S_WRITE;
+        S_WRITE : next_state = m_axi_wlast ? IDLE : S_WRITE;
     endcase 
   end
 
   //output logic
   always_comb begin
-    case(state)
-      IDLE: begin
-        bus_valid = 0;
-        bus_ready = currPow2;
-        
-        m_axi_arvalid = 0;
-        m_axi_rready = 0;
+    if (reset) begin
+      bus_valid = 0;
+      bus_ready = 0;
+      
+      m_axi_arvalid = 0;
+      m_axi_rready = 0;
+      
+      m_axi_awvalid = 0;
+      m_axi_wvalid = 0;
+      m_axi_wdata = 0;
+    end else begin
+      case(state)
+        IDLE: begin
+          bus_valid = 0;
+          bus_ready = currPow2;
+          
+          m_axi_arvalid = 0;
+          m_axi_rready = 0;
 
-        m_axi_awvalid = 0;
-        m_axi_wvalid = 0;
-        m_axi_wdata = 0;
-      end
-      L_ADDR: begin
-        bus_valid = 0;
-        bus_ready = 0;
-        
-        m_axi_arvalid = 1;
-        m_axi_rready = 0;
-        
-        m_axi_awvalid = 0;
-        m_axi_wvalid = 0;
-        m_axi_wdata = 0;
-      end
-      L_READ: begin
-        bus_valid = 0;
-        bus_ready = 0;
-        
-        m_axi_arvalid = 0;
-        m_axi_rready = 1;
-        
-        m_axi_awvalid = 0;
-        m_axi_wvalid = 0;
-        m_axi_wdata = 0;
-      end
-      L_DONE: begin
-        bus_valid = currPow2;
-        bus_ready = 0;
-        
-        m_axi_arvalid = 0;
-        m_axi_rready = 0;
-        
-        m_axi_awvalid = 0;
-        m_axi_wvalid = 0;
-        m_axi_wdata = 0;
-      end
-      S_ADDR: begin
-        bus_valid = 0;
-        bus_ready = 0;
-        
-        m_axi_arvalid = 0;
-        m_axi_rready = 0;
-        
-        m_axi_awvalid = 1;
-        m_axi_wvalid = 0;
-        m_axi_wdata = 0;
-      end
-      S_WRITE: begin
-        bus_valid = 0;
-        bus_ready = 0;
-        
-        m_axi_arvalid = 0;
-        m_axi_rready = 0;
-        
-        m_axi_awvalid = 0;
-        m_axi_wvalid = 0;
-        m_axi_wdata = data_buffer [offsetCounter]; 
-      end
-    endcase
+          m_axi_awvalid = 0;
+          m_axi_wvalid = 0;
+          m_axi_wdata = 0;
+          m_axi_wlast = 0;
+        end
+        L_ADDR: begin
+          bus_valid = 0;
+          bus_ready = 0;
+          
+          m_axi_arvalid = 1;
+          m_axi_rready = 0;
+          
+          m_axi_awvalid = 0;
+          m_axi_wvalid = 0;
+          m_axi_wdata = 0;
+          m_axi_wlast = 0;
+        end
+        L_READ: begin
+          bus_valid = 0;
+          bus_ready = 0;
+          
+          m_axi_arvalid = 0;
+          m_axi_rready = 1;
+          
+          m_axi_awvalid = 0;
+          m_axi_wvalid = 0;
+          m_axi_wdata = 0;
+          m_axi_wlast = 0;
+        end
+        L_DONE: begin
+          bus_valid = currPow2;
+          bus_ready = 0;
+          
+          m_axi_arvalid = 0;
+          m_axi_rready = 0;
+          
+          m_axi_awvalid = 0;
+          m_axi_wvalid = 0;
+          m_axi_wdata = 0;
+          m_axi_wlast = 0;
+        end
+        S_ADDR: begin
+          bus_valid = 0;
+          bus_ready = 0;
+          
+          m_axi_arvalid = 0;
+          m_axi_rready = 0;
+          
+          m_axi_awvalid = 1;
+          m_axi_wvalid = 0;
+          m_axi_wdata = 0;
+          m_axi_wlast = 0;
+        end
+        S_WRITE: begin
+          bus_valid = 0;
+          bus_ready = 0;
+          
+          m_axi_arvalid = 0;
+          m_axi_rready = 0;
+          
+          m_axi_awvalid = 0;
+          m_axi_wvalid = 1;
+          m_axi_wdata = data_buffer [offsetCounter]; 
+          m_axi_wlast = offsetCounter == {CHUNKS_LOG{1'b1}} ? 1 : 0;
+        end
+      endcase
+    end
   end
 endmodule
