@@ -100,7 +100,7 @@ module cacheMemoryBus
           IDLE: begin
             currID <= busChoiceOut; 
             addr_buffer <= command_addr[busChoiceOut];
-            data_buffer <= 0;
+            data_buffer <= data_in[busChoiceOut];
           end
           L_ADDR: begin
             /*
@@ -122,7 +122,6 @@ module cacheMemoryBus
               offsetCounter <= offsetCounter + 1;
             end
           end
-          L_DONE: begin end
       endcase
     end
 
@@ -162,6 +161,7 @@ module cacheMemoryBus
           m_axi_awvalid = 0;
           m_axi_wvalid = 0;
           m_axi_wdata = 0;
+          m_axi_wlast = 0;
         end
         L_ADDR: begin
           bus_valid = 0;
@@ -173,6 +173,7 @@ module cacheMemoryBus
           m_axi_awvalid = 0;
           m_axi_wvalid = 0;
           m_axi_wdata = 0;
+          m_axi_wlast = 0;
         end
         L_READ: begin
           bus_valid = 0;
@@ -184,6 +185,7 @@ module cacheMemoryBus
           m_axi_awvalid = 0;
           m_axi_wvalid = 0;
           m_axi_wdata = 0;
+          m_axi_wlast = 0;
         end
         L_DONE: begin
           bus_valid = currPow2;
@@ -195,6 +197,7 @@ module cacheMemoryBus
           m_axi_awvalid = 0;
           m_axi_wvalid = 0;
           m_axi_wdata = 0;
+          m_axi_wlast = 0;
         end
         S_ADDR: begin
           bus_valid = 0;
@@ -206,6 +209,7 @@ module cacheMemoryBus
           m_axi_awvalid = 1;
           m_axi_wvalid = 0;
           m_axi_wdata = 0;
+          m_axi_wlast = 0;
         end
         S_WRITE: begin
           bus_valid = 0;
@@ -215,8 +219,9 @@ module cacheMemoryBus
           m_axi_rready = 0;
           
           m_axi_awvalid = 0;
-          m_axi_wvalid = 0;
+          m_axi_wvalid = 1;
           m_axi_wdata = data_buffer [offsetCounter]; 
+          m_axi_wlast = offsetCounter == {CHUNKS_LOG{1'b1}} ? 1 : 0;
         end
       endcase
     end

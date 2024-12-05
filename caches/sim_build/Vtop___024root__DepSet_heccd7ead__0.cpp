@@ -51,7 +51,6 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
     vlSelf->m_axi_awlock = vlSelf->cacheMemoryBus__DOT__m_axi_awlock;
     vlSelf->m_axi_awcache = vlSelf->cacheMemoryBus__DOT__m_axi_awcache;
     vlSelf->m_axi_awprot = vlSelf->cacheMemoryBus__DOT__m_axi_awprot;
-    vlSelf->m_axi_wlast = vlSelf->cacheMemoryBus__DOT__m_axi_wlast;
     vlSelf->m_axi_bready = vlSelf->cacheMemoryBus__DOT__m_axi_bready;
     vlSelf->m_axi_arlen = vlSelf->cacheMemoryBus__DOT__m_axi_arlen;
     vlSelf->m_axi_arsize = vlSelf->cacheMemoryBus__DOT__m_axi_arsize;
@@ -94,6 +93,23 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
     vlSelf->data_out[0x1eU] = vlSelf->cacheMemoryBus__DOT__data_buffer[0x1eU];
     vlSelf->data_out[0x1fU] = vlSelf->cacheMemoryBus__DOT__data_buffer[0x1fU];
     vlSelf->m_axi_awaddr = vlSelf->cacheMemoryBus__DOT__addr_buffer;
+    if ((1U & (~ (IData)(vlSelf->reset)))) {
+        if ((0U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((1U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((3U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((4U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((5U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast 
+                = ((0xfU == (IData)(vlSelf->cacheMemoryBus__DOT__offsetCounter))
+                    ? 1U : 0U);
+        }
+    }
     vlSelf->cacheMemoryBus__DOT__busChoice__DOT__i = 0U;
     vlSelf->cacheMemoryBus__DOT__busChoice__DOT__out = 0U;
     vlSelf->cacheMemoryBus__DOT__busChoice__DOT__out 
@@ -113,57 +129,57 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
     }
     vlSelf->cacheMemoryBus__DOT__currPow2 = (3U & VL_POWSS_III(2,32,1, (IData)(2U), (IData)(vlSelf->cacheMemoryBus__DOT__currID), 1,0));
     if (vlSelf->reset) {
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
     } else if ((0U == vlSelf->cacheMemoryBus__DOT__state)) {
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         vlSelf->cacheMemoryBus__DOT__bus_ready = vlSelf->cacheMemoryBus__DOT__currPow2;
         vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
     } else if ((1U == vlSelf->cacheMemoryBus__DOT__state)) {
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 1U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
     } else if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 1U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 1U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
     } else if ((3U == vlSelf->cacheMemoryBus__DOT__state)) {
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_valid = vlSelf->cacheMemoryBus__DOT__currPow2;
     } else if ((4U == vlSelf->cacheMemoryBus__DOT__state)) {
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 1U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
     } else if ((5U == vlSelf->cacheMemoryBus__DOT__state)) {
-        vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
+        vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 1U;
+        vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 
             (((QData)((IData)(vlSelf->cacheMemoryBus__DOT__data_buffer[
@@ -242,14 +258,15 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
         vlSelf->data_out[0x1eU];
     vlSelf->cacheMemoryBus__DOT__data_out[0x1fU] = 
         vlSelf->data_out[0x1fU];
+    vlSelf->m_axi_rready = vlSelf->cacheMemoryBus__DOT__m_axi_rready;
     vlSelf->m_axi_wvalid = vlSelf->cacheMemoryBus__DOT__m_axi_wvalid;
     vlSelf->m_axi_awvalid = vlSelf->cacheMemoryBus__DOT__m_axi_awvalid;
-    vlSelf->m_axi_rready = vlSelf->cacheMemoryBus__DOT__m_axi_rready;
     vlSelf->m_axi_arvalid = vlSelf->cacheMemoryBus__DOT__m_axi_arvalid;
     vlSelf->m_axi_wdata = vlSelf->cacheMemoryBus__DOT__m_axi_wdata;
     vlSelf->m_axi_araddr = vlSelf->m_axi_awaddr;
     vlSelf->cacheMemoryBus__DOT__m_axi_awaddr = vlSelf->m_axi_awaddr;
     vlSelf->cacheMemoryBus__DOT__m_axi_araddr = vlSelf->m_axi_awaddr;
+    vlSelf->m_axi_wlast = vlSelf->cacheMemoryBus__DOT__m_axi_wlast;
     vlSelf->cacheMemoryBus__DOT__busChoiceOut = vlSelf->cacheMemoryBus__DOT__busChoice__DOT__out;
     vlSelf->cacheMemoryBus__DOT__busChoiceReply__DOT__broadcast 
         = vlSelf->cacheMemoryBus__DOT__currPow2;
@@ -432,69 +449,388 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
                                           >> 5U))])) 
                    >> (0x1fU & VL_SHIFTL_III(7,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 6U)))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(1U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[(0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                            >> 5U))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[1U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[1U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(2U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(1U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[2U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[2U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(3U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(2U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[3U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[3U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(4U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(3U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[4U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[4U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(5U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(4U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[5U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[5U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(6U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(5U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[6U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[6U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(7U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(6U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[7U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[7U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(8U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(7U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[8U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[8U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(9U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(8U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[9U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[9U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0xaU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(9U) + (0x3fU 
+                                                  & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                     >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0xaU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xaU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0xbU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0xaU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0xbU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xbU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0xcU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0xbU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0xcU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xcU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0xdU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0xcU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0xdU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xdU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0xeU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0xdU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0xeU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xeU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0xfU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0xeU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0xfU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0xfU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x10U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0xfU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x10U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x10U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x11U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x10U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x11U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x11U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x12U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x11U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x12U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x12U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x13U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x12U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x13U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x13U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x14U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x13U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x14U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x14U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x15U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x14U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x15U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x15U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x16U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x15U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x16U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x16U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x17U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x16U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x17U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x17U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x18U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x17U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x18U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x18U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x19U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x18U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x19U] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x19U];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x1aU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x19U) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x1aU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1aU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x1bU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x1aU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x1bU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1bU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x1cU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x1bU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x1cU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1cU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x1dU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x1cU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x1dU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1dU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x1eU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x1dU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x1eU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1eU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x1fU) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x1eU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
         vlSelf->cacheMemoryBus__DOT__data_buffer[0x1fU] 
-            = Vtop__ConstPool__CONST_hd6b7ba52_0[0x1fU];
+            = (((0U == (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU)))
+                 ? 0U : (vlSelf->data_in[((IData)(0x20U) 
+                                          + (0x3fU 
+                                             & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                                >> 5U)))] 
+                         << ((IData)(0x20U) - (0x1fU 
+                                               & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))))) 
+               | (vlSelf->data_in[((IData)(0x1fU) + 
+                                   (0x3fU & (VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU) 
+                                             >> 5U)))] 
+                  >> (0x1fU & VL_SHIFTL_III(11,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__busChoiceOut), 0xaU))));
     } else if ((1U != vlSelf->cacheMemoryBus__DOT__state)) {
         if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
             if (vlSelf->m_axi_rvalid) {
@@ -553,9 +889,9 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     vlSelf->cacheMemoryBus__DOT__currPow2 = (3U & VL_POWSS_III(2,32,1, (IData)(2U), (IData)(vlSelf->cacheMemoryBus__DOT__currID), 1,0));
     if (vlSelf->reset) {
         vlSelf->cacheMemoryBus__DOT__state = 0U;
+        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-        vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
         vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
         vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
@@ -563,51 +899,51 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     } else {
         vlSelf->cacheMemoryBus__DOT__state = vlSelf->cacheMemoryBus__DOT__next_state;
         if ((0U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_ready 
                 = vlSelf->cacheMemoryBus__DOT__currPow2;
             vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         } else if ((1U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 1U;
             vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         } else if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 1U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 1U;
             vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         } else if ((3U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
-            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_valid 
                 = vlSelf->cacheMemoryBus__DOT__currPow2;
             vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         } else if ((4U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 1U;
-            vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_wdata = 0ULL;
         } else if ((5U == vlSelf->cacheMemoryBus__DOT__state)) {
-            vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 0U;
-            vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_rready = 0U;
+            vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = 1U;
+            vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_ready = 0U;
             vlSelf->cacheMemoryBus__DOT__bus_valid = 0U;
@@ -695,13 +1031,31 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
         vlSelf->data_out[0x1fU];
     vlSelf->cacheMemoryBus__DOT__busChoiceReply__DOT__broadcast 
         = vlSelf->cacheMemoryBus__DOT__currPow2;
+    if ((1U & (~ (IData)(vlSelf->reset)))) {
+        if ((0U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((1U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((2U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((3U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((4U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast = 0U;
+        } else if ((5U == vlSelf->cacheMemoryBus__DOT__state)) {
+            vlSelf->cacheMemoryBus__DOT__m_axi_wlast 
+                = ((0xfU == (IData)(vlSelf->cacheMemoryBus__DOT__offsetCounter))
+                    ? 1U : 0U);
+        }
+    }
+    vlSelf->m_axi_rready = vlSelf->cacheMemoryBus__DOT__m_axi_rready;
     vlSelf->m_axi_wvalid = vlSelf->cacheMemoryBus__DOT__m_axi_wvalid;
     vlSelf->m_axi_awvalid = vlSelf->cacheMemoryBus__DOT__m_axi_awvalid;
-    vlSelf->m_axi_rready = vlSelf->cacheMemoryBus__DOT__m_axi_rready;
     vlSelf->m_axi_arvalid = vlSelf->cacheMemoryBus__DOT__m_axi_arvalid;
     vlSelf->bus_ready = vlSelf->cacheMemoryBus__DOT__bus_ready;
     vlSelf->bus_valid = vlSelf->cacheMemoryBus__DOT__bus_valid;
     vlSelf->m_axi_wdata = vlSelf->cacheMemoryBus__DOT__m_axi_wdata;
+    vlSelf->m_axi_wlast = vlSelf->cacheMemoryBus__DOT__m_axi_wlast;
 }
 
 VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__1(Vtop___024root* vlSelf) {
