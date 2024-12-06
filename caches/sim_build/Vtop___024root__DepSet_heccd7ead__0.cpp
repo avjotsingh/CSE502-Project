@@ -95,7 +95,7 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
     vlSelf->invalidate_addr = vlSelf->cacheMemoryBus__DOT__invalidate_addr_buffer;
     vlSelf->cacheMemoryBus__DOT__m_axi_acready = ((1U 
                                                    & (~ (IData)(vlSelf->reset))) 
-                                                  && (IData)(vlSelf->cacheMemoryBus__DOT__invalidate_buffer));
+                                                  && (IData)(vlSelf->cacheMemoryBus__DOT__acready_buffer));
     vlSelf->m_axi_awaddr = vlSelf->cacheMemoryBus__DOT__addr_buffer;
     if ((1U & (~ (IData)(vlSelf->reset)))) {
         if ((0U == vlSelf->cacheMemoryBus__DOT__state)) {
@@ -361,6 +361,10 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     __Vdly__cacheMemoryBus__DOT__offsetCounter = 0;
     // Body
     __Vdly__cacheMemoryBus__DOT__offsetCounter = vlSelf->cacheMemoryBus__DOT__offsetCounter;
+    vlSelf->cacheMemoryBus__DOT__acready_buffer = (
+                                                   (1U 
+                                                    & (~ (IData)(vlSelf->reset))) 
+                                                   && (IData)(vlSelf->m_axi_acvalid));
     vlSelf->cacheMemoryBus__DOT__invalidate_buffer 
         = ((1U & (~ (IData)(vlSelf->reset))) && ((IData)(vlSelf->m_axi_acvalid) 
                                                  && (0xdU 
@@ -904,11 +908,11 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
         }
     }
     vlSelf->cacheMemoryBus__DOT__offsetCounter = __Vdly__cacheMemoryBus__DOT__offsetCounter;
-    vlSelf->invalidate_addr = vlSelf->cacheMemoryBus__DOT__invalidate_addr_buffer;
-    vlSelf->invalidate = vlSelf->cacheMemoryBus__DOT__invalidate_buffer;
     vlSelf->cacheMemoryBus__DOT__m_axi_acready = ((1U 
                                                    & (~ (IData)(vlSelf->reset))) 
-                                                  && (IData)(vlSelf->cacheMemoryBus__DOT__invalidate_buffer));
+                                                  && (IData)(vlSelf->cacheMemoryBus__DOT__acready_buffer));
+    vlSelf->invalidate_addr = vlSelf->cacheMemoryBus__DOT__invalidate_addr_buffer;
+    vlSelf->invalidate = vlSelf->cacheMemoryBus__DOT__invalidate_buffer;
     vlSelf->m_axi_awaddr = vlSelf->cacheMemoryBus__DOT__addr_buffer;
     vlSelf->data_out[0U] = vlSelf->cacheMemoryBus__DOT__data_buffer[0U];
     vlSelf->data_out[1U] = vlSelf->cacheMemoryBus__DOT__data_buffer[1U];
@@ -1036,9 +1040,9 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
                          >> (0x1fU & VL_SHIFTL_III(10,32,32, (IData)(vlSelf->cacheMemoryBus__DOT__offsetCounter), 6U)))));
         }
     }
+    vlSelf->m_axi_acready = vlSelf->cacheMemoryBus__DOT__m_axi_acready;
     vlSelf->cacheMemoryBus__DOT__invalidate_addr = vlSelf->invalidate_addr;
     vlSelf->cacheMemoryBus__DOT__invalidate = vlSelf->invalidate;
-    vlSelf->m_axi_acready = vlSelf->cacheMemoryBus__DOT__m_axi_acready;
     vlSelf->m_axi_araddr = vlSelf->m_axi_awaddr;
     vlSelf->cacheMemoryBus__DOT__m_axi_awaddr = vlSelf->m_axi_awaddr;
     vlSelf->cacheMemoryBus__DOT__m_axi_araddr = vlSelf->m_axi_awaddr;

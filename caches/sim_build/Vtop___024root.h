@@ -99,6 +99,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
         CData/*1:0*/ cacheMemoryBus__DOT__currPow2;
         CData/*0:0*/ cacheMemoryBus__DOT__busChoiceOut;
         CData/*0:0*/ cacheMemoryBus__DOT__invalidate_buffer;
+        CData/*0:0*/ cacheMemoryBus__DOT__acready_buffer;
         CData/*1:0*/ cacheMemoryBus__DOT__busChoice__DOT__candidates;
         CData/*0:0*/ cacheMemoryBus__DOT__busChoice__DOT__out;
         CData/*0:0*/ cacheMemoryBus__DOT__busChoice__DOT__i;

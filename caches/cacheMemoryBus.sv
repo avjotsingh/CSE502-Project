@@ -91,6 +91,7 @@ module cacheMemoryBus
   
   reg invalidate_buffer;
   reg [ADDR_WIDTH-1:0] invalidate_addr_buffer;
+  reg acready_buffer;
   assign invalidate = invalidate_buffer;
   assign invalidate_addr = invalidate_addr_buffer;
 
@@ -103,12 +104,15 @@ module cacheMemoryBus
       currID <= 0;
       invalidate_buffer <= 0;
       invalidate_addr_buffer <= 0;
+      acready_buffer <= 0;
     end else begin
       state <= next_state;
       if (m_axi_acvalid) begin
+        acready_buffer <= 1;
         invalidate_buffer <= m_axi_acsnoop == 4'hd;
         invalidate_addr_buffer <= m_axi_acaddr;
       end else begin
+        acready_buffer <= 0;
         invalidate_buffer <= 0;
         invalidate_addr_buffer <= 0;
       end
@@ -169,7 +173,7 @@ module cacheMemoryBus
 
       m_axi_acready = 0;
     end else begin
-      m_axi_acready = invalidate_buffer; //this should work, is a little hack-y
+      m_axi_acready = acready_buffer;
       case(state)
         IDLE: begin
           bus_valid = 0;

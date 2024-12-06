@@ -267,6 +267,7 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->cacheMemoryBus__DOT__busChoiceOut = VL_RAND_RESET_I(1);
     vlSelf->cacheMemoryBus__DOT__invalidate_buffer = VL_RAND_RESET_I(1);
     vlSelf->cacheMemoryBus__DOT__invalidate_addr_buffer = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__acready_buffer = VL_RAND_RESET_I(1);
     vlSelf->cacheMemoryBus__DOT__busChoice__DOT__candidates = VL_RAND_RESET_I(2);
     vlSelf->cacheMemoryBus__DOT__busChoice__DOT__out = VL_RAND_RESET_I(1);
     vlSelf->cacheMemoryBus__DOT__busChoice__DOT__i = VL_RAND_RESET_I(1);

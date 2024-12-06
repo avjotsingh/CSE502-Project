@@ -93,6 +93,7 @@ Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, const char* namep, Vtop* mode
         __Vscope_cacheMemoryBus.varInsert(__Vfinal,"CHUNKS_LOG", const_cast<void*>(static_cast<const void*>(&(TOP.cacheMemoryBus__DOT__CHUNKS_LOG))), true, VLVT_UINT32,VLVD_NODIR|VLVF_PUB_RW,1 ,31,0);
         __Vscope_cacheMemoryBus.varInsert(__Vfinal,"CONNECTIONS", const_cast<void*>(static_cast<const void*>(&(TOP.cacheMemoryBus__DOT__CONNECTIONS))), true, VLVT_UINT32,VLVD_NODIR|VLVF_PUB_RW,1 ,31,0);
         __Vscope_cacheMemoryBus.varInsert(__Vfinal,"DATA_WIDTH", const_cast<void*>(static_cast<const void*>(&(TOP.cacheMemoryBus__DOT__DATA_WIDTH))), true, VLVT_UINT32,VLVD_NODIR|VLVF_PUB_RW,1 ,31,0);
+        __Vscope_cacheMemoryBus.varInsert(__Vfinal,"acready_buffer", &(TOP.cacheMemoryBus__DOT__acready_buffer), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,0);
         __Vscope_cacheMemoryBus.varInsert(__Vfinal,"addr_buffer", &(TOP.cacheMemoryBus__DOT__addr_buffer), false, VLVT_UINT64,VLVD_NODIR|VLVF_PUB_RW,1 ,63,0);
         __Vscope_cacheMemoryBus.varInsert(__Vfinal,"busChoiceOut", &(TOP.cacheMemoryBus__DOT__busChoiceOut), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,0,0);
         __Vscope_cacheMemoryBus.varInsert(__Vfinal,"bus_ready", &(TOP.cacheMemoryBus__DOT__bus_ready), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,1,0);
