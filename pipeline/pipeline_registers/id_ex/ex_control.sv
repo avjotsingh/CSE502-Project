@@ -1,4 +1,4 @@
-module id_ex_control #(
+module ex_control #(
     ALU_OP_WIDTH = 7,
     ALU_FUNC3_WIDTH = 3,
     ALU_FUNC7_WIDTH = 7
@@ -12,6 +12,7 @@ module id_ex_control #(
     input wire [ALU_OP_WIDTH-1:0] alu_op_in,            // control signal -> specifies the type of ALU operation (R, I, S, B, U, J)
     input wire [ALU_FUNC3_WIDTH-1:0] alu_func3_in,      // control signal -> specifies the exact operation to perform depending on ALU op
     input wire [ALU_FUNC7_WIDTH-1:0] alu_func7_in,      // control signal -> specifies the exact operation to perform depending on ALU op
+    output wire reg_to_pc_out,
     output wire alu_src_out,
     output wire [ALU_OP_WIDTH-1:0] alu_op_out,
     output wire [ALU_FUNC3_WIDTH-1:0] alu_func3_out,
@@ -39,7 +40,7 @@ module id_ex_control #(
             alu_op          <= '0;
             alu_func3       <= '0;
             alu_func7       <= '0;
-        else if (flush) begin
+        end else if (flush) begin
             reg_to_pc       <= 1'b0;
             alu_src         <= 1'b1;
             alu_op          <= 7'b0010011;

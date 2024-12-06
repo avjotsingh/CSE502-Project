@@ -1,7 +1,7 @@
 module mem_control (
     input wire clk,
     input wire reset,
-    input wire flush
+    input wire flush,
     input wire stall,
     input wire mem_read_in,                     // control signal -> whether or not to read from memory
     input wire mem_write_in,                    // control signal -> whether or not to write to memory

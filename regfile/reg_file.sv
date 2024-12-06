@@ -11,9 +11,13 @@ module register_file #(
     input wire [DATA_WIDTH-1:0] write_data,
     output wire [DATA_WIDTH-1:0] data1,
     output wire [DATA_WIDTH-1:0] data2
-)
+);
 
     logic [DATA_WIDTH-1:0] registers [NUM_REGS-1:0];
+    
+    assign data1 = registers[read1];
+    assign data2 = registers[read2];
+    
     always_ff @ (posedge clk) begin
         if (reset) begin
             foreach(registers[i]) registers[i] <= 0;
@@ -24,10 +28,5 @@ module register_file #(
                 registers[write_reg] <= 0;
             end
         end
-    end
-
-    always_comb begin
-        data1 = registers[read1];
-        data2 = registers[read2];
     end
 endmodule

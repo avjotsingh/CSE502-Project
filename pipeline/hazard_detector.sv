@@ -10,7 +10,7 @@ module hazard_detector #(
     input wire [DATA_WIDTH-1:0] target_ex,                                      // target PC from EX stage
     input wire [DATA_WIDTH-1:0] pc_id,                                          // PC value from ID stage
     output wire mem_hazard,                                                     // mem data hazard? (memory loads into a destination which the younger instr reads from)
-    output wire mispredict,                                                     // branch misprection?
+    output wire mispredict                                                      // branch misprection?
 );
 
     logic mem_hazard_;

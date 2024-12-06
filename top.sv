@@ -61,12 +61,12 @@ module top
 
   // Wires for IF stage
   logic [63:0] pc_if;          // Program counter that drives the pipeline
-  wire [63:0] next_pc;
+  logic [63:0] next_pc;
 
 
   // Pipeline stall and flush signals
-  wire stall_pc, stall_if_id, stall_id_ex, stall_ex_mem, stall_mem_wb;
-  wire flush_if_id, flush_id_ex;
+  logic stall_pc, stall_if_id, stall_id_ex, stall_ex_mem, stall_mem_wb;
+  logic flush_if_id, flush_id_ex;
   
 
   // Outputs - BTB
@@ -99,17 +99,17 @@ module top
 
   // Outputs - ID/EX registers
   wire [63:0] pc_id_ex, imm_id_ex, data1_id_ex, data2_id_ex;
-  wire [5:0] rd_id_ex, reg1_id_ex, reg2_id_ex;
+  wire [4:0] rd_id_ex, rs1_id_ex, rs2_id_ex;
   wire [18:0] ex_control_id_ex;
-  wire [2:0] mem_control_id_ex, wb_control_id_ex;
+  wire [1:0] mem_control_id_ex, wb_control_id_ex;
 
 
   // Wire for computing target PC
-  wire [63:0] target_ex;
+  logic [63:0] target_ex;
 
 
   // Inputs - ALU
-  wire [63:0] data1_ex, data2_ex;
+  logic [63:0] data1_ex, data2_ex;
 
 
   // Outputs - ALU
@@ -130,12 +130,12 @@ module top
 
 
   // Outputs - Forwarding Unit
-  wire forward1, forward2;
+  logic [1:0] forward1, forward2;
 
 
   // Inputs - Data Cache
-  wire avalid_mem;
-  wire load_mem;
+  logic avalid_mem;
+  logic load_mem;
 
 
   // Outputs - Data Cache
@@ -149,8 +149,8 @@ module top
 
 
   // Wires for WB stage
-  wire [63:0] write_data_wb;
-  wire [4:0] write_reg_wb;
+  logic [63:0] write_data_wb;
+  logic [4:0] write_reg_wb;
 
 
   // Set stall/flush signals for different stages
@@ -267,7 +267,7 @@ module top
     .dest_in(rd_id),
     .reg1_in(rs1_id),
     .reg2_in(rs2_id),
-    .ex_control_in({ alu_src_id, alu_op_id, func3_id, func7_id }),
+    .ex_control_in({ reg_to_pc_id, alu_src_id, alu_op_id, func3_id, func7_id }),
     .mem_control_in({ mem_read_id, mem_write_id }),
     .wb_control_in({ reg_write_id, mem_to_reg_id }),
     
@@ -306,7 +306,7 @@ module top
     .target_ex(target_ex),
     .pc_id(pc_if_id),
     .mem_hazard(mem_hazard),
-    .mispredict(branch_mispredict),
+    .mispredict(branch_mispredict)
   );
 
 
@@ -351,7 +351,6 @@ module top
   directCache data_cache (
     .clk(clk),
     .reset(reset),
-    .stall(stall_mem_wb),
     .avalid(avalid_mem),
     .aaddr(alu_res_ex_mem),
     .load(load_mem),
@@ -373,6 +372,7 @@ module top
   mem_wb_regs mem_wb_regs(
     .clk(clk),
     .reset(reset),
+    .stall(stall_mem_wb),
     .alu_in(alu_res_ex_mem),
     .mem_data_in(read_data_mem),
     .dest_in(rd_ex_mem),
@@ -381,8 +381,8 @@ module top
     .alu_out(alu_res_mem_wb),
     .mem_data_out(mem_data_mem_wb),
     .dest_out(rd_mem_wb),
-    .wb_control_out(wb_control_mem_wb),
-  )
+    .wb_control_out(wb_control_mem_wb)
+  );
 
 
   // Combination logic for IF stage
@@ -408,7 +408,8 @@ module top
       2'b10:
         data1_ex = alu_res_ex_mem;
       2'b01:
-        data1_ex = write_data_wb;;
+        data1_ex = write_data_wb;
+      default: ;
     endcase
     case (forward2)
       2'b00:
@@ -417,6 +418,7 @@ module top
         data2_ex = alu_res_ex_mem;
       2'b01:
         data2_ex = write_data_wb;
+      default: ;
     endcase
   end
 
@@ -431,7 +433,7 @@ module top
   // Combinational logic for WB stage
   always_comb begin
     write_data_wb = wb_control_mem_wb[0] ? mem_data_mem_wb : alu_res_mem_wb;
-    write_reg_wb = wb_control_mem_wb[1] ? 0x0 : rd_mem_wb;
+    write_reg_wb = wb_control_mem_wb[1] ? '0 : rd_mem_wb;
   end
 
 

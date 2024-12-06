@@ -13,20 +13,14 @@ module directCache
     input wire reset,
     
     //cpu wires
-    
-    //is the address valid
-    input wire avalid,
-    //the address
-    input wire [ADDR_WIDTH-1:0] aaddr,
-    //load command? if not, then store command
-    input wire load,
-
+    input wire avalid,                                              //is the address valid
+    input wire [ADDR_WIDTH-1:0] aaddr,                              //the address
+    input wire load,                                                //load command? if not, then store command
     input wire [DATA_WIDTH-1:0] data_from_cpu,
     output reg [DATA_WIDTH-1:0] data_to_cpu,
-    //this is also "dvalid", if this is 1 then the cpu is being given valid data
-    output reg hit,
+    output reg hit,                                                 //this is also "dvalid", if this is 1 then the cpu is being given valid data
 
-    //memory bus wires:
+    //memory bus wires
     output reg command_valid,
     output reg command_store,
     output reg command_rready,
