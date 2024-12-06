@@ -56,7 +56,7 @@ module decoder #(
     
     always_comb begin
         instr_ = instr;
-        alu_op_ = instr_[6:0];
+        alu_op_ = instr[6:0];
         func3_ = 0;
         func7_ = 0;
         imm_ = 0;
@@ -157,8 +157,7 @@ module decoder #(
                 imm_ = { {52{instr_[31]}}, instr_[31:20]};
                 func7_ = imm_[ALU_FUNC7_WIDTH-1:0];
             end
-            default: begin
-            end
+            default: ;
         endcase
     end
 endmodule
