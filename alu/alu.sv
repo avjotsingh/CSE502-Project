@@ -65,6 +65,7 @@ module alu #(
                     12'h501: res = data1 / data2;                                                   // divu
                     12'h601: res = signed_data1 % signed_data2;                                     // rem
                     12'h701: res = data1 % data2;                                                   // remu
+                    default: ;
                 endcase
                  
             7'b0000011, 7'b0100011:
@@ -82,6 +83,7 @@ module alu #(
                     12'h500: decision = signed_data1 >= signed_data2;                            // bge
                     12'h600: decision = data1 < data2;                                           // bltu
                     12'h700: decision = data1 >= data2;                                          // bgeu
+                    default: ;
                 endcase
 
             7'b1101111, 7'b1100111:
@@ -104,25 +106,27 @@ module alu #(
                     // RV64I
                     12'h000: begin                                                                  // addw, addiw
                         temp = data1_w + data2_w;
-                        res = signed'(temp[WORD_LENGTH-1:0]);
+                        res = { {(DATA_WIDTH-WORD_LENGTH){temp[WORD_LENGTH-1]}}, temp[WORD_LENGTH-1:0] };
                     end
                     12'h020: begin                                                                  // subw
                         temp = data1_w - data2_w;
-                        res = signed'(temp[WORD_LENGTH-1:0]);
+                        res = { {(DATA_WIDTH-WORD_LENGTH){temp[WORD_LENGTH-1]}}, temp[WORD_LENGTH-1:0] };
                     end
                     12'h100: begin                                                                  // sllw, slliw
                         temp = data1_w << shamt_5;
-                        res = signed'(temp[WORD_LENGTH-1:0]);    
+                        res = { {(DATA_WIDTH-WORD_LENGTH){temp[WORD_LENGTH-1]}}, temp[WORD_LENGTH-1:0] };
                     end                
                     12'h500: begin                                                                  // srlw, srliw
                         temp = data1_w >> shamt_5;
-                        res = signed'(temp[WORD_LENGTH-1:0]);
+                        res = { {(DATA_WIDTH-WORD_LENGTH){temp[WORD_LENGTH-1]}}, temp[WORD_LENGTH-1:0] };
                     end
                     12'h520: begin                                                                  // sraw, sraiw
                         temp = signed'(data1_w) >>> shamt_5;
-                        res = signed'(temp[WORD_LENGTH-1:0]);
+                        res = { {(DATA_WIDTH-WORD_LENGTH){temp[WORD_LENGTH-1]}}, temp[WORD_LENGTH-1:0] };
                     end
+                    default: ;
                 endcase
+            default: ;
         endcase
     end
 endmodule
