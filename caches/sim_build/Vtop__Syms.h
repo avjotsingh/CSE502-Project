@@ -31,9 +31,8 @@ class alignas(VL_CACHE_LINE_BYTES)Vtop__Syms final : public VerilatedSyms {
 
     // SCOPE NAMES
     VerilatedScope __Vscope_TOP;
-    VerilatedScope __Vscope_cacheMemoryBus;
-    VerilatedScope __Vscope_cacheMemoryBus__busChoice;
-    VerilatedScope __Vscope_cacheMemoryBus__busChoiceReply;
+    VerilatedScope __Vscope_directCache;
+    VerilatedScope __Vscope_directCache__store_modifier;
 
     // SCOPE HIERARCHY
     VerilatedHierarchy __Vhier;

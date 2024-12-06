@@ -199,3 +199,29 @@ async def test_cache(cache):
     idle_mem(cache)
     assert cache.hit.value == 0x1,f"Failed 2.hit, got {cache.hit.value}"
     assert cache.data_to_cpu.value == 0xe111111111111111,f"Failed 2.data value, got {cache.data_to_cpu.value}"
+
+    #Test case 9: invalidate
+    
+    await tick_tock(cache,8)
+    
+    cache.avalid.value = 1
+    cache.aaddr.value = 0x0000000000000011
+    cache.load.value = 1
+    print_tio(cache)
+    await tick_tock(cache,8)
+    assert cache.hit.value == 0x1,f"Failed 1.hit, got {cache.hit.value}"
+    await tick_tock(cache,8)
+    assert cache.hit.value == 0x1,f"Failed 1.hit, got {cache.hit.value}"
+    await tick_tock(cache,8)
+    cache.invalidate.value = 1
+    cache.invalidate_addr.value = 0x1000000000000011
+    await tick_tock(cache,8)
+    assert cache.hit.value == 0x1,f"Failed 1.hit, got {cache.hit.value}"
+    await tick_tock(cache,8)
+    cache.invalidate.value = 1
+    cache.invalidate_addr.value = 0x0000000000000011
+    await tick_tock(cache,8)
+    assert cache.hit.value == 0x0,f"Failed 1.hit, got {cache.hit.value}"
+
+    cache.bus_ready.value = 1
+    assert cache.state.value == 0x0,f"Failed 2.state, got {cache.state.value}"

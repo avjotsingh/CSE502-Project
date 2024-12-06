@@ -35,7 +35,10 @@ module directCache
     output reg [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_to_bus,
     input wire [DATA_WIDTH*(2**OFFSET_LENGTH)-1:0] data_from_bus,
     input wire bus_valid,
-    input wire bus_ready
+    input wire bus_ready,
+    input wire invalidate,
+    input wire [ADDR_WIDTH-1:0] invalidate_addr,
+    output wire invalidate_ack
 );
 
 
@@ -81,13 +84,17 @@ module directCache
             state <= next_state;
             case (state)
                 IDLE: begin
-                    if (avalid) begin
-                        if (!hit && curr_valid) begin
-                            dirty_data <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
-                            dirty_addr <= {index, cache[index][TAG_LENGTH - 1:0], {OFFSET_LENGTH{1'b0}}}; 
-                        end else if (hit) begin
-                            if (!load) begin
-                                cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                    if (invalidate && cache[invalidate_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH]][TAG_LENGTH-1:0] == invalidate_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH]) begin
+                        cache[invalidate_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH]][TAG_LENGTH] <= 0;
+                    end else begin    
+                        if (avalid) begin
+                            if (!hit && curr_valid) begin
+                                dirty_data <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
+                                dirty_addr <= {index, cache[index][TAG_LENGTH - 1:0], {OFFSET_LENGTH{1'b0}}}; 
+                            end else if (hit) begin
+                                if (!load) begin
+                                    cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                                end
                             end
                         end
                     end
@@ -113,8 +120,6 @@ module directCache
                         cache[index][TAG_LENGTH] <= 1;
                     end
                 end
-
-
             endcase
         end
     end
@@ -129,24 +134,28 @@ module directCache
                     command_valid = 0;
                     command_store = 0;
                     command_rready = 0;
+                    invalidate_ack = 1;
                 end
                 DIRTY_WRITEBACK: begin 
                     command_addr = {dirty_addr[ADDR_WIDTH-1:OFFSET_LENGTH], {OFFSET_LENGTH{1'b0}}};
                     command_valid = 1;
                     command_store = 1;
                     command_rready = 0;
+                    invalidate_ack = 0;
                 end
                 LOADING: begin
                     command_addr = {tag, index, {OFFSET_LENGTH{1'b0}}};
                     command_valid = 1;
                     command_store = 0;
                     command_rready = 1;
+                    invalidate_ack = 0;
                 end
                 LOADING_CLEAN: begin
                     command_addr = {tag, index, {OFFSET_LENGTH{1'b0}}};
                     command_valid = 1;
                     command_store = 0;
                     command_rready = 1;
+                    invalidate_ack = 0;
                 end
             endcase
         end
@@ -156,7 +165,7 @@ module directCache
     //next state logic
     always_comb begin
         case (state)
-            IDLE: next_state = avalid ? (hit ? IDLE : (curr_valid ? LOADING : LOADING_CLEAN)) : IDLE;
+            IDLE: next_state = !invalidate && avalid ? (hit ? IDLE : (curr_valid ? LOADING : LOADING_CLEAN)) : IDLE;
             DIRTY_WRITEBACK: next_state = bus_ready ? IDLE : DIRTY_WRITEBACK;
             LOADING: next_state = bus_valid ? DIRTY_WRITEBACK : LOADING;
             LOADING_CLEAN: next_state = bus_valid ? IDLE : LOADING_CLEAN;
