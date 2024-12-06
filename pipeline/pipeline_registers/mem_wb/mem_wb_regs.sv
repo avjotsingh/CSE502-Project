@@ -4,6 +4,7 @@ module mem_wb_regs #(
 ) (
     input wire clk,
     input wire reset,
+    input wire stall,
     input wire [DATA_WIDTH-1:0] alu_in,                 // ALU result from ex stage
     input wire [DATA_WIDTH-1:0] mem_data_in,            // Mem result from mem stage
     input wire [REG_ID_WIDTH-1:0] dest_in,
@@ -17,9 +18,11 @@ module mem_wb_regs #(
 );
 
     // Internal registers to store values
-    mem_wb_control mem_wb_ctrl(
+    wb_control wb_ctrl(
         .clk(clk),
         .reset(reset),
+        .flush(0),
+        .stall(stall),
         .reg_write_in(wb_control_in[1]),
         .mem_to_reg_in(wb_control_in[0]),
         .reg_write_out(wb_control_out[1]), 
@@ -40,7 +43,7 @@ module mem_wb_regs #(
             alu         <= '0;  
             mem_data    <= '0;
             dest        <= '0;
-        end else begin
+        end else if (!stall) begin              // Update registers if not stalled
             alu         <= alu_in;
             mem_data    <= mem_data_in;
             dest        <= dest_in;

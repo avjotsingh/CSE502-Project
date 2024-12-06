@@ -1,0 +1,14 @@
+obj_dir/*
+sim_build/*
+alu/__pycache__/*
+alu/sim_build/*
+alu/results.xml
+branch_predictor/__pycache__/*
+branch_predictor/sim_build/*
+branch_predictor/results.xml
+caches/__pycache__/*
+caches/sim_build/*
+caches/results.xml
+decoder/__pycache__/*
+decoder/sim_build/*
+decoder/results.xml

@@ -4,6 +4,8 @@ module if_id_regs #(
 ) (
     input wire clk,
     input wire reset,
+    input wire flush,
+    input wire stall,
     input wire [DATA_WIDTH-1:0] pc_in,
     input wire [INSTR_WIDTH-1:0] instruction_in,
     output wire [DATA_WIDTH-1:0] pc_out,
@@ -20,7 +22,10 @@ module if_id_regs #(
         if (reset) begin
             pc              <= 0;
             instruction     <= 0;
-        end else begin
+        end else if (flush) begin                       // update registers to no-op
+            pc              <= 0;
+            instruction     <= 'h13;
+        end else if (!stall) begin                      // update registers if not stalled
             pc              <= pc_in;
             instruction     <= instruction_in;
         end

@@ -1,6 +1,8 @@
-module mem_wb_control (
+module wb_control (
     input wire clk,
     input wire reset,
+    input wire flush,
+    input wire stall,
     input wire reg_write_in,                    // control signal -> whether or not to write back to register file (0 for no writeback, 1 for writeback)
     input wire mem_to_reg_in,                   // control signal -> whether writeback value comes from memory or ALU result (0 for memory, 1 for ALU)
   
@@ -17,10 +19,10 @@ module mem_wb_control (
 
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
-        if (reset) begin
+        if (reset || flush) begin
             reg_write   <= '0;   // Reset all registers to zero
             mem_to_reg  <= '0;
-        end else begin
+        end else if (!stall) begin
             reg_write   <= reg_write_in;
             mem_to_reg  <= mem_to_reg_in;
         end

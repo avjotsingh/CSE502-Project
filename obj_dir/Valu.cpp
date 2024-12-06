@@ -100,10 +100,3 @@ void Valu::prepareClone() const { contextp()->prepareClone(); }
 void Valu::atClone() const {
     contextp()->threadPoolpOnClone();
 }
-
-//============================================================
-// Trace configuration
-
-VL_ATTR_COLD void Valu::trace(VerilatedVcdC* tfp, int levels, int options) {
-    vl_fatal(__FILE__, __LINE__, __FILE__,"'Valu::trace()' called on model that was Verilated without --trace option");
-}

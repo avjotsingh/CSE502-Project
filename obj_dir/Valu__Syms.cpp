@@ -17,6 +17,8 @@ Valu__Syms::Valu__Syms(VerilatedContext* contextp, const char* namep, Valu* mode
     // Setup module instances
     , TOP{this, namep}
 {
+        // Check resources
+        Verilated::stackCheck(69);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-12);
     _vm_contextp__->timeprecision(-12);

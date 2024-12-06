@@ -5,7 +5,10 @@ module id_ex_control #(
 ) (
     input wire clk,
     input wire reset,
-    input wire alu_src_in,                              // control signal -> whether second operand is register value or immediate
+    input wire flush,
+    input wire stall,
+    input wire reg_to_pc_in,                            // control signal -> whether first operand is register value or PC
+    input wire alu_src_in,                              // control signal -> whether second operand is register value or immediate (0 for register value, 1 for immediate)
     input wire [ALU_OP_WIDTH-1:0] alu_op_in,            // control signal -> specifies the type of ALU operation (R, I, S, B, U, J)
     input wire [ALU_FUNC3_WIDTH-1:0] alu_func3_in,      // control signal -> specifies the exact operation to perform depending on ALU op
     input wire [ALU_FUNC7_WIDTH-1:0] alu_func7_in,      // control signal -> specifies the exact operation to perform depending on ALU op
@@ -16,11 +19,13 @@ module id_ex_control #(
 );
 
     // Internal registers to store values
+    logic reg_to_pc;
     logic alu_src;
     logic [ALU_OP_WIDTH-1:0] alu_op;
     logic [ALU_FUNC3_WIDTH-1:0] alu_func3;
     logic [ALU_FUNC7_WIDTH-1:0] alu_func7;
 
+    assign reg_to_pc_out       = reg_to_pc;
     assign alu_src_out         = alu_src;
     assign alu_op_out          = alu_op;
     assign alu_func3_out       = alu_func3;
@@ -29,11 +34,19 @@ module id_ex_control #(
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
         if (reset) begin
-            alu_src         <= '0;   // Reset all registers to zero
+            reg_to_pc       <= '0;          // Reset all registers to zero
+            alu_src         <= '0;          
             alu_op          <= '0;
             alu_func3       <= '0;
             alu_func7       <= '0;
-        end else begin
+        else if (flush) begin
+            reg_to_pc       <= 1'b0;
+            alu_src         <= 1'b1;
+            alu_op          <= 7'b0010011;
+            alu_func3       <= 3'b000;
+            alu_func7       <= 7'b0000000;
+        end else if (!stall) begin          // update registers if not stalled
+            reg_to_pc       <= reg_to_pc_in;
             alu_src         <= alu_src_in;
             alu_op          <= alu_op_in;
             alu_func3       <= alu_func3_in;

@@ -24,14 +24,14 @@ VM_TRACE_FST = 0
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
 	Valu \
-	Valu___024root__DepSet_h7172bd91__0 \
-	Valu___024root__DepSet_ha59b247d__0 \
+	Valu___024root__DepSet_h31d87e28__0 \
+	Valu___024root__DepSet_h990b6f7d__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
 	Valu___024root__Slow \
-	Valu___024root__DepSet_h7172bd91__0__Slow \
-	Valu___024root__DepSet_ha59b247d__0__Slow \
+	Valu___024root__DepSet_h31d87e28__0__Slow \
+	Valu___024root__DepSet_h990b6f7d__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \

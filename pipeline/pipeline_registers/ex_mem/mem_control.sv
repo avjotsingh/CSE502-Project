@@ -1,6 +1,8 @@
-module ex_mem_control (
+module mem_control (
     input wire clk,
     input wire reset,
+    input wire flush
+    input wire stall,
     input wire mem_read_in,                     // control signal -> whether or not to read from memory
     input wire mem_write_in,                    // control signal -> whether or not to write to memory
     
@@ -17,10 +19,10 @@ module ex_mem_control (
 
     // Sequential logic to update registers on every clock cycle
     always_ff @(posedge clk) begin
-        if (reset) begin
+        if (reset || flush) begin
             mem_read    <= '0;      // Reset all registers to zero
             mem_write   <= '0;
-        end else begin
+        end else if (!stall) begin
             mem_read    <= mem_read_in;
             mem_write   <= mem_write_in;
         end

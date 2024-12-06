@@ -4,6 +4,7 @@ module ex_mem_regs #(
 ) (
     input wire clk,
     input wire reset,
+    input wire stall,
     input wire [DATA_WIDTH-1:0] target_in,                          // Branch target computed by ALU
     input wire branch_decision_in,                                  // Branch decision taken by ALU
     input wire [DATA_WIDTH-1:0] alu_res_in,                         // ALU result
@@ -23,18 +24,22 @@ module ex_mem_regs #(
 
     // Internal registers to store values
 
-    ex_mem_control ex_mem_ctrl(
+    mem_control mem_ctrl(
         .clk(clk),
         .reset(reset),
+        .flush(0),
+        .stall(stall),
         .mem_read_in(mem_control_in[1]),
         .mem_write_in(mem_control_in[0]),
         .mem_read_out(mem_control_out[1]),
         .mem_write_out(mem_control_out[0])
     );
 
-    mem_wb_control mem_wb_ctrl(
+    wb_control wb_ctrl(
         .clk(clk),
         .reset(reset),
+        .flush(0),
+        .stall(stall),
         .reg_write_in(wb_control_in[1]),
         .mem_to_reg_in(wb_control_in[0]),
         .reg_write_out(wb_control_out[1]), 
@@ -62,7 +67,7 @@ module ex_mem_regs #(
             alu_res             <= '0;
             write_data          <= '0;
             dest                <= '0;
-        end else begin
+        end else if (!stall) begin              // update register values if not stalled
             target              <= target_in;
             branch_decision     <= branch_decision_in;
             alu_res             <= alu_res_in;
