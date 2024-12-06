@@ -7,7 +7,7 @@ module minimum_inverse
     input wire [LOG_INPUTS-1:0] sel,
     output reg [2**LOG_INPUTS-1:0] broadcast
 );
-    logic [$size(broadcast)-1:0] i;
+    logic [2**LOG_INPUTS-1:0] i;
     always_comb begin
         broadcast = 2**sel;
     end

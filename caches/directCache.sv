@@ -81,12 +81,13 @@ module directCache
             dirty_data <= 0;
             state <= IDLE;
         end else begin
-            state <= next_state;
-            case (state)
-                IDLE: begin
-                    if (invalidate && cache[invalidate_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH]][TAG_LENGTH-1:0] == invalidate_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH]) begin
-                        cache[invalidate_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH]][TAG_LENGTH] <= 0;
-                    end else begin    
+            if (invalidate && cache[invalidate_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH]][TAG_LENGTH-1:0] == invalidate_addr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH]) begin
+                cache[invalidate_addr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH]][TAG_LENGTH] <= 0;
+            end else begin
+                state <= next_state;
+                case (state)
+
+                    IDLE: begin 
                         if (avalid) begin
                             if (!hit && curr_valid) begin
                                 dirty_data <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
@@ -98,29 +99,29 @@ module directCache
                             end
                         end
                     end
-                end
-                DIRTY_WRITEBACK: begin end
-                LOADING: begin
-                    if (bus_valid) begin
-                        cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
-                        cache[index][TAG_LENGTH - 1 : 0] <= tag;
-                        if (!load) begin 
-                            cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                    DIRTY_WRITEBACK: begin end
+                    LOADING: begin
+                        if (bus_valid) begin
+                            cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
+                            cache[index][TAG_LENGTH - 1 : 0] <= tag;
+                            if (!load) begin 
+                                cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                            end
+                            cache[index][TAG_LENGTH] <= 1;
                         end
-                        cache[index][TAG_LENGTH] <= 1;
                     end
-                end
-                LOADING_CLEAN: begin
-                    if (bus_valid) begin
-                        cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
-                        cache[index][TAG_LENGTH - 1 : 0] <= tag;
-                        if (!load) begin 
-                            cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                    LOADING_CLEAN: begin
+                        if (bus_valid) begin
+                            cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)] <= data_from_bus;
+                            cache[index][TAG_LENGTH - 1 : 0] <= tag;
+                            if (!load) begin 
+                                cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
+                            end
+                            cache[index][TAG_LENGTH] <= 1;
                         end
-                        cache[index][TAG_LENGTH] <= 1;
                     end
-                end
-            endcase
+                endcase
+            end
         end
     end
 
@@ -134,28 +135,24 @@ module directCache
                     command_valid = 0;
                     command_store = 0;
                     command_rready = 0;
-                    invalidate_ack = 1;
                 end
                 DIRTY_WRITEBACK: begin 
                     command_addr = {dirty_addr[ADDR_WIDTH-1:OFFSET_LENGTH], {OFFSET_LENGTH{1'b0}}};
                     command_valid = 1;
                     command_store = 1;
                     command_rready = 0;
-                    invalidate_ack = 0;
                 end
                 LOADING: begin
                     command_addr = {tag, index, {OFFSET_LENGTH{1'b0}}};
                     command_valid = 1;
                     command_store = 0;
                     command_rready = 1;
-                    invalidate_ack = 0;
                 end
                 LOADING_CLEAN: begin
                     command_addr = {tag, index, {OFFSET_LENGTH{1'b0}}};
                     command_valid = 1;
                     command_store = 0;
                     command_rready = 1;
-                    invalidate_ack = 0;
                 end
             endcase
         end

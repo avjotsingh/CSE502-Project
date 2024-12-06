@@ -1,6 +1,19 @@
 <testsuites name="results">
   <testsuite name="all" package="all">
-    <property name="random_seed" value="1733445130" />
-    <testcase name="test_cache" classname="test_cache" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_cache.py" lineno="23" time="0.013870954513549805" sim_time_ns="89.001" ratio_time="6416.357281905843" />
+    <property name="random_seed" value="1733447904" />
+    <testcase name="test_reset" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="12" time="0.0006697177886962891" sim_time_ns="2.001" ratio_time="2987.825668921324" />
+    <testcase name="test_idle_idle" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="21" time="0.0005104541778564453" sim_time_ns="4.0009999999999994" ratio_time="7838.11784399813" />
+    <testcase name="test_idle_laddr" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="33" time="0.0009443759918212891" sim_time_ns="12.001000000000001" ratio_time="12707.862232769505" />
+    <testcase name="test_laddr_laddr" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="69" time="0.00052642822265625" sim_time_ns="8.001000000000001" ratio_time="15198.653217391307" />
+    <testcase name="test_laddr_lread" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="90" time="0.00031948089599609375" sim_time_ns="4.000999999999998" ratio_time="12523.440525373127" />
+    <testcase name="test_lread_lread_ldone" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="99" time="0.0021054744720458984" sim_time_ns="40.001000000000005" ratio_time="18998.56803351829" />
+    <testcase name="test_ldone_ldone" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="162" time="0.0005838871002197266" sim_time_ns="4.001000000000005" ratio_time="6852.352104532471" />
+    <testcase name="test_ldone_idle" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="173" time="0.0005025863647460938" sim_time_ns="6.000999999999991" ratio_time="11940.236387096755" />
+    <testcase name="test_idle_saddr" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="194" time="0.0009675025939941406" sim_time_ns="12.001000000000005" ratio_time="12404.101109906363" />
+    <testcase name="test_saddr_saddr" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="233" time="0.00034546852111816406" sim_time_ns="6.001000000000005" ratio_time="17370.6130462388" />
+    <testcase name="test_saddr_swrite" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="247" time="0.00032401084899902344" sim_time_ns="4.000999999999991" ratio_time="12348.35195290652" />
+    <testcase name="test_swrite_swrite_idle" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="254" time="0.002032756805419922" sim_time_ns="38.001000000000005" ratio_time="18694.31694862773" />
+    <testcase name="test_idle_laddr_multi" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="318" time="0.00042057037353515625" sim_time_ns="6.001000000000005" ratio_time="14268.717859410443" />
+    <testcase name="test_idle_saddr_multi" classname="test_bus" file="/mnt/c/Users/zachg/Documents/CSE502-Project/caches/test_bus.py" lineno="337" time="0.0005450248718261719" sim_time_ns="6.001000000000005" ratio_time="11010.506694663176" />
   </testsuite>
 </testsuites>

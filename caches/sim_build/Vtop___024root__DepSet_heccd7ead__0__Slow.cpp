@@ -11,12 +11,24 @@ VL_ATTR_COLD void Vtop___024root___eval_static(Vtop___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___eval_static\n"); );
 }
 
+VL_ATTR_COLD void Vtop___024root___eval_initial__TOP(Vtop___024root* vlSelf);
+
 VL_ATTR_COLD void Vtop___024root___eval_initial(Vtop___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___eval_initial\n"); );
     // Body
+    Vtop___024root___eval_initial__TOP(vlSelf);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = vlSelf->clk;
+}
+
+VL_ATTR_COLD void Vtop___024root___eval_initial__TOP(Vtop___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___eval_initial__TOP\n"); );
+    // Body
+    vlSelf->cacheMemoryBus__DOT__m_axi_arburst = 2U;
+    vlSelf->cacheMemoryBus__DOT__m_axi_arlen = 7U;
 }
 
 VL_ATTR_COLD void Vtop___024root___eval_final(Vtop___024root* vlSelf) {
@@ -46,7 +58,7 @@ VL_ATTR_COLD void Vtop___024root___eval_settle(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
             Vtop___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("directCache.sv", 1, "", "Settle region did not converge.");
+            VL_FATAL_MT("cacheMemoryBus.sv", 1, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;
@@ -153,67 +165,113 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     // Body
     vlSelf->clk = VL_RAND_RESET_I(1);
     vlSelf->reset = VL_RAND_RESET_I(1);
-    vlSelf->avalid = VL_RAND_RESET_I(1);
-    vlSelf->aaddr = VL_RAND_RESET_Q(64);
-    vlSelf->load = VL_RAND_RESET_I(1);
-    vlSelf->data_from_cpu = VL_RAND_RESET_Q(64);
-    vlSelf->data_to_cpu = VL_RAND_RESET_Q(64);
-    vlSelf->hit = VL_RAND_RESET_I(1);
-    vlSelf->command_valid = VL_RAND_RESET_I(1);
-    vlSelf->command_store = VL_RAND_RESET_I(1);
-    vlSelf->command_rready = VL_RAND_RESET_I(1);
-    vlSelf->command_addr = VL_RAND_RESET_Q(64);
-    VL_RAND_RESET_W(1024, vlSelf->data_to_bus);
-    VL_RAND_RESET_W(1024, vlSelf->data_from_bus);
-    vlSelf->bus_valid = VL_RAND_RESET_I(1);
-    vlSelf->bus_ready = VL_RAND_RESET_I(1);
+    vlSelf->hz32768timer = VL_RAND_RESET_I(1);
+    vlSelf->command_valid = VL_RAND_RESET_I(2);
+    vlSelf->command_store = VL_RAND_RESET_I(2);
+    vlSelf->command_rready = VL_RAND_RESET_I(2);
+    VL_RAND_RESET_W(128, vlSelf->command_addr);
+    VL_RAND_RESET_W(2048, vlSelf->data_in);
+    vlSelf->bus_valid = VL_RAND_RESET_I(2);
+    vlSelf->bus_ready = VL_RAND_RESET_I(2);
+    VL_RAND_RESET_W(1024, vlSelf->data_out);
     vlSelf->invalidate = VL_RAND_RESET_I(1);
     vlSelf->invalidate_addr = VL_RAND_RESET_Q(64);
-    vlSelf->invalidate_ack = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__clk = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__reset = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__avalid = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__aaddr = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT__load = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__data_from_cpu = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT__data_to_cpu = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT__hit = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__command_valid = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__command_store = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__command_rready = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__command_addr = VL_RAND_RESET_Q(64);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__data_to_bus);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__data_from_bus);
-    vlSelf->directCache__DOT__bus_valid = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__bus_ready = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__invalidate = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__invalidate_addr = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT__invalidate_ack = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT__dirty_addr = VL_RAND_RESET_Q(64);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__dirty_data);
-    vlSelf->directCache__DOT__tag = VL_RAND_RESET_Q(50);
-    vlSelf->directCache__DOT__index = VL_RAND_RESET_I(10);
-    vlSelf->directCache__DOT__offset = VL_RAND_RESET_I(4);
-    vlSelf->directCache__DOT__curr_valid = VL_RAND_RESET_I(1);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__new_cache_data);
-    vlSelf->directCache__DOT__new_data = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT__state = 0;
-    vlSelf->directCache__DOT__next_state = 0;
-    VL_RAND_RESET_W(1100800, vlSelf->directCache__DOT__cache);
-    vlSelf->directCache__DOT____Vlvbound_hb54154a8__0 = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__0 = VL_RAND_RESET_Q(64);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT____Vlvbound_h08920d1f__0);
-    vlSelf->directCache__DOT____Vlvbound_h78d7f6ab__0 = VL_RAND_RESET_Q(50);
-    vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__1 = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT____Vlvbound_h22f92dc4__0 = VL_RAND_RESET_I(1);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT____Vlvbound_h08920d1f__1);
-    vlSelf->directCache__DOT____Vlvbound_h78d7f6ab__1 = VL_RAND_RESET_Q(50);
-    vlSelf->directCache__DOT____Vlvbound_h1b8b6c23__2 = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT____Vlvbound_h22f92dc4__1 = VL_RAND_RESET_I(1);
-    vlSelf->directCache__DOT____VdfgTmp_ha8191f0f__0 = 0;
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__store_modifier__DOT__data);
-    vlSelf->directCache__DOT__store_modifier__DOT__new_data = VL_RAND_RESET_Q(64);
-    vlSelf->directCache__DOT__store_modifier__DOT__sel = VL_RAND_RESET_I(4);
-    VL_RAND_RESET_W(1024, vlSelf->directCache__DOT__store_modifier__DOT__final_data);
+    vlSelf->m_axi_awaddr = VL_RAND_RESET_Q(64);
+    vlSelf->m_axi_awlen = VL_RAND_RESET_I(8);
+    vlSelf->m_axi_awsize = VL_RAND_RESET_I(3);
+    vlSelf->m_axi_awburst = VL_RAND_RESET_I(2);
+    vlSelf->m_axi_awlock = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_awcache = VL_RAND_RESET_I(4);
+    vlSelf->m_axi_awprot = VL_RAND_RESET_I(3);
+    vlSelf->m_axi_awvalid = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_awready = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_wdata = VL_RAND_RESET_Q(64);
+    vlSelf->m_axi_wlast = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_wvalid = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_wready = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_bresp = VL_RAND_RESET_I(2);
+    vlSelf->m_axi_bvalid = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_bready = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_araddr = VL_RAND_RESET_Q(64);
+    vlSelf->m_axi_arlen = VL_RAND_RESET_I(8);
+    vlSelf->m_axi_arsize = VL_RAND_RESET_I(3);
+    vlSelf->m_axi_arburst = VL_RAND_RESET_I(2);
+    vlSelf->m_axi_arlock = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_arcache = VL_RAND_RESET_I(4);
+    vlSelf->m_axi_arprot = VL_RAND_RESET_I(3);
+    vlSelf->m_axi_arvalid = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_arready = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_rdata = VL_RAND_RESET_Q(64);
+    vlSelf->m_axi_rresp = VL_RAND_RESET_I(2);
+    vlSelf->m_axi_rlast = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_rvalid = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_rready = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_acvalid = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_acready = VL_RAND_RESET_I(1);
+    vlSelf->m_axi_acaddr = VL_RAND_RESET_Q(64);
+    vlSelf->m_axi_acsnoop = VL_RAND_RESET_I(4);
+    vlSelf->cacheMemoryBus__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__hz32768timer = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__command_valid = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__command_store = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__command_rready = VL_RAND_RESET_I(2);
+    VL_RAND_RESET_W(128, vlSelf->cacheMemoryBus__DOT__command_addr);
+    VL_RAND_RESET_W(2048, vlSelf->cacheMemoryBus__DOT__data_in);
+    vlSelf->cacheMemoryBus__DOT__bus_valid = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__bus_ready = VL_RAND_RESET_I(2);
+    VL_RAND_RESET_W(1024, vlSelf->cacheMemoryBus__DOT__data_out);
+    vlSelf->cacheMemoryBus__DOT__invalidate = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__invalidate_addr = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awaddr = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awlen = VL_RAND_RESET_I(8);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awsize = VL_RAND_RESET_I(3);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awburst = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awlock = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awcache = VL_RAND_RESET_I(4);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awprot = VL_RAND_RESET_I(3);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awvalid = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_awready = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_wdata = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__m_axi_wlast = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_wvalid = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_wready = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_bresp = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__m_axi_bvalid = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_bready = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_araddr = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arlen = VL_RAND_RESET_I(8);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arsize = VL_RAND_RESET_I(3);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arburst = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arlock = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arcache = VL_RAND_RESET_I(4);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arprot = VL_RAND_RESET_I(3);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arvalid = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_arready = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_rdata = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__m_axi_rresp = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__m_axi_rlast = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_rvalid = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_rready = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_acvalid = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_acready = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__m_axi_acaddr = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__m_axi_acsnoop = VL_RAND_RESET_I(4);
+    vlSelf->cacheMemoryBus__DOT__state = 0;
+    vlSelf->cacheMemoryBus__DOT__next_state = 0;
+    vlSelf->cacheMemoryBus__DOT__offsetCounter = VL_RAND_RESET_I(4);
+    VL_RAND_RESET_W(1024, vlSelf->cacheMemoryBus__DOT__data_buffer);
+    vlSelf->cacheMemoryBus__DOT__addr_buffer = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__currID = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__currPow2 = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__busChoiceOut = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__invalidate_buffer = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__invalidate_addr_buffer = VL_RAND_RESET_Q(64);
+    vlSelf->cacheMemoryBus__DOT__busChoice__DOT__candidates = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__busChoice__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__busChoice__DOT__i = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__busChoiceReply__DOT__sel = VL_RAND_RESET_I(1);
+    vlSelf->cacheMemoryBus__DOT__busChoiceReply__DOT__broadcast = VL_RAND_RESET_I(2);
+    vlSelf->cacheMemoryBus__DOT__busChoiceReply__DOT__i = VL_RAND_RESET_I(2);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
 }
