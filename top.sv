@@ -75,7 +75,18 @@ module top
    .data_from_bus(), .bus_valid(), .bus_ready());
 
   if_id_regs if_id (.clk(clk), .reset(reset), .pc_in(pc_cpu), .instruction_in(cache_instr), .pc_out(pc_if), .instruction_out(if_id_decoder_instr));
+  
+  decoder decoder (.instr(if_id_decoder_instr), .alu_op(), .func3(), .func7(), .imm(), .rs1(), .rs2(), .rd(), 
+                  .reg_to_pc(), .alu_src(), .mem_read(), .mem_write(), .reg_write(), .mem_to_reg());
+  
+  alu alu (.alu_op(), .func3(), .func7(), .data1(), .data2(), .alu_res(), .branch_decision());
 
+  directCache data_cache 
+  (.clk(clk), .reset(reset), .avalid(), .aaddr(), .load(), .data_from_cpu(), .data_to_cpu(),
+   .hit(data_cache_hit), 
+   .command_valid(), .command_store(), .command_rready(), .command_addr(), .data_to_bus(), 
+   .data_from_bus(), .bus_valid(), .bus_ready());
+  
   always_ff @ (posedge clk)
     if (reset) begin
       pc_cpu <= entry;

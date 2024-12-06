@@ -24,6 +24,25 @@ constexpr IData/*31:0*/ Vtop___024root::top__DOT__instruction_cache__DOT__store_
 constexpr IData/*31:0*/ Vtop___024root::top__DOT__instruction_cache__DOT__store_modifier__DOT__DATA_WIDTH;
 constexpr IData/*31:0*/ Vtop___024root::top__DOT__if_id__DOT__INSTR_WIDTH;
 constexpr IData/*31:0*/ Vtop___024root::top__DOT__if_id__DOT__DATA_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__decoder__DOT__DATA_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__decoder__DOT__INSTR_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__decoder__DOT__ALU_OP_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__decoder__DOT__ALU_FUNC3_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__decoder__DOT__ALU_FUNC7_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__decoder__DOT__REG_ID_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__alu__DOT__DATA_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__alu__DOT__WORD_LENGTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__alu__DOT__ALU_OP_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__alu__DOT__ALU_FUNC3_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__alu__DOT__ALU_FUNC7_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__TAG_LENGTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__INDEX_LENGTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__OFFSET_LENGTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__DATA_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__ADDR_WIDTH;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__STATE_BITS;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__store_modifier__DOT__REG_LOG;
+constexpr IData/*31:0*/ Vtop___024root::top__DOT__data_cache__DOT__store_modifier__DOT__DATA_WIDTH;
 
 
 void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf);

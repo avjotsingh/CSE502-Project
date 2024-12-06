@@ -33,15 +33,14 @@ module alu #(
         shamt_5 = data2[4:0];
         data1_w = data1[WORD_LENGTH-1:0];
         data2_w = data2[WORD_LENGTH-1:0];
-
-        res = 0;
-        decision = 0;
     end
 
     assign alu_res = res;
     assign branch_decision = decision;
 
     always_comb begin
+        res = 0;
+        decision = 0;
         case (alu_op)
             7'b0110011, 7'b0010011:
                 case (func)

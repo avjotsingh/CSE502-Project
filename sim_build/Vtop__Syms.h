@@ -32,7 +32,11 @@ class alignas(VL_CACHE_LINE_BYTES)Vtop__Syms final : public VerilatedSyms {
     // SCOPE NAMES
     VerilatedScope __Vscope_TOP;
     VerilatedScope __Vscope_top;
+    VerilatedScope __Vscope_top__alu;
     VerilatedScope __Vscope_top__branch_predictor;
+    VerilatedScope __Vscope_top__data_cache;
+    VerilatedScope __Vscope_top__data_cache__store_modifier;
+    VerilatedScope __Vscope_top__decoder;
     VerilatedScope __Vscope_top__if_id;
     VerilatedScope __Vscope_top__instruction_cache;
     VerilatedScope __Vscope_top__instruction_cache__store_modifier;
