@@ -87,6 +87,7 @@ module alu #(
             7'b1101111, 7'b1100111:
                 // RV32I
                 res = data1 + 4;                                                                    // jal, jalr
+                decision = 1'b1;
             
             7'b0110111:
                 // RV32I

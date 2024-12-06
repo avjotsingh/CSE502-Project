@@ -9,14 +9,14 @@ module ex_mem_regs #(
     input wire [DATA_WIDTH-1:0] alu_res_in,                         // ALU result
     input wire [DATA_WIDTH-1:0] write_data_in,                      // Data to write to memory
     input wire [REG_ID_WIDTH-1:0] dest_in,                          // Destination register ID for writeback stage
-    input wire [2:0] mem_control_in,
+    input wire [1:0] mem_control_in,
     input wire [1:0] wb_control_in,
 
     output wire [DATA_WIDTH-1:0] target_out,
     output wire branch_decision_out,
     output wire [DATA_WIDTH-1:0] alu_res_out,
     output wire [DATA_WIDTH-1:0] write_data_out,
-    output wire [2:0] mem_control_out,
+    output wire [1:0] mem_control_out,
     output wire [1:0] wb_control_out,
     output wire [REG_ID_WIDTH-1:0] dest_out
 );
@@ -26,10 +26,8 @@ module ex_mem_regs #(
     ex_mem_control ex_mem_ctrl(
         .clk(clk),
         .reset(reset),
-        .branch_in(mem_control_in[2]),
         .mem_read_in(mem_control_in[1]),
         .mem_write_in(mem_control_in[0]),
-        .branch_out(mem_control_out[2]),
         .mem_read_out(mem_control_out[1]),
         .mem_write_out(mem_control_out[0])
     );

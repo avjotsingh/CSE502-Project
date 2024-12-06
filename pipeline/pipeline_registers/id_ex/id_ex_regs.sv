@@ -14,8 +14,8 @@ module id_ex_regs #(
     input wire [REG_ID_WIDTH-1:0] dest_in,
     input wire [REG_ID_WIDTH-1:0] reg1_in,
     input wire [REG_ID_WIDTH-1:0] reg2_in,
-    input wire [ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH+1:0] ex_control_in,
-    input wire [2:0] mem_control_in,
+    input wire [ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH:0] ex_control_in,
+    input wire [1:0] mem_control_in,
     input wire [1:0] wb_control_in,
 
     output wire [DATA_WIDTH-1:0] pc_out,
@@ -25,20 +25,18 @@ module id_ex_regs #(
     output wire [REG_ID_WIDTH-1:0] dest_out,
     output wire [REG_ID_WIDTH-1:0] reg1_out,
     output wire [REG_ID_WIDTH-1:0] reg2_out,
-    output wire [ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH+1:0] ex_control_out,
-    output wire [2:0] mem_control_out,
+    output wire [ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH:0] ex_control_out,
+    output wire [1:0] mem_control_out,
     output wire [1:0] wb_control_out
 );
 
     id_ex_control id_ex_ctrl(
         .clk(clk),
         .reset(reset),
-        .reg_to_pc_in(ex_control_in[ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH+1]),
         .alu_src_in(ex_control_in[ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH]),
         .alu_op_in(ex_control_in[ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH-1:ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH]),
         .alu_func3_in(ex_control_in[ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH-1:ALU_FUNC7_WIDTH]),
         .alu_func7_in(ex_control_in[ALU_FUNC7_WIDTH-1:0]),
-        .reg_to_pc_out(ex_control_out[ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH+1]),
         .alu_src_out(ex_control_out[ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH]),
         .alu_op_out(ex_control_out[ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH-1:ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH]),
         .alu_func3_out(ex_control_out[ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH-1:ALU_FUNC7_WIDTH]),
@@ -48,10 +46,8 @@ module id_ex_regs #(
     ex_mem_control ex_mem_ctrl(
         .clk(clk),
         .reset(reset),
-        .branch_in(mem_control_in[2]),
         .mem_read_in(mem_control_in[1]),
         .mem_write_in(mem_control_in[0]),
-        .branch_out(mem_control_out[2]),
         .mem_read_out(mem_control_out[1]),
         .mem_write_out(mem_control_out[0])
     );

@@ -1,8 +1,8 @@
 module mem_wb_control (
     input wire clk,
     input wire reset,
-    input wire reg_write_in,                    // control signal -> whether or not to write back to register file
-    input wire mem_to_reg_in,                   // control signal -> whether writeback value comes from memory or ALU result
+    input wire reg_write_in,                    // control signal -> whether or not to write back to register file (0 for no writeback, 1 for writeback)
+    input wire mem_to_reg_in,                   // control signal -> whether writeback value comes from memory or ALU result (0 for memory, 1 for ALU)
   
     output wire reg_write_out,
     output wire mem_to_reg_out
