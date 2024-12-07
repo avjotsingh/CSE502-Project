@@ -9,10 +9,9 @@
 [A] handle data+control hazards in pipeline via forwarding/stalling
 [A] decoder logic
 [A] alu logic
-[a] add logic to handle data hazards (stalling or data forwarding)
-[a] assemble all components to get a working pipeline
+[A] add logic to handle data hazards (stalling or data forwarding)
 [Z] cache memory bus
 [Z] make a direct-mapped cache<br>
-[] connect everything in top.sv<br>
-[] test test test<br>
+[AZ] connect everything in top.sv<br>
+[az] test test test<br>
 [] submit!<br>
