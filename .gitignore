@@ -4,3 +4,5 @@ sim_build/*
 */sim_build/*
 */results.xml
 */obj_dir/*
+__pycache__/*
+results.xml

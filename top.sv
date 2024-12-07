@@ -139,7 +139,8 @@ module top
 
 
   // Outputs - Data Cache
-  wire [63:0] read_data_mem, data_cache_hit;
+  wire [63:0] read_data_mem;
+  wire data_cache_hit;
 
 
   // Outputs - MEM/WB registers
