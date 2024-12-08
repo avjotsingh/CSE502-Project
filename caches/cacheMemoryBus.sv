@@ -20,6 +20,10 @@ module cacheMemoryBus
   output reg [CONNECTIONS-1:0] bus_ready,
   output reg [DATA_WIDTH*(2**CHUNKS_LOG)-1:0] data_out,
 
+  //invalidate
+  output reg invalidate,
+  output reg [ADDR_WIDTH-1:0] invalidate_addr,
+
 
   // interface to connect to the bus
   //output  wire [ID_WIDTH-1:0]    m_axi_awid,
@@ -85,17 +89,33 @@ module cacheMemoryBus
   //to be used to filter which connection we are sending to 
   minimum_inverse #($clog2(CONNECTIONS)) busChoiceReply (currID, currPow2);
   
+  reg invalidate_buffer;
+  reg [ADDR_WIDTH-1:0] invalidate_addr_buffer;
+  reg acready_buffer;
+  assign invalidate = invalidate_buffer;
+  assign invalidate_addr = invalidate_addr_buffer;
 
-
-  always_ff @ (posedge clk)
+  always_ff @ (posedge clk) begin
     if (reset) begin
       state <= IDLE;
       offsetCounter <= 0;
       data_buffer <= 0;
       addr_buffer <= 0;
       currID <= 0;
+      invalidate_buffer <= 0;
+      invalidate_addr_buffer <= 0;
+      acready_buffer <= 0;
     end else begin
       state <= next_state;
+      if (m_axi_acvalid) begin
+        acready_buffer <= 1;
+        invalidate_buffer <= m_axi_acsnoop == 4'hd;
+        invalidate_addr_buffer <= m_axi_acaddr;
+      end else begin
+        acready_buffer <= 0;
+        invalidate_buffer <= 0;
+        invalidate_addr_buffer <= 0;
+      end
       case(state)
           IDLE: begin
             currID <= busChoiceOut; 
@@ -124,6 +144,7 @@ module cacheMemoryBus
           end
       endcase
     end
+  end
 
   //next_state logic
   always_comb begin
@@ -149,7 +170,10 @@ module cacheMemoryBus
       m_axi_awvalid = 0;
       m_axi_wvalid = 0;
       m_axi_wdata = 0;
+
+      m_axi_acready = 0;
     end else begin
+      m_axi_acready = acready_buffer;
       case(state)
         IDLE: begin
           bus_valid = 0;

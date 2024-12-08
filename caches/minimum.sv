@@ -5,10 +5,10 @@ module minimum
     LOG_INPUTS = 1
 )
 (
-    input wire [2**LOG_INPUTS-1:0] candidates,
+    input wire [2**LOG_INPUTS-1:0] candidates, 
     output logic [LOG_INPUTS-1:0] out
 );
-    logic [$size(out)-1:0] i;
+    logic [LOG_INPUTS-1:0] i;
     
     always_comb begin
         i = 0;

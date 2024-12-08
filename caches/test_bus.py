@@ -353,3 +353,31 @@ async def test_idle_saddr_multi(bus):
     assert bus.m_axi_awvalid.value == 1
     assert bus.m_axi_awaddr == 0x0123456789abcdef
     assert bus.data_buffer.value == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,f"is {bus.data_buffer.value}"
+
+@cocotb.test()
+async def acsnoop(bus):
+    await tick_tock(bus)
+    assert bus.invalidate.value == 0
+    await tick_tock(bus)
+    bus.m_axi_acvalid.value = 1
+    bus.m_axi_acaddr.value = 0x123456
+    bus.m_axi_acsnoop.value = 0xd
+    await tick_tock(bus)
+    assert bus.invalidate_buffer.value == 1
+    assert bus.invalidate_addr_buffer.value == 0x123456
+    assert bus.m_axi_acready.value == 1
+    bus.m_axi_acvalid.value = 0
+    await tick_tock(bus)
+    assert bus.invalidate_buffer.value == 0
+    assert bus.invalidate_addr_buffer.value == 0x0
+    assert bus.m_axi_acready.value == 0
+    await tick_tock(bus)
+    bus.m_axi_acsnoop.value = 0xc
+    bus.m_axi_acvalid.value = 1
+    await tick_tock(bus)
+    assert bus.invalidate_buffer.value == 0
+    assert bus.m_axi_acready.value == 1
+    bus.m_axi_acvalid.value = 0
+    await tick_tock(bus)
+    assert bus.invalidate_buffer.value == 0
+    assert bus.m_axi_acready.value == 0
