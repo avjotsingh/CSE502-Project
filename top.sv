@@ -153,6 +153,18 @@ module top
   logic [63:0] write_data_wb;
   logic [4:0] write_reg_wb;
 
+  // Wires for Cache-Bus Communication
+  wire command_valid_i, command_valid_d;
+  wire command_store_i, command_store_d;
+  wire command_rready_i, command_rready_d;
+  wire [ADDR_WIDTH-1:0] command_addr_i, command_addr_d;
+  //DATA_WIDTH * 16 should always be size of a cache line data
+  wire [DATA_WIDTH * 16 - 1:0] data_to_bus_i, data_to_bus_d;
+  wire bus_valid_i, bus_valid_d;
+  wire bus_ready_i, bus_ready_d;
+  wire [DATA_WIDTH * 16 - 1:0] data_from_bus;
+  wire invalidate;
+  wire invalidate_addr;
 
   // Set stall/flush signals for different stages
   always_comb begin
@@ -199,14 +211,16 @@ module top
     .data_from_cpu(0),
     .data_to_cpu(instr_cache),
     .hit(instruction_cache_hit), 
-    .command_valid(), 
-    .command_store(), 
-    .command_rready(), 
-    .command_addr(), 
-    .data_to_bus(), 
-    .data_from_bus(), 
-    .bus_valid(), 
-    .bus_ready()
+    .command_valid(command_valid_i), 
+    .command_store(command_store_i), 
+    .command_rready(command_rready_i), 
+    .command_addr(command_addr_i), 
+    .data_to_bus(data_to_bus_i), 
+    .data_from_bus(data_from_bus), 
+    .bus_valid(bus_valid_i), 
+    .bus_ready(bus_ready_i),
+    .invalidate(invalidate),
+    .invalidate_addr(invalidate_addr)
   );
   
   
@@ -358,14 +372,16 @@ module top
     .data_from_cpu(write_data_ex_mem),
     .data_to_cpu(read_data_mem),
     .hit(data_cache_hit),
-    .command_valid(),
-    .command_store(),
-    .command_rready(),
-    .command_addr(),
-    .data_to_bus(),
-    .data_from_bus(),
-    .bus_valid(),
-    .bus_ready()
+    .command_valid(command_valid_d),
+    .command_store(command_store_d),
+    .command_rready(command_rready_d),
+    .command_addr(command_addr_d),
+    .data_to_bus(data_to_bus_d),
+    .data_from_bus(data_from_bus),
+    .bus_valid(bus_valid_d),
+    .bus_ready(bus_ready_d),
+    .invalidate(invalidate),
+    .invalidate_addr(invalidate_addr)
   );
   
 
@@ -385,6 +401,62 @@ module top
     .wb_control_out(wb_control_mem_wb)
   );
 
+  /*** Memory bus***/
+  // {Instruction Cache, Data Cache}
+  cacheMemoryBus memory_bus(
+    .clk(clk),
+    .reset(reset),
+    .command_valid({command_valid_i,command_valid_d}),
+    .command_store({command_store_i,command_store_d}),
+    .command_rready({command_rready_i,command_rready_d}),
+    .command_addr({command_addr_i,command_addr_d}),
+    .data_in({data_to_bus_i,data_to_bus_d}),
+
+    .bus_valid({bus_valid_i,bus_valid_d}),
+    .bus_ready({bus_ready_i,bus_ready_d}),
+    .data_out(data_from_bus),
+    .invalidate(invalidate),
+    .invalidate_addr(invalidate_addr),
+    .m_axi_awid(m_axi_awid),
+    .m_axi_awaddr(m_axi_awaddr),
+    .m_axi_awlen(m_axi_awlen),
+    .m_axi_awsize(m_axi_awsize),
+    .m_axi_awburst(m_axi_awburst),
+    .m_axi_awlock(m_axi_awlock),
+    .m_axi_awcache(m_axi_awcache),
+    .m_axi_awprot(m_axi_awprot),
+    .m_axi_awvalid(m_axi_awvalid),
+    .m_axi_awready(m_axi_awready),
+    .m_axi_wdata(m_axi_wdata),
+    .m_axi_wstrb(m_axi_wstrb),
+    .m_axi_wlast(m_axi_wlast),
+    .m_axi_wvalid(m_axi_wvalid),
+    .m_axi_wready(m_axi_wready),
+    .m_axi_bid(m_axi_bid),
+    .m_axi_bresp(m_axi_bresp),
+    .m_axi_bvalid(m_axi_bvalid),
+    .m_axi_bready(m_axi_bready),
+    .m_axi_arid(m_axi_arid),
+    .m_axi_araddr(m_axi_araddr),
+    .m_axi_arlen(m_axi_arlen),
+    .m_axi_arsize(m_axi_arsize),
+    .m_axi_arburst(m_axi_arburst),
+    .m_axi_arlock(m_axi_arlock),
+    .m_axi_arcache(m_axi_arcache),
+    .m_axi_arprot(m_axi_arprot),
+    .m_axi_arvalid(m_axi_arvalid),
+    .m_axi_arready(m_axi_arready),
+    .m_axi_rid(m_axi_rid),
+    .m_axi_rdata(m_axi_rdata),
+    .m_axi_rresp(m_axi_rresp),
+    .m_axi_rlast(m_axi_rlast),
+    .m_axi_rvalid(m_axi_rvalid),
+    .m_axi_rready(m_axi_rready),
+    .m_axi_acvalid(m_axi_acvalid),
+    .m_axi_acready(m_axi_acready),
+    .m_axi_acaddr(m_axi_acaddr),
+    .m_axi_acsnoop(m_axi_acsnoop)
+  );
 
   // Combination logic for IF stage
   always_comb begin

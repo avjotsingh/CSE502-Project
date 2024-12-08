@@ -31,8 +31,7 @@ module directCache
     input wire bus_valid,
     input wire bus_ready,
     input wire invalidate,
-    input wire [ADDR_WIDTH-1:0] invalidate_addr,
-    output wire invalidate_ack
+    input wire [ADDR_WIDTH-1:0] invalidate_addr
 );
 
 

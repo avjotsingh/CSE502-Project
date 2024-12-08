@@ -8,7 +8,6 @@ module cacheMemoryBus
 (
   input  clk,
          reset,
-         hz32768timer,
 
   //cache interface, each cache should connect to one of the elements of the array 
   input wire [CONNECTIONS-1:0] command_valid,
@@ -26,7 +25,7 @@ module cacheMemoryBus
 
 
   // interface to connect to the bus
-  //output  wire [ID_WIDTH-1:0]    m_axi_awid,
+  output  wire [ID_WIDTH-1:0]    m_axi_awid,
   output  wire [ADDR_WIDTH-1:0]  m_axi_awaddr,
   output  wire [7:0]             m_axi_awlen,
   output  wire [2:0]             m_axi_awsize,
@@ -37,15 +36,15 @@ module cacheMemoryBus
   output  wire                   m_axi_awvalid,
   input   wire                   m_axi_awready,
   output  wire [DATA_WIDTH-1:0]  m_axi_wdata,
-  //output  wire [STRB_WIDTH-1:0]  m_axi_wstrb,
+  output  wire [STRB_WIDTH-1:0]  m_axi_wstrb,
   output  wire                   m_axi_wlast,
   output  wire                   m_axi_wvalid,
   input   wire                   m_axi_wready,
-  //input   wire [ID_WIDTH-1:0]    m_axi_bid,
+  input   wire [ID_WIDTH-1:0]    m_axi_bid,
   input   wire [1:0]             m_axi_bresp,
   input   wire                   m_axi_bvalid,
   output  wire                   m_axi_bready,
-  //output  wire [ID_WIDTH-1:0]    m_axi_arid,
+  output  wire [ID_WIDTH-1:0]    m_axi_arid,
   output  wire [ADDR_WIDTH-1:0]  m_axi_araddr,
   output  wire [7:0]             m_axi_arlen,
   output  wire [2:0]             m_axi_arsize,
@@ -55,7 +54,7 @@ module cacheMemoryBus
   output  wire [2:0]             m_axi_arprot,
   output  wire                   m_axi_arvalid,
   input   wire                   m_axi_arready,
-  //input   wire [ID_WIDTH-1:0]    m_axi_rid,
+  input   wire [ID_WIDTH-1:0]    m_axi_rid,
   input   wire [DATA_WIDTH-1:0]  m_axi_rdata,
   input   wire [1:0]             m_axi_rresp,
   input   wire                   m_axi_rlast,
