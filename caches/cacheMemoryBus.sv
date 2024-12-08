@@ -3,7 +3,9 @@ module cacheMemoryBus
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
     CHUNKS_LOG = 4,
-    CONNECTIONS = 2
+    CONNECTIONS = 2,
+    STRB_WIDTH = DATA_WIDTH/8,
+    ID_WIDTH = 13
 )
 (
   input  clk,
