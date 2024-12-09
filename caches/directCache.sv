@@ -59,7 +59,7 @@ module directCache
     
     //test
     wire [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cacheline;
-    assign cacheline = cache[index];
+    assign cacheline = cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 : STATE_BITS + TAG_LENGTH];
 
     enum {IDLE, DIRTY_WRITEBACK, LOADING, LOADING_CLEAN} state, next_state;
 
