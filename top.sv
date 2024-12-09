@@ -509,12 +509,18 @@ module top
   end
 
 
+  logic [63:0] count;
   // Sequential logic for IF stage
   always_ff @ (posedge clk) begin
     if (reset) begin
       pc_if <= entry;
     end else begin
+      count <= count + 1;
       pc_if <= next_pc;
+      $display("Next PC: %0h", next_pc);
+      if (count == 1000) begin
+        $finish;
+      end
     end
   end
     
