@@ -1,5 +1,4 @@
-//`include "Sysbus.defs"
-//this include will become necessary
+`include "Sysbus.defs"
 module top
 #(
   ID_WIDTH = 13,

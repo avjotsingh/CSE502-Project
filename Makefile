@@ -25,7 +25,8 @@ obj_dir/Vtop.mk: $(VFILES) $(CFILES)
 	--exe $(CFILES) /shared/cse502/DRAMSim2/libdramsim.so \
 	-CFLAGS -I/shared/cse502 -CFLAGS -std=c++11 -CFLAGS -g3 \
 	-LDFLAGS -Wl,-rpath=/shared/cse502/DRAMSim2 \
-	-LDFLAGS -lncurses -LDFLAGS -lelf -LDFLAGS -lrt $(INCLUDE_PATHS)
+	-LDFLAGS -lncurses -LDFLAGS -lelf -LDFLAGS -lrt \
+	$(INCLUDE_PATHS)
 
 run: obj_dir/Vtop
 	cd obj_dir/ && env HAVETLB=$(HAVETLB) FULLSYSTEM=$(FULLSYSTEM) ./Vtop $(PROG)
