@@ -50,7 +50,7 @@ module directCache
 
     assign tag = aaddr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
     assign index = aaddr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
-    assign offset = aaddr[OFFSET_LENGTH-1:0];
+    assign offset = aaddr[OFFSET_LENGTH-1:2];
     
     assign curr_valid = cache[index][TAG_LENGTH] == 1;
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && curr_valid;
@@ -82,7 +82,7 @@ module directCache
                         if (avalid) begin
                             if (!hit && curr_valid) begin
                                 dirty_data <= cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH * (2**OFFSET_LENGTH)];
-                                dirty_addr <= {index, cache[index][TAG_LENGTH - 1:0], {OFFSET_LENGTH{1'b0}}}; 
+                                dirty_addr <= {cache[index][TAG_LENGTH - 1:0], index, {OFFSET_LENGTH{1'b0}}}; 
                             end else if (hit) begin
                                 if (!load) begin
                                     cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH] <= data_from_cpu;
