@@ -56,6 +56,10 @@ module directCache
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && curr_valid;
     
     assign data_to_cpu = cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH];
+    
+    //test
+    wire [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cacheline;
+    assign cacheline = cache[index];
 
     enum {IDLE, DIRTY_WRITEBACK, LOADING, LOADING_CLEAN} state, next_state;
 
