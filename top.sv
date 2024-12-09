@@ -167,15 +167,7 @@ module top
 
   // Set stall/flush signals for different stages
   always_comb begin
-    stall_pc = 0;
-    stall_if_id = 0;
-    stall_id_ex = 0;
-    stall_ex_mem = 0;
-    stall_mem_wb = 0;
-    flush_if_id = 0;
-    flush_id_ex = 0;
-
-    stall_pc = !instruction_cache_hit || mem_hazard || !data_cache_hit;
+    stall_pc = !instruction_cache_hit || mem_hazard || (avalid_mem && !data_cache_hit);
     stall_if_id = mem_hazard  || !data_cache_hit;
     stall_id_ex = !data_cache_hit;
     stall_ex_mem = !data_cache_hit;
