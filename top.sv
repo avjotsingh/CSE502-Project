@@ -193,7 +193,7 @@ module top
 
   /*** Instruction cache ***/
   // TODO: connect the cache to the bus
-  directCache #(.OFFSET_LENGTH(5), .TAG_LENGTH(49), .DATA_WIDTH(32)) instruction_cache (
+  directCache #(.OFFSET_LENGTH(4), .INDEX_LENGTH(11), .TAG_LENGTH(49), .DATA_WIDTH(32)) instruction_cache (
     .clk(clk),
     .reset(reset),
     .avalid(1),
@@ -354,7 +354,7 @@ module top
 
   /*** Data cache ***/
   // TODO: connect the bus to the cache
-  directCache data_cache (
+  directCache #(.OFFSET_LENGTH(3), .INDEX_LENGTH(12), .TAG_LENGTH(49), .DATA_WIDTH(64)) data_cache (
     .clk(clk),
     .reset(reset),
     .avalid(avalid_mem),

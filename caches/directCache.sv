@@ -48,12 +48,6 @@ module directCache
     wire [DATA_WIDTH * (2**OFFSET_LENGTH) -1 : 0] new_cache_data;
     wire [DATA_WIDTH-1:0] new_data;
 
-
-    //makes the new cache state
-    modifyOne #(OFFSET_LENGTH, DATA_WIDTH) store_modifier 
-        (.data(cache[index][DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:STATE_BITS + TAG_LENGTH]), 
-        .new_data(data_from_cpu), .sel(offset), .final_data(new_cache_data));
-
     assign tag = aaddr[ADDR_WIDTH-1:OFFSET_LENGTH + INDEX_LENGTH];
     assign index = aaddr[INDEX_LENGTH + OFFSET_LENGTH -1:OFFSET_LENGTH];
     assign offset = aaddr[OFFSET_LENGTH-1:0];
@@ -62,6 +56,10 @@ module directCache
     assign hit = tag == cache[index][TAG_LENGTH-1:0] && curr_valid;
     
     assign data_to_cpu = cache[index][({{32-OFFSET_LENGTH{1'b0}}, offset} + 1) * DATA_WIDTH + STATE_BITS + TAG_LENGTH - 1 -: DATA_WIDTH];
+    
+    //test
+    wire [DATA_WIDTH * (2**OFFSET_LENGTH) + STATE_BITS + TAG_LENGTH - 1:0] cacheline;
+    assign cacheline = cache[index];
 
     enum {IDLE, DIRTY_WRITEBACK, LOADING, LOADING_CLEAN} state, next_state;
 
