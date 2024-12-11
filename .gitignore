@@ -7,3 +7,5 @@ sim_build/*
 __pycache__/*
 results.xml
 trace.vcd
+*.vis
+vpv.json
