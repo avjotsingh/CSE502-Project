@@ -152,7 +152,7 @@ module cacheMemoryBus
     case(state)
         IDLE : next_state = command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) : IDLE;
         L_ADDR : next_state = m_axi_arready ? L_READ : L_ADDR;
-        L_READ : next_state = offsetCounter == 7 ? L_DONE : L_READ; //m_axi_rlast ? L_DONE : L_READ;
+        L_READ : next_state = offsetCounter == 7 && m_axi_rvalid ? L_DONE : L_READ; //m_axi_rlast ? L_DONE : L_READ;
         L_DONE : next_state = command_rready[currID] ? IDLE : L_DONE; //(command_valid[busChoiceOut] ? (command_store[busChoiceOut] ? S_ADDR : L_ADDR) :
         S_ADDR : next_state = m_axi_awready ? S_WRITE : S_ADDR;//handshake???
         S_WRITE : next_state = m_axi_wlast ? IDLE : S_WRITE;
