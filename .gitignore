@@ -6,6 +6,6 @@ sim_build/*
 */obj_dir/*
 __pycache__/*
 results.xml
-trace.vcd
+*.vcd
 *.vis
 vpv.json
