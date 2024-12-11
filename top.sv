@@ -168,10 +168,10 @@ module top
   // Set stall/flush signals for different stages
   always_comb begin
     stall_pc = !instruction_cache_hit || mem_hazard || (avalid_mem && !data_cache_hit);
-    stall_if_id = mem_hazard  || !data_cache_hit;
-    stall_id_ex = !data_cache_hit;
-    stall_ex_mem = !data_cache_hit;
-    stall_mem_wb = !data_cache_hit;
+    stall_if_id = mem_hazard  || (avalid_mem && !data_cache_hit);
+    stall_id_ex = (avalid_mem && !data_cache_hit);
+    stall_ex_mem = (avalid_mem && !data_cache_hit);
+    stall_mem_wb = (avalid_mem && !data_cache_hit);
 
     flush_if_id = branch_mispredict;
     flush_id_ex = mem_hazard || branch_mispredict;
@@ -451,14 +451,15 @@ module top
 
   // Combination logic for IF stage
   always_comb begin
-    if (stall_pc) begin
-      next_pc = pc_if;
-    end else if (branch_mispredict) begin
+    if (branch_mispredict) begin
       next_pc = target_ex;
-    end else if (btb_hit) begin
-      next_pc = predicted_target;
-    end else begin
+    // TODO: add back BTB
+    // end else if (btb_hit) begin
+    //  next_pc = predicted_target;
+    end else if (!stall_pc) begin
       next_pc = pc_if + 4;
+    end else begin
+      next_pc = pc_if;
     end
   end
 
