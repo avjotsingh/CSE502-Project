@@ -451,14 +451,15 @@ module top
 
   // Combination logic for IF stage
   always_comb begin
-    if (stall_pc) begin
-      next_pc = pc_if;
-    end else if (branch_mispredict) begin
+    if (branch_mispredict) begin
       next_pc = target_ex;
-    end else if (btb_hit) begin
-      next_pc = predicted_target;
-    end else begin
+    // TODO: add back BTB
+    // end else if (btb_hit) begin
+    //  next_pc = predicted_target;
+    end else if (!stall_pc) begin
       next_pc = pc_if + 4;
+    end else begin
+      next_pc = pc_if;
     end
   end
 
