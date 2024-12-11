@@ -466,7 +466,19 @@ module top
 
   // Combinational logic for EX stage
   always_comb begin
-    target_ex = pc_id_ex + imm_id_ex;
+    if (ex_control_id_ex[16:10] == 7'b1100111) begin
+      case (forward1)
+        2'b00:
+          target_ex = data1_id_ex + imm_id_ex;
+        2'b10:
+          target_ex = alu_res_ex_mem + imm_id_ex;
+        2'b01:
+          target_ex = write_data_wb + imm_id_ex;
+      endcase
+    end else begin
+      target_ex = pc_id_ex + imm_id_ex;
+    end
+    
     case (forward1) 
       2'b00:
         data1_ex = ex_control_id_ex[18] ? pc_id_ex : data1_id_ex;
@@ -476,6 +488,7 @@ module top
         data1_ex = write_data_wb;
       default: ;
     endcase
+    
     case (forward2)
       2'b00:
         data2_ex = ex_control_id_ex[17] ? imm_id_ex : data2_id_ex;
@@ -497,8 +510,8 @@ module top
 
   // Combinational logic for WB stage
   always_comb begin
-    write_data_wb = wb_control_mem_wb[0] ? mem_data_mem_wb : alu_res_mem_wb;
-    write_reg_wb = wb_control_mem_wb[1] ? '0 : rd_mem_wb;
+    write_data_wb = wb_control_mem_wb[0] ? alu_res_mem_wb : mem_data_mem_wb;
+    write_reg_wb = wb_control_mem_wb[1] ? rd_mem_wb : '0;
   end
 
 
