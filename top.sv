@@ -89,7 +89,7 @@ module top
   wire [6:0] func7_id;
   wire [63:0] imm_id;
   wire [4:0] rs1_id, rs2_id, rd_id;
-  wire reg_to_pc_id, alu_src_id, mem_read_id, mem_write_id, reg_write_id, mem_to_reg_id;
+  wire reg_to_pc_id, alu_src_id, mem_read_id, mem_write_id, is_ecall_id, reg_write_id, mem_to_reg_id;
 
 
   // Outputs - register file
@@ -100,7 +100,8 @@ module top
   wire [63:0] pc_id_ex, imm_id_ex, data1_id_ex, data2_id_ex;
   wire [4:0] rd_id_ex, rs1_id_ex, rs2_id_ex;
   wire [18:0] ex_control_id_ex;
-  wire [1:0] mem_control_id_ex, wb_control_id_ex;
+  wire [1:0] mem_control_id_ex;
+  wire [2:0] wb_control_id_ex;
 
 
   // Wire for computing target PC
@@ -121,11 +122,11 @@ module top
 
 
   // Outputs - EX/MEM registers
-  wire [63:0] target_ex_mem, alu_res_ex_mem, write_data_ex_mem;
+  wire [63:0] pc_ex_mem, target_ex_mem, alu_res_ex_mem, write_data_ex_mem;
   wire branch_decision_ex_mem;
   wire [4:0] rd_ex_mem;
   wire [1:0] mem_control_ex_mem;
-  wire [1:0] wb_control_ex_mem;
+  wire [2:0] wb_control_ex_mem;
 
 
   // Outputs - Forwarding Unit
@@ -137,18 +138,25 @@ module top
   logic load_mem;
 
 
+  // Wires - MEM stage
+  wire do_pending_write;
+
+
   // Outputs - Data Cache
   wire [63:0] read_data_mem;
   wire data_cache_hit;
 
 
   // Outputs - MEM/WB registers
-  wire [63:0] alu_res_mem_wb, mem_data_mem_wb;
+  wire [63:0] pc_mem_wb, alu_res_mem_wb, mem_data_mem_wb;
   wire [4:0] rd_mem_wb;
-  wire [1:0] wb_control_mem_wb;
+  wire [2:0] wb_control_mem_wb;
 
 
   // Wires for WB stage
+  wire [DATA_WIDTH-1:0] a0, a1, a2, a3, a4, a5, a6, a7, a0_;
+  wire is_ecall_wb, flush_ecall_wb;
+
   logic [63:0] write_data_wb;
   logic [4:0] write_reg_wb;
 
@@ -173,8 +181,10 @@ module top
     stall_ex_mem = (avalid_mem && !data_cache_hit);
     stall_mem_wb = (avalid_mem && !data_cache_hit);
 
-    flush_if_id = branch_mispredict || flush_ecall;
-    flush_id_ex = mem_hazard || branch_mispredict || flush_ecall;
+    flush_if_id = branch_mispredict || is_ecall_wb;
+    flush_id_ex = mem_hazard || branch_mispredict || is_ecall_wb;
+    flush_ex_mem = is_ecall_wb;
+    flush_mem_wb = is_ecall_wb;
   end
   
 
@@ -242,6 +252,7 @@ module top
     .alu_src(alu_src_id),
     .mem_read(mem_read_id),
     .mem_write(mem_write_id),
+    .is_ecall(is_ecall_id),
     .reg_write(reg_write_id),
     .mem_to_reg(mem_to_reg_id)
   );
@@ -256,7 +267,15 @@ module top
     .write_reg(write_reg_wb),
     .write_data(write_data_wb),
     .data1(data1_id),
-    .data2(data2_id)
+    .data2(data2_id),
+    .a0(a0),
+    .a1(a1),
+    .a2(a2),
+    .a3(a3),
+    .a4(a4),
+    .a5(a5),
+    .a6(a6),
+    .a7(a7)
   );
 
 
@@ -275,7 +294,7 @@ module top
     .reg2_in(rs2_id),
     .ex_control_in({ reg_to_pc_id, alu_src_id, alu_op_id, func3_id, func7_id }),
     .mem_control_in({ mem_read_id, mem_write_id }),
-    .wb_control_in({ reg_write_id, mem_to_reg_id }),
+    .wb_control_in({ is_ecall_id, reg_write_id, mem_to_reg_id }),
     
     .pc_out(pc_id_ex), 
     .data1_out(data1_id_ex), 
@@ -306,8 +325,8 @@ module top
   hazard_detector hazard_detector (
     .mem_read_ex(mem_control_id_ex[1]),
     .rd_ex(rd_id_ex),
-    .reg1_id(rs1_id_ex),
-    .reg2_id(rs2_id_ex),
+    .reg1_id(rs1_id),
+    .reg2_id(rs2_id),
     .branch_dec_ex(branch_decision_ex),
     .target_ex(target_ex),
     .pc_id(pc_if_id),
@@ -321,6 +340,8 @@ module top
     .clk(clk),
     .reset(reset),
     .stall(stall_ex_mem),
+    .flush(flush_ex_mem),
+    .pc_in(pc_id_ex),
     .target_in(target_ex),
     .branch_decision_in(branch_decision_ex),
     .alu_res_in(alu_res_ex),
@@ -329,6 +350,7 @@ module top
     .mem_control_in(mem_control_id_ex),
     .wb_control_in(wb_control_id_ex),
 
+    .pc_out(pc_ex_mem),
     .target_out(target_ex_mem),
     .branch_decision_out(branch_decision_ex_mem),
     .alu_res_out(alu_res_ex_mem),
@@ -374,6 +396,16 @@ module top
     .invalidate(invalidate),
     .invalidate_addr(invalidate_addr)
   );
+
+
+  /*** Do Pending Write module ***/
+  pending_write pending_write (
+    .clk(clk),
+    .reset(reset),
+    .address(alu_res_ex_mem),
+    .value(write_data_ex_mem),
+    .trigger(do_pending_write)
+  );
   
 
   /*** MEM/WB registers ***/
@@ -381,16 +413,37 @@ module top
     .clk(clk),
     .reset(reset),
     .stall(stall_mem_wb),
+    .flush(flush_mem_wb),
+    .pc_in(pc_ex_mem),
     .alu_in(alu_res_ex_mem),
     .mem_data_in(read_data_mem),
     .dest_in(rd_ex_mem),
     .wb_control_in(wb_control_ex_mem),
 
+    .pc_out(pc_mem_wb),
     .alu_out(alu_res_mem_wb),
     .mem_data_out(mem_data_mem_wb),
     .dest_out(rd_mem_wb),
     .wb_control_out(wb_control_mem_wb)
   );
+
+
+  /*** ECALL module ***/
+  ecall ecall(
+    .clk(clk),
+    .reset(reset),
+    .a0(a0),
+    .a1(a1),
+    .a2(a2),
+    .a3(a3),
+    .a4(a4),
+    .a5(a5),
+    .a6(a7),
+    .a7(a7),
+    .a0_(a0_),
+    .trigger(wb_control_mem_wb[2])
+  );
+
 
   /*** Memory bus***/
   // {Instruction Cache, Data Cache}
@@ -449,38 +502,12 @@ module top
     .m_axi_acsnoop(m_axi_acsnoop)
   );
 
-  wire [DATA_WIDTH-1:0] a0,a1,a2,a3,a4,a5,a6,a7,a0_;
-  wire is_ecall, flush_ecall;
-  ecall ecall(
-    .clk(clk),
-    .reset(reset),
-    .a0(a0),
-    .a1(a1),
-    .a2(a2),
-    .a3(a3),
-    .a4(a4),
-    .a5(a5),
-    .a6(a7),
-    .a7(a7),
-    .a0_(a0_),
-    .trigger(is_ecall),
-    .flush(flush_ecall)
-  );
 
-  wire [ADDR_WIDTH-1:0] pending_write_address;
-  wire [DATA_WIDTH-1:0] pending_write_data;
-  wire is_do_pending_write;
-  pending_write pending_write(
-    .clk(clk),
-    .reset(reset),
-    .address(pending_write_address),
-    .value(pending_write_data),
-    .trigger(is_do_pending_write)
-  );
-  
   // Combination logic for IF stage
   always_comb begin
-    if (branch_mispredict) begin
+    if (is_ecall_wb) begin
+      next_pc = pc_mem_wb + 4;
+    end else if (branch_mispredict) begin
       next_pc = target_ex;
     // TODO: add back BTB
     // end else if (btb_hit) begin
@@ -534,6 +561,7 @@ module top
   always_comb begin
     avalid_mem = mem_control_ex_mem[1] || mem_control_ex_mem[0];
     load_mem = mem_control_ex_mem[1] ? 1 : 0;
+    do_pending_write = mem_control_ex_mem[0];
   end
 
 
@@ -541,6 +569,7 @@ module top
   always_comb begin
     write_data_wb = reset ? stackptr : (wb_control_mem_wb[0] ? alu_res_mem_wb : mem_data_mem_wb);
     write_reg_wb = wb_control_mem_wb[1] ? rd_mem_wb : '0;
+    is_ecall_wb = wb_control_mem_wb[2];
   end
 
   logic [63:0] count;

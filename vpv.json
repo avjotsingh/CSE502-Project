@@ -1,16 +1,16 @@
 {
   "extensionVersion": "1.2.5",
-  "fileName": "/home/zgurwitz/project/trace.vcd",
-  "markerTime": 334275,
+  "fileName": "/home/avjsingh/CSE502-Project/trace.vcd",
+  "markerTime": 866000,
   "altMarkerTime": null,
   "selectedSignal": {
-    "name": "TOP.top.pc_id_ex",
-    "numberFormat": "hexadecimal",
-    "msb": 63,
-    "lsb": 0
+    "name": "TOP.top.clk",
+    "numberFormat": 16,
+    "msb": -1,
+    "lsb": -1
   },
-  "zoomRatio": 0.04,
-  "scrollLeft": 58925,
+  "zoomRatio": 0.000625,
+  "scrollLeft": 107.5,
   "displayedSignals": [
     {
       "name": "TOP.top.clk",
@@ -25,6 +25,66 @@
       "lsb": -1
     },
     {
+      "name": "TOP.top.stall_pc",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.stall_if_id",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.stall_id_ex",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.stall_ex_mem",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.stall_mem_wb",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.flush_if_id",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.flush_id_ex",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.flush_ex_mem",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.flush_mem_wb",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.flush_ecall_wb",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
       "name": "TOP.top.next_pc",
       "numberFormat": "hexadecimal",
       "msb": 63,
@@ -34,6 +94,18 @@
       "name": "TOP.top.pc_if",
       "numberFormat": "hexadecimal",
       "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.instruction_cache_hit",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.instr_cache",
+      "numberFormat": "hexadecimal",
+      "msb": 31,
       "lsb": 0
     },
     {
@@ -79,7 +151,91 @@
       "lsb": 0
     },
     {
-      "name": "TOP.top.register_file.registers(2)",
+      "name": "TOP.top.target_ex",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.branch_decision_ex",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.pc_ex_mem",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.data_cache_hit",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.alu_res_ex_mem",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.data2_id_ex",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.rd_id_ex",
+      "numberFormat": "hexadecimal",
+      "msb": 4,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.avalid_mem",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.load_mem",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.register_file.registers(5)",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.mem_hazard",
+      "numberFormat": "hexadecimal",
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.hazard_detector.rd_ex",
+      "numberFormat": "hexadecimal",
+      "msb": 4,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.hazard_detector.reg1_id",
+      "numberFormat": "hexadecimal",
+      "msb": 4,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.hazard_detector.reg2_id",
+      "numberFormat": "hexadecimal",
+      "msb": 4,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.pc_mem_wb",
       "numberFormat": "hexadecimal",
       "msb": 63,
       "lsb": 0

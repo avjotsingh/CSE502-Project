@@ -21,6 +21,7 @@ module decoder #(
     output wire alu_src,                                                                    // ALU control signal -> chooses b/w register 2 value and immediate (0 for register value, 1 for immediate)
     output wire mem_read,                                                                   // MEM control signal -> read memory?
     output wire mem_write,                                                                  // MEM control signal -> write memory?
+    output wire is_ecall,                                                                   // WB control signal -> is ecall?
     output wire reg_write,                                                                  // WB control signal -> write to register?
     output wire mem_to_reg                                                                  // WB control signal -> value being written comes from memory or ALU result? (0 for memory, 1 for ALU res)
 );
@@ -37,6 +38,7 @@ module decoder #(
     logic alu_src_;
     logic mem_read_;
     logic mem_write_;
+    logic is_ecall_;
     logic reg_write_;
     logic mem_to_reg_;
 
@@ -51,6 +53,7 @@ module decoder #(
     assign alu_src = alu_src_;
     assign mem_read = mem_read_;
     assign mem_write = mem_write_;
+    assign is_ecall = is_ecall_;
     assign reg_write = reg_write_;
     assign mem_to_reg = mem_to_reg_;
     
@@ -67,6 +70,7 @@ module decoder #(
         alu_src_ = 0;
         mem_read_ = 0;
         mem_write_ = 0;
+        is_ecall_ = 0;
         reg_write_ = 0;
         mem_to_reg_ = 0;
 
@@ -156,6 +160,8 @@ module decoder #(
                 func3_ = instr_[14:12];
                 imm_ = { {52{instr_[31]}}, instr_[31:20]};
                 func7_ = imm_[ALU_FUNC7_WIDTH-1:0];
+                rd_ = 5'b10010;
+                is_ecall_ = 1;
             end
             default: ;
         endcase

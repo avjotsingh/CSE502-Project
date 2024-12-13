@@ -18,7 +18,7 @@ module id_ex_regs #(
     input wire [REG_ID_WIDTH-1:0] reg2_in,
     input wire [ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH+1:0] ex_control_in,
     input wire [1:0] mem_control_in,
-    input wire [1:0] wb_control_in,
+    input wire [2:0] wb_control_in,
 
     output wire [DATA_WIDTH-1:0] pc_out,
     output wire [DATA_WIDTH-1:0] data1_out,
@@ -29,7 +29,7 @@ module id_ex_regs #(
     output wire [REG_ID_WIDTH-1:0] reg2_out,
     output wire [ALU_OP_WIDTH+ALU_FUNC3_WIDTH+ALU_FUNC7_WIDTH+1:0] ex_control_out,
     output wire [1:0] mem_control_out,
-    output wire [1:0] wb_control_out
+    output wire [2:0] wb_control_out
 );
 
     ex_control ex_ctrl(
@@ -65,8 +65,10 @@ module id_ex_regs #(
         .reset(reset),
         .flush(flush),
         .stall(stall),
+        .is_ecall_in(wb_control_in[2]),
         .reg_write_in(wb_control_in[1]),
         .mem_to_reg_in(wb_control_in[0]),
+        .is_ecall_out(wb_control_out[2]),
         .reg_write_out(wb_control_out[1]), 
         .mem_to_reg_out(wb_control_out[0])
     );
