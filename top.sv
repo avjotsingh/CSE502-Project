@@ -173,8 +173,8 @@ module top
     stall_ex_mem = (avalid_mem && !data_cache_hit);
     stall_mem_wb = (avalid_mem && !data_cache_hit);
 
-    flush_if_id = branch_mispredict;
-    flush_id_ex = mem_hazard || branch_mispredict;
+    flush_if_id = branch_mispredict || flush_ecall;
+    flush_id_ex = mem_hazard || branch_mispredict || flush_ecall;
   end
   
 
@@ -193,7 +193,7 @@ module top
 
   /*** Instruction cache ***/
   // TODO: connect the cache to the bus
-  directCache #(.OFFSET_LENGTH(4), .INDEX_LENGTH(11), .TAG_LENGTH(49), .DATA_WIDTH(32)) instruction_cache (
+  directCache #(.OFFSET_LENGTH(4), .INDEX_LENGTH(11), .TAG_LENGTH(49), .DATA_WIDTH(32), .IS_INSTRUCTION_CACHE(1)) instruction_cache (
     .clk(clk),
     .reset(reset),
     .avalid(1),
@@ -211,7 +211,8 @@ module top
     .bus_valid(bus_valid_i), 
     .bus_ready(bus_ready_i),
     .invalidate(invalidate),
-    .invalidate_addr(invalidate_addr)
+    .invalidate_addr(invalidate_addr),
+
   );
   
   

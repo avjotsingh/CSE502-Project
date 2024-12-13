@@ -7,6 +7,7 @@ module directCache
     ADDR_WIDTH = 64,
     //TODO: Make this non-variable in construction
     STATE_BITS = 1 // {Valid}
+    IS_INSTRUCTION_CACHE = 0;
 )
 (
     input wire clk,
@@ -153,7 +154,7 @@ module directCache
     //next state logic
     always_comb begin
         case (state)
-            IDLE: next_state = !invalidate && avalid ? (hit ? IDLE : (curr_valid ? LOADING : LOADING_CLEAN)) : IDLE;
+            IDLE: next_state = !invalidate && avalid ? (hit ? IDLE : (curr_valid && (IS_INSTRUCTION_CACHE == 0) ? LOADING : LOADING_CLEAN)) : IDLE;
             DIRTY_WRITEBACK: next_state = bus_ready ? IDLE : DIRTY_WRITEBACK;
             LOADING: next_state = bus_valid ? DIRTY_WRITEBACK : LOADING;
             LOADING_CLEAN: next_state = bus_valid ? IDLE : LOADING_CLEAN;

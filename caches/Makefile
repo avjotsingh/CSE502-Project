@@ -1,14 +1,14 @@
-SIM = verilator  # Use the desired simulator (e.g., questa, xsim, verilator)
-TOPLEVEL_LANG = verilog
-VERILOG_SOURCES = cacheMemoryBus.sv  # Path to your SV file
-TOPLEVEL = cacheMemoryBus  # Name of the top-level module in your SV code
-MODULE = test_bus  # Name of the Python test module
-
 #SIM = verilator  # Use the desired simulator (e.g., questa, xsim, verilator)
 #TOPLEVEL_LANG = verilog
-#VERILOG_SOURCES = directCache.sv  # Path to your SV file
-#TOPLEVEL = directCache  # Name of the top-level module in your SV code
-#MODULE = test_cache  # Name of the Python test module
+#VERILOG_SOURCES = cacheMemoryBus.sv  # Path to your SV file
+#TOPLEVEL = cacheMemoryBus  # Name of the top-level module in your SV code
+#MODULE = test_bus  # Name of the Python test module
+
+SIM = verilator  # Use the desired simulator (e.g., questa, xsim, verilator)
+TOPLEVEL_LANG = verilog
+VERILOG_SOURCES = directCache.sv  # Path to your SV file
+TOPLEVEL = directCache  # Name of the top-level module in your SV code
+MODULE = test_cache  # Name of the Python test module
 
 #SIM = verilator  # Use the desired simulator (e.g., questa, xsim, verilator)
 #TOPLEVEL_LANG = verilog
@@ -23,6 +23,6 @@ MODULE = test_bus  # Name of the Python test module
 #MODULE = test_minimum_inverse  # Name of the Python test module
 
 #when changing which module to test, uncomment this line:
-#$(shell rm -rf sim_build)
+$(shell rm -rf sim_build)
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
