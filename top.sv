@@ -449,6 +449,23 @@ module top
     .m_axi_acsnoop(m_axi_acsnoop)
   );
 
+  wire [DATA_WIDTH-1:0] a0,a1,a2,a3,a4,a5,a6,a7,a0_;
+  wire is_ecall, flush_ecall;
+  ecall ecall(
+    .clk(clk),
+    .reset(reset),
+    .a0(a0),
+    .a1(a1),
+    .a2(a2),
+    .a3(a3),
+    .a4(a4),
+    .a5(a5),
+    .a6(a7),
+    .a7(a7),
+    .a0_(a0_),
+    .trigger(is_ecall),
+    .flush(flush_ecall)
+  )
   // Combination logic for IF stage
   always_comb begin
     if (branch_mispredict) begin
