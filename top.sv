@@ -211,8 +211,7 @@ module top
     .bus_valid(bus_valid_i), 
     .bus_ready(bus_ready_i),
     .invalidate(invalidate),
-    .invalidate_addr(invalidate_addr),
-
+    .invalidate_addr(invalidate_addr)
   );
   
   
@@ -540,10 +539,9 @@ module top
 
   // Combinational logic for WB stage
   always_comb begin
-    write_data_wb = wb_control_mem_wb[0] ? alu_res_mem_wb : mem_data_mem_wb;
+    write_data_wb = reset ? stackptr : (wb_control_mem_wb[0] ? alu_res_mem_wb : mem_data_mem_wb);
     write_reg_wb = wb_control_mem_wb[1] ? rd_mem_wb : '0;
   end
-
 
   logic [63:0] count;
   // Sequential logic for IF stage
@@ -554,9 +552,9 @@ module top
       count <= count + 1;
       pc_if <= next_pc;
       $display("Next PC: %0h", next_pc);
-      if (count == 1000) begin
-        $finish;
-      end
+//      if (count == 3000) begin
+//        $finish;
+//      end
     end
   end
     

@@ -21,6 +21,8 @@ module register_file #(
     always_ff @ (posedge clk) begin
         if (reset) begin
             foreach(registers[i]) registers[i] <= 0;
+            //initial stack pointer
+            registers[2] <= write_data;
         end else begin 
             if (write_reg != 0) begin 
                 registers[write_reg] <= write_data;
