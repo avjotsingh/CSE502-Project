@@ -115,7 +115,7 @@ module decoder #(
                 alu_src_ = 1;
                 mem_read_ = alu_op != 7'b1100111 ? 1 : 0;
                 reg_write_ = 1;
-                mem_to_reg_ = 0;
+                mem_to_reg_ = alu_op == 7'b1100111 ? 1: 0;
             end
             7'b0100011: begin
                 // RV32I S-type instructions (sb, sh, sw)
