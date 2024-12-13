@@ -7,7 +7,7 @@ module pending_write #(
     input wire [ADDR_WIDTH-1:0] address,
     input wire [DATA_WIDTH-1:0] value,
     input wire trigger
-)
+);
 
 always_ff @(posedge clk) begin
     if (!reset && trigger) begin

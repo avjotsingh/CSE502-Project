@@ -6,8 +6,8 @@ module directCache
     DATA_WIDTH = 64,
     ADDR_WIDTH = 64,
     //TODO: Make this non-variable in construction
-    STATE_BITS = 1 // {Valid}
-    IS_INSTRUCTION_CACHE = 0;
+    STATE_BITS = 1, // {Valid}
+    IS_INSTRUCTION_CACHE = 0
 )
 (
     input wire clk,

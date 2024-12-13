@@ -1,0 +1,82 @@
+{
+  "extensionVersion": "1.2.5",
+  "fileName": "/home/zgurwitz/project/trace.vcd",
+  "markerTime": 337550,
+  "altMarkerTime": null,
+  "selectedSignal": {
+    "name": "TOP.top.alu.alu_res",
+    "numberFormat": "hexadecimal",
+    "msb": 63,
+    "lsb": 0
+  },
+  "zoomRatio": 0.04,
+  "scrollLeft": 13426,
+  "displayedSignals": [
+    {
+      "name": "TOP.top.clk",
+      "numberFormat": 16,
+      "msb": -1,
+      "lsb": -1
+    },
+    {
+      "name": "TOP.top.next_pc",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.pc_if",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.pc_if_id",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.pc_id_ex",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.memory_bus.m_axi_araddr",
+      "numberFormat": 16,
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.decoder.instr",
+      "numberFormat": "hexadecimal",
+      "msb": 31,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.alu.data1",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.alu.data2",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.alu.alu_res",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    },
+    {
+      "name": "TOP.top.register_file.registers(2)",
+      "numberFormat": "hexadecimal",
+      "msb": 63,
+      "lsb": 0
+    }
+  ]
+}
