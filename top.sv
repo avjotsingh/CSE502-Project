@@ -466,7 +466,19 @@ module top
     .a0_(a0_),
     .trigger(is_ecall),
     .flush(flush_ecall)
-  )
+  );
+
+  wire [ADDR_WIDTH-1:0] pending_write_address;
+  wire [DATA_WIDTH-1:0] pending_write_data;
+  wire is_do_pending_write;
+  pending_write pending_write(
+    .clk(clk),
+    .reset(reset),
+    .address(pending_write_address),
+    .value(pending_write_data),
+    .trigger(is_do_pending_write)
+  );
+  
   // Combination logic for IF stage
   always_comb begin
     if (branch_mispredict) begin
